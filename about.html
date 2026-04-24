@@ -31,6 +31,7 @@
         .belief-card:hover { transform: translateY(-5px); border-color: #d4af37; }
         #mobileMenu { transition: transform 0.3s ease-in-out; }
     </style>
+<base target="_blank">
 </head>
 <body class="bg-background text-gray-900 font-sans leading-relaxed">
 
@@ -44,11 +45,11 @@
         
         <!-- Desktop Menu -->
         <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest">
-            <a href="index.html" class="hover:text-accent transition">Home</a>
+            <a href="index.html" class="nav-link hover:text-accent transition">Home</a>
             <a href="about.html" class="text-accent border-b-2 border-accent">About</a>
-            <a href="media.html" class="text-primary hover:text-accent transition">Library</a>
-            <button onclick="toggleModal('givingModal')" class="hover:text-accent transition uppercase">Giving</button>
-            <button onclick="toggleModal('connectModal')" class="hover:text-accent transition uppercase">Connect</button>
+            <a href="media.html" class="nav-link text-primary hover:text-accent transition">Library</a>
+            <button onclick="toggleModal('givingModal')" class="nav-link hover:text-accent transition uppercase">Giving</button>
+            <button onclick="toggleModal('connectModal')" class="nav-link hover:text-accent transition uppercase">Connect</button>
         </div>
 
         <!-- Mobile Menu Toggle -->
@@ -65,10 +66,10 @@
             <span class="material-symbols-outlined text-4xl">close</span>
         </button>
         <div class="mt-20 flex flex-col space-y-8 text-center text-2xl font-serif text-white">
-            <a href="index.html">Home</a>
-            <a href="about.html" class="text-accent">About Us</a>
-            <button onclick="toggleModal('givingModal'); toggleMobileMenu(false)">Giving</button>
-            <button onclick="toggleModal('connectModal'); toggleMobileMenu(false)">Connect</button>
+            <a href="index.html" class="mobile-link">Home</a>
+            <a href="about.html" class="text-accent mobile-link">About Us</a>
+            <button class="mobile-link" onclick="toggleModal('givingModal'); toggleMobileMenu(false)">Giving</button>
+            <button class="mobile-link" onclick="toggleModal('connectModal'); toggleMobileMenu(false)">Connect</button>
         </div>
     </div>
 </div>
@@ -76,17 +77,17 @@
 <main class="pt-20">
     <!-- Hero -->
     <section class="bg-primary text-white py-20 px-6 text-center">
-        <h1 class="font-serif text-4xl md:text-6xl mb-4">About Our Ministry</h1>
-        <p class="text-accent font-bold tracking-[0.2em] uppercase text-sm">Winning the Lost at All Cost</p>
+        <h1 class="font-serif text-4xl md:text-6xl mb-4 hero-title">About Our Ministry</h1>
+        <p class="text-accent font-bold tracking-[0.2em] uppercase text-sm hero-subtitle hero-glow">Winning the Lost at All Cost</p>
     </section>
 
     <!-- Content Sections -->
     <div class="max-w-7xl mx-auto px-4 sm:px-8 py-16 space-y-24">
 
         <!-- Section 1: Love -->
-        <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div id="section-love" class="grid md:grid-cols-2 gap-12 items-center">
             <div class="order-2 md:order-1">
-                <img class="w-full h-80 md:h-[450px] object-cover organic-shape shadow-xl" src="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1000" alt="God's Love"/>
+                <img class="w-full h-80 md:h-[450px] object-cover organic-shape shadow-xl organic-morph parallax-img reveal-left" src="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1000" alt="God's Love"/>
             </div>
             <div class="order-1 md:order-2 space-y-6">
                 <h2 class="font-serif text-3xl md:text-4xl text-primary">Understand God’s Love</h2>
@@ -97,22 +98,22 @@
         </div>
 
         <!-- Section 2: Impact (IN A BOX) -->
-        <div class="bg-white rounded-[2.5rem] p-8 md:p-16 border border-gray-200 shadow-sm">
+        <div id="section-impact" class="bg-white rounded-[2.5rem] p-8 md:p-16 border border-gray-200 shadow-sm">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
-                    <h2 class="font-serif text-3xl md:text-4xl text-primary">Make an Impact</h2>
-                    <p class="text-lg text-gray-700">
+                    <h2 class="font-serif text-3xl md:text-4xl text-primary reveal-up">Make an Impact</h2>
+                    <p class="text-lg text-gray-700 reveal-up">
                         As followers of Christ, we are to care for our neighbors, feed the hungry, defend the powerless, and love the unlovable. Then we will truly make a difference in our community and the world.
                     </p>
                 </div>
-                <img class="w-full h-64 md:h-80 object-cover rounded-3xl" src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000" alt="Impact"/>
+                <img class="w-full h-64 md:h-80 object-cover rounded-3xl parallax-img reveal-up" src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000" alt="Impact"/>
             </div>
         </div>
 
         <!-- Section 3: Word -->
-        <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div id="section-word" class="grid md:grid-cols-2 gap-12 items-center">
             <div class="order-2 md:order-1">
-                <img class="w-full h-80 md:h-[450px] object-cover rounded-[50px] shadow-xl" src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1000" alt="The Bible"/>
+                <img class="w-full h-80 md:h-[450px] object-cover rounded-[50px] shadow-xl parallax-img reveal-left" src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1000" alt="The Bible"/>
             </div>
             <div class="order-1 md:order-2 space-y-6">
                 <h2 class="font-serif text-3xl md:text-4xl text-primary">Discover God’s Word</h2>
@@ -123,7 +124,7 @@
         </div>
 
         <!-- Section 4: Blessing (IN A BOX) -->
-        <div class="bg-primary text-white rounded-[2.5rem] p-8 md:p-16 shadow-2xl">
+        <div id="section-blessing" class="bg-primary text-white rounded-[2.5rem] p-8 md:p-16 shadow-2xl">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
                     <h2 class="font-serif text-3xl md:text-4xl text-accent">Receive God’s Blessing</h2>
@@ -131,7 +132,7 @@
                         God’s best for you comes when you seek Him with all your heart. As a church, we want to see people draw near to God so we can discover His will for us and receive His blessings, and in turn bless others.
                     </p>
                 </div>
-                <img class="w-full h-64 md:h-80 object-cover rounded-3xl opacity-90" src="https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1000" alt="Blessing"/>
+                <img class="w-full h-64 md:h-80 object-cover rounded-3xl opacity-90 parallax-img reveal-up" src="https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1000" alt="Blessing"/>
             </div>
         </div>
 
@@ -140,12 +141,12 @@
     <!-- Our Beliefs Section -->
     <section class="bg-gray-50 py-24 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
+            <div id="beliefs-header" class="text-center mb-16">
                 <h2 class="font-serif text-4xl md:text-5xl text-primary mb-4">Our Beliefs</h2>
-                <div class="w-24 h-1 bg-accent mx-auto"></div>
+                <div class="w-24 h-1 bg-accent mx-auto divider-grow"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="beliefs-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- 1. One God -->
                 <div class="belief-card lg:col-span-3 bg-primary text-white border-none">
                     <h3 class="text-accent font-bold text-2xl mb-4">One God</h3>
@@ -251,7 +252,7 @@
 <!-- Modal: Connect -->
 <div id="connectModal" class="modal">
     <div class="absolute inset-0 bg-black/80" onclick="toggleModal('connectModal')"></div>
-    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8">
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 modal-content">
         <button class="absolute top-4 right-4 text-gray-400" onclick="toggleModal('connectModal')"><span class="material-symbols-outlined">close</span></button>
         <h3 class="font-serif text-2xl text-primary mb-6">Connect With Us</h3>
         <div class="space-y-4">
@@ -270,7 +271,7 @@
 
 <!-- Footer -->
 <footer class="bg-primary text-white py-12 px-6 text-center">
-    <p class="font-serif opacity-80">© 2025 Pardon By Grace International Church</p>
+    <p class="font-serif opacity-80 footer-reveal">© 2025 Pardon By Grace International Church</p>
 </footer>
 
 <script>
@@ -293,6 +294,207 @@
             menu.classList.add('translate-x-full');
         }
     }
+</script>
+
+
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+/* Reveal initial states */
+.reveal-up { opacity: 0; transform: translateY(60px); }
+.reveal-left { opacity: 0; transform: translateX(-60px); }
+.reveal-right { opacity: 0; transform: translateX(60px); }
+.reveal-scale { opacity: 0; transform: scale(0.85); }
+.reveal-rotate { opacity: 0; transform: rotate(-5deg) scale(0.9); }
+
+/* Stagger children helper */
+.stagger-children > * { opacity: 0; transform: translateY(30px); }
+
+/* Nav link hover underline animation */
+.nav-link { position: relative; }
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 50%; width: 0; height: 2px;
+    background: #d4af37;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+.nav-link:hover::after { width: 100%; }
+
+/* Hero text glow pulse */
+@keyframes heroGlow {
+    0%, 100% { text-shadow: 0 0 20px rgba(212,175,55,0.3); }
+    50% { text-shadow: 0 0 40px rgba(212,175,55,0.6), 0 0 60px rgba(212,175,55,0.2); }
+}
+.hero-glow { animation: heroGlow 3s ease-in-out infinite; }
+
+/* Organic shape morph */
+@keyframes organicMorph {
+    0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    50% { border-radius: 50% 50% 40% 60% / 40% 50% 60% 50%; }
+    75% { border-radius: 40% 60% 50% 50% / 60% 40% 50% 50%; }
+    100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+.organic-morph { animation: organicMorph 8s ease-in-out infinite; }
+
+/* Card float animation */
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.card-float { animation: cardFloat 4s ease-in-out infinite; }
+
+/* Image parallax wrapper */
+.parallax-img { will-change: transform; }
+
+/* Modal entrance */
+.modal-content { transform: scale(0.9) translateY(20px); opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.modal.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+
+/* Belief card shine effect */
+.belief-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.6s ease;
+}
+.belief-card:hover::before { left: 100%; }
+.belief-card { position: relative; overflow: hidden; }
+
+/* Section divider line animation */
+.divider-grow { width: 0; transition: width 1.2s ease; }
+.divider-grow.active { width: 6rem; }
+
+/* Smooth scroll behavior */
+html { scroll-behavior: smooth; }
+
+/* Mobile menu slide with stagger */
+.mobile-link { opacity: 0; transform: translateX(30px); transition: all 0.4s ease; }
+#mobileMenu:not(.translate-x-full) .mobile-link { opacity: 1; transform: translateX(0); }
+#mobileMenu:not(.translate-x-full) .mobile-link:nth-child(1) { transition-delay: 0.1s; }
+#mobileMenu:not(.translate-x-full) .mobile-link:nth-child(2) { transition-delay: 0.2s; }
+#mobileMenu:not(.translate-x-full) .mobile-link:nth-child(3) { transition-delay: 0.3s; }
+#mobileMenu:not(.translate-x-full) .mobile-link:nth-child(4) { transition-delay: 0.4s; }
+
+/* Footer fade in */
+.footer-reveal { opacity: 0; transform: translateY(20px); }
+</style>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance animation
+gsap.from(".hero-title", {
+    duration: 1.2,
+    y: 80,
+    opacity: 0,
+    ease: "power3.out",
+    delay: 0.2
+});
+gsap.from(".hero-subtitle", {
+    duration: 1,
+    y: 40,
+    opacity: 0,
+    ease: "power3.out",
+    delay: 0.6
+});
+
+// Nav links stagger
+gsap.from("nav a, nav button", {
+    duration: 0.8,
+    y: -20,
+    opacity: 0,
+    stagger: 0.1,
+    ease: "power2.out",
+    delay: 0.1
+});
+
+// Section 1: Love - left image, right text
+gsap.from("#section-love .reveal-left", {
+    scrollTrigger: { trigger: "#section-love", start: "top 75%", toggleActions: "play none none none" },
+    x: -80, opacity: 0, duration: 1, ease: "power3.out"
+});
+gsap.from("#section-love .reveal-right", {
+    scrollTrigger: { trigger: "#section-love", start: "top 75%", toggleActions: "play none none none" },
+    x: 80, opacity: 0, duration: 1, ease: "power3.out", delay: 0.2
+});
+
+// Section 2: Impact - box reveal
+gsap.from("#section-impact", {
+    scrollTrigger: { trigger: "#section-impact", start: "top 80%", toggleActions: "play none none none" },
+    scale: 0.9, opacity: 0, duration: 1, ease: "power3.out"
+});
+gsap.from("#section-impact .reveal-up", {
+    scrollTrigger: { trigger: "#section-impact", start: "top 70%", toggleActions: "play none none none" },
+    y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
+});
+
+// Section 3: Word
+gsap.from("#section-word .reveal-left", {
+    scrollTrigger: { trigger: "#section-word", start: "top 75%", toggleActions: "play none none none" },
+    x: -80, opacity: 0, duration: 1, ease: "power3.out"
+});
+gsap.from("#section-word .reveal-right", {
+    scrollTrigger: { trigger: "#section-word", start: "top 75%", toggleActions: "play none none none" },
+    x: 80, opacity: 0, duration: 1, ease: "power3.out", delay: 0.2
+});
+
+// Section 4: Blessing - dark box
+gsap.from("#section-blessing", {
+    scrollTrigger: { trigger: "#section-blessing", start: "top 80%", toggleActions: "play none none none" },
+    scale: 0.9, opacity: 0, duration: 1, ease: "power3.out"
+});
+gsap.from("#section-blessing .reveal-up", {
+    scrollTrigger: { trigger: "#section-blessing", start: "top 70%", toggleActions: "play none none none" },
+    y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
+});
+
+// Beliefs section header
+gsap.from("#beliefs-header", {
+    scrollTrigger: { trigger: "#beliefs-header", start: "top 80%", toggleActions: "play none none none" },
+    y: 60, opacity: 0, duration: 1, ease: "power3.out"
+});
+
+// Belief cards stagger with scale
+gsap.from(".belief-card", {
+    scrollTrigger: { trigger: "#beliefs-grid", start: "top 80%", toggleActions: "play none none none" },
+    y: 60, opacity: 0, scale: 0.95, duration: 0.7, stagger: 0.1, ease: "power2.out"
+});
+
+// Footer
+gsap.from(".footer-reveal", {
+    scrollTrigger: { trigger: "footer", start: "top 90%", toggleActions: "play none none none" },
+    y: 30, opacity: 0, duration: 0.8, ease: "power2.out"
+});
+
+// Parallax on images
+gsap.utils.toArray(".parallax-img").forEach(img => {
+    gsap.to(img, {
+        scrollTrigger: {
+            trigger: img.closest("section, div"),
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+        },
+        y: -40,
+        ease: "none"
+    });
+});
+
+// Divider line grow on scroll
+const divider = document.querySelector(".divider-grow");
+if (divider) {
+    ScrollTrigger.create({
+        trigger: divider,
+        start: "top 85%",
+        onEnter: () => divider.classList.add("active")
+    });
+}
 </script>
 
 </body>
