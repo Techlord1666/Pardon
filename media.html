@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Media Library | Pardon By Grace</title>
     
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -13,11 +15,8 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-                "primary": "#061b0e",
-                "accent": "#d4af37",
-                "tertiary": "#171816",
-            },
+            colors: { "primary": "#061b0e", "accent": "#d4af37", "tertiary": "#171816" },
+            fontFamily: { "serif": ["Noto Serif", "serif"], "sans": ["Manrope", "sans-serif"] }
           }
         }
       }
@@ -26,140 +25,192 @@
         .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
         .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        
-        /* Fixed Footer Upload Button - Dim but visible */
-        #adminUploadBtn { 
-            opacity: 0.2; 
-            transition: all 0.3s; 
-            cursor: pointer;
-        }
-        #adminUploadBtn:hover { opacity: 1; color: #d4af37; }
-        
-        /* Mobile menu fix */
-        #mobileMenu { transition: transform 0.4s ease-in-out; }
+        .admin-only { display: none; } /* Hidden until admin logs in */
+        body.is-admin .admin-only { display: flex; }
+        #adminBtn { opacity: 0.1; cursor: pointer; transition: 0.3s; }
+        #adminBtn:hover { opacity: 1; color: #d4af37; }
+        .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#171816] text-white font-sans overflow-x-hidden">
+<body class="bg-tertiary text-white font-sans overflow-x-hidden">
 
 <!-- Navigation -->
-<nav class="fixed top-0 w-full z-50 bg-[#171816]/90 backdrop-blur-md border-b border-white/5">
-    <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+<nav class="fixed top-0 w-full z-50 bg-tertiary/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
         <a href="index.html" class="flex items-center gap-2">
             <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40x40?text=PBG'">
-            <span class="font-serif font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
+            <span class="font-serif font-bold text-lg uppercase tracking-tighter hidden sm:block">Pardon By Grace</span>
         </a>
-        
-        <!-- Desktop Links -->
-        <div class="hidden lg:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
+        <div class="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest">
+            <a href="index.html" class="hover:text-accent">Home</a>
+            <a href="about.html" class="hover:text-accent">About</a>
             <a href="media.html" class="text-accent">Library</a>
-            <button onclick="alert('Please go to home page for giving')">Giving</button>
         </div>
-
-        <!-- Mobile Button -->
-        <button class="lg:hidden" onclick="toggleMobileMenu(true)">
-            <span class="material-symbols-outlined text-3xl">menu</span>
-        </button>
     </div>
 </nav>
 
-<!-- Mobile Menu Sidebar -->
-<div id="mobileMenu" class="fixed inset-0 z-[60] bg-[#061b0e] translate-x-full lg:hidden flex flex-col items-center justify-center space-y-8 text-2xl font-serif">
-    <button class="absolute top-6 right-6" onclick="toggleMobileMenu(false)"><span class="material-symbols-outlined text-4xl text-white">close</span></button>
-    <a href="index.html">Home</a>
-    <a href="about.html">About Us</a>
-    <a href="media.html" class="text-accent">Media Library</a>
-</div>
+<main class="pt-28 pb-40 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-6xl font-serif mb-4">Sermon Library</h1>
+        <p class="text-accent font-bold tracking-[0.3em] uppercase text-xs">Winning the lost at all cost</p>
+    </div>
 
-<main class="pt-28 pb-32 px-4 max-w-7xl mx-auto">
-    <h1 class="text-4xl md:text-6xl font-serif mb-4 text-center">Media Library</h1>
-    <p class="text-accent text-center font-bold tracking-widest mb-16 uppercase text-sm">Watch, Listen & Download Sermons</p>
-
-    <!-- GRID OF SERMONS -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <!-- EXAMPLE VIDEO SERMON CARD -->
-        <div class="bg-white/5 p-4 rounded-[2rem] border border-white/5 group">
-            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6">
-                <img src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
-                </div>
-            </div>
-            <h3 class="text-xl font-serif mb-2">Power of Grace</h3>
-            <p class="text-gray-400 text-sm mb-6">Pastor Franklin Oji</p>
-            <div class="flex gap-3">
-                <!-- VIEW LINK -->
-                <a href="YOUR_GOOGLE_DRIVE_VIEW_LINK" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-xs font-bold">WATCH</a>
-                <!-- DOWNLOAD LINK (Notice the uc?export format) -->
-                <a href="https://drive.google.com/uc?export=download&id=1_ABC_YOUR_FILE_ID_HERE" class="bg-white/10 p-3 rounded-full hover:bg-white/20">
-                    <span class="material-symbols-outlined text-sm">download</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- EXAMPLE AUDIO SERMON CARD -->
-        <div class="bg-white/5 p-4 rounded-[2rem] border border-white/5 group">
-            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary flex items-center justify-center">
-                <span class="material-symbols-outlined text-6xl text-accent/30">mic_external_on</span>
-                <div class="absolute top-4 left-4 bg-accent text-primary text-[10px] font-bold px-2 py-1 rounded">AUDIO</div>
-            </div>
-            <h3 class="text-xl font-serif mb-2">Unshakable Faith</h3>
-            <p class="text-gray-400 text-sm mb-6">Pastor Franklin Oji</p>
-            <div class="flex gap-3">
-                <a href="YOUR_GOOGLE_DRIVE_VIEW_LINK" target="_blank" class="flex-1 bg-white/10 text-center py-3 rounded-full text-xs font-bold hover:bg-white/20">LISTEN</a>
-                <a href="https://drive.google.com/uc?export=download&id=1_ABC_YOUR_FILE_ID_HERE" class="bg-white/10 p-3 rounded-full hover:bg-white/20">
-                    <span class="material-symbols-outlined text-sm">download</span>
-                </a>
-            </div>
-        </div>
-
+    <!-- Sermon Grid -->
+    <div id="sermonGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Will show "Loading..." then sermons will appear here -->
+        <p id="emptyMsg" class="col-span-full text-center text-gray-500 py-20 italic">The library is currently empty. Check back soon!</p>
     </div>
 </main>
 
-<!-- Footer -->
-<footer class="py-20 border-t border-white/5 bg-black/30 px-4 text-center">
-    <div class="max-w-7xl mx-auto">
-        <p class="text-gray-600 text-sm mb-6">© 2025 Pardon By Grace International Church</p>
-        
-        <!-- THE ADMIN BUTTON (Now dim but visible at the bottom) -->
-        <button id="adminUploadBtn" onclick="requestAdminAccess()" class="text-[10px] font-bold uppercase tracking-widest p-4">
-            [ Admin Upload ]
-        </button>
-    </div>
+<footer class="py-20 border-t border-white/5 bg-black/20 text-center">
+    <p class="text-gray-600 text-sm mb-4">© 2025 Pardon By Grace International Church</p>
+    <button id="adminBtn" onclick="loginAdmin()" class="text-[10px] font-bold uppercase tracking-widest">[ Admin Access ]</button>
 </footer>
 
-<!-- UPLOAD MODAL -->
+<!-- MODAL: UPLOAD / EDIT FORM -->
 <div id="uploadModal" class="modal">
-    <div class="absolute inset-0 bg-black/90" onclick="toggleModal('uploadModal', false)"></div>
-    <div class="relative bg-[#171816] border border-white/10 w-full max-w-md rounded-[2rem] p-8">
-        <h3 class="text-2xl font-serif mb-6 text-accent">Admin Notification</h3>
-        <p class="text-gray-400 mb-6">To add new sermons to this library permanently, you must copy a "Sermon Card" block in your HTML code and paste your Google Drive links inside it.</p>
-        <button onclick="toggleModal('uploadModal', false)" class="w-full bg-accent text-primary py-4 rounded-xl font-bold">I UNDERSTAND</button>
+    <div class="absolute inset-0 bg-black/95" onclick="closeModal()"></div>
+    <div class="relative bg-tertiary border border-white/10 w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl">
+        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Add New Sermon</h3>
+        <input type="hidden" id="editId">
+        <div class="space-y-4">
+            <input type="text" id="fTitle" placeholder="Sermon Title" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            <input type="text" id="fSpeaker" placeholder="Speaker (e.g. Pastor Franklin Oji)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            <input type="text" id="fImage" placeholder="Thumbnail Image URL (Google Drive/FB Image link)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            <input type="text" id="fView" placeholder="Google Drive View Link" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            <input type="text" id="fFileID" placeholder="Google Drive File ID (for download)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            
+            <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Publish Now</button>
+        </div>
     </div>
 </div>
 
 <script>
-    function toggleMobileMenu(open) {
-        const menu = document.getElementById('mobileMenu');
-        if(open) menu.classList.remove('translate-x-full');
-        else menu.classList.add('translate-x-full');
-    }
+    // SUPABASE CONFIG
+    const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function toggleModal(id, open) {
-        const modal = document.getElementById(id);
-        if(open) modal.classList.add('active');
-        else modal.classList.remove('active');
-    }
+    let isAdmin = false;
 
-    function requestAdminAccess() {
-        let password = prompt("Enter Admin Password:");
-        if (password === "pardonbygrace11") {
-            toggleModal('uploadModal', true);
+    // 1. Initial Load
+    window.onload = loadSermons;
+
+    async function loadSermons() {
+        const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
+        const grid = document.getElementById('sermonGrid');
+        const emptyMsg = document.getElementById('emptyMsg');
+
+        if (data && data.length > 0) {
+            emptyMsg.style.display = 'none';
+            grid.innerHTML = '';
+            data.forEach(s => renderCard(s));
         } else {
-            alert("Incorrect Password!");
+            grid.innerHTML = '';
+            grid.appendChild(emptyMsg);
+            emptyMsg.style.display = 'block';
         }
+    }
+
+    // 2. Render Sermon Card
+    function renderCard(s) {
+        const grid = document.getElementById('sermonGrid');
+        const div = document.createElement('div');
+        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card group";
+        div.innerHTML = `
+            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary">
+                <img src="${s.image_url || 'https://via.placeholder.com/400x225?text=Sermon'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                    <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
+                </div>
+            </div>
+            <h3 class="text-xl font-serif mb-1">${s.title}</h3>
+            <p class="text-gray-500 text-sm mb-6">${s.speaker || 'Pastor Franklin Oji'}</p>
+            
+            <div class="flex gap-2">
+                <a href="${s.view_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
+                <a href="https://drive.google.com/uc?export=download&id=${s.download_id}" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                </a>
+            </div>
+
+            <!-- Admin Controls -->
+            <div class="admin-only mt-4 flex gap-2 border-t border-white/5 pt-4">
+                <button onclick="openEdit('${s.id}', '${s.title}', '${s.speaker}', '${s.image_url}', '${s.view_link}', '${s.download_id}')" class="flex-1 text-[10px] font-bold uppercase text-gray-400 hover:text-white">Edit</button>
+                <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold uppercase text-red-400 hover:text-red-600">Delete</button>
+            </div>
+        `;
+        grid.appendChild(div);
+    }
+
+    // 3. Admin Actions
+    function loginAdmin() {
+        const pw = prompt("Enter Admin Password:");
+        if (pw === "pardonbygrace11") {
+            isAdmin = true;
+            document.body.classList.add('is-admin');
+            openUpload();
+        } else alert("Invalid Password");
+    }
+
+    function openUpload() {
+        document.getElementById('modalTitle').innerText = "Add New Sermon";
+        document.getElementById('editId').value = "";
+        clearForm();
+        document.getElementById('uploadModal').classList.add('active');
+    }
+
+    function openEdit(id, title, speaker, img, view, fileId) {
+        document.getElementById('modalTitle').innerText = "Edit Sermon";
+        document.getElementById('editId').value = id;
+        document.getElementById('fTitle').value = title;
+        document.getElementById('fSpeaker').value = speaker;
+        document.getElementById('fImage').value = img;
+        document.getElementById('fView').value = view;
+        document.getElementById('fFileID').value = fileId;
+        document.getElementById('uploadModal').classList.add('active');
+    }
+
+    async function saveSermon() {
+        const id = document.getElementById('editId').value;
+        const btn = document.getElementById('saveBtn');
+        btn.innerText = "Processing...";
+
+        const payload = {
+            title: document.getElementById('fTitle').value,
+            speaker: document.getElementById('fSpeaker').value,
+            image_url: document.getElementById('fImage').value,
+            view_link: document.getElementById('fView').value,
+            download_id: document.getElementById('fFileID').value
+        };
+
+        let result;
+        if (id) {
+            result = await _supabase.from('sermons').update(payload).eq('id', id);
+        } else {
+            result = await _supabase.from('sermons').insert([payload]);
+        }
+
+        if (result.error) alert("Error: " + result.error.message);
+        else {
+            alert("Success!");
+            location.reload();
+        }
+    }
+
+    async function deleteSermon(id) {
+        const pw = prompt("Enter Delete Password (pgic):");
+        if (pw === "pgic") {
+            const { error } = await _supabase.from('sermons').delete().eq('id', id);
+            if (error) alert(error.message);
+            else location.reload();
+        } else alert("Wrong password! Delete cancelled.");
+    }
+
+    function closeModal() { document.getElementById('uploadModal').classList.remove('active'); }
+    function clearForm() {
+        ['fTitle','fSpeaker','fImage','fView','fFileID'].forEach(id => document.getElementById(id).value = "");
     }
 </script>
 
