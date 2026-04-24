@@ -54,23 +54,25 @@
 <body class="bg-[#fafaf4] text-gray-900 font-body overflow-x-hidden">
 
 <!-- Navigation -->
-<nav class="fixed top-0 w-full z-50 glass border-b border-gray-200">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
-       <!-- Logo -->
+        
+        <!-- Logo Image -->
         <a href="index.html" class="flex items-center">
             <img src="logo.png" alt="PARDON BY GRACE INTERNATIONAL CHURCH" class="h-12 w-auto object-contain" onerror="this.src='https://via.placeholder.com/200x60?text=PBG+CHURCH'">
         </a>
-        <!-- Desktop Menu -->
-        <div class="hidden lg:flex items-center space-x-8 text-sm font-bold tracking-wide uppercase">
-            <a href="#" class="hover:text-secondary transition">Home</a>
-            <a href="#about" class="hover:text-secondary transition">About</a>
-            <button onclick="toggleModal('givingModal')" class="hover:text-secondary transition uppercase">Giving</button>
-            <a href="#service-times" class="hover:text-secondary transition">Services</a>
-            <button onclick="toggleModal('joinModal')" class="bg-primary text-white px-6 py-2 rounded-full hover:scale-105 transition">Join Us</button>
+        
+        <!-- Desktop Menu (Hidden on Mobile) -->
+        <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest">
+            <a href="index.html" class="text-primary hover:text-accent transition">Home</a>
+            <a href="about.html" class="text-primary hover:text-accent transition">About</a>
+            <a href="media.html" class="text-primary hover:text-accent transition">Library</a>
+            <button onclick="toggleModal('givingModal')" class="text-primary hover:text-accent transition uppercase">Giving</button>
+            <button onclick="toggleModal('connectModal')" class="text-primary hover:text-accent transition uppercase">Connect</button>
         </div>
 
-        <!-- Mobile Menu Toggle -->
-        <button class="lg:hidden text-primary" onclick="toggleMobileMenu()">
+        <!-- Mobile Menu Toggle (Visible only on Mobile) -->
+        <button class="lg:hidden text-primary" onclick="toggleMobileMenu(true)">
             <span class="material-symbols-outlined text-3xl">menu</span>
         </button>
     </div>
