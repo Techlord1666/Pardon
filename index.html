@@ -1,305 +1,383 @@
 <!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    
+    <!-- SEO & Keywords -->
+    <title>Pardon By Grace International Church | Winning the Lost at All Cost</title>
+    <meta name="description" content="Pardon by Grace International Church, founded by Pastor Franklin Oji. A dynamic ministry in Lagos, Nigeria, dedicated to winning souls, salvation, and spiritual growth." />
+    <meta name="keywords" content="Pardon by Grace International Church, Pastor Franklin Oji, Church in Obawole, Church in Lagos, Salvation, Deliverance, Winning the Lost" />
+    
+    <!-- Link Preview (Open Graph) -->
+    <meta property="og:title" content="Pardon By Grace International Church" />
+    <meta property="og:description" content="Winning the lost at all cost. Join us for a life-changing encounter with Jesus Christ." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1000" />
+    <meta property="og:type" content="website" />
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sanctuary — Sacred Modernism</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32.png?text=PBG">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
-            "colors": {
-                "inverse-surface": "#2f312d",
-                "primary-container": "#1b3022",
-                "on-secondary-container": "#786044",
-                "outline": "#737973",
-                "on-surface": "#1a1c19",
-                "surface-container-lowest": "#ffffff",
-                "secondary-container": "#fdddb9",
-                "on-tertiary": "#ffffff",
-                "outline-variant": "#c3c8c1",
-                "surface-bright": "#fafaf4",
-                "surface-container-high": "#e8e8e3",
-                "on-primary-fixed-variant": "#364c3c",
-                "on-tertiary-fixed": "#1c1c1a",
-                "secondary-fixed": "#fdddb9",
-                "error-container": "#ffdad6",
-                "tertiary": "#171816",
-                "surface": "#fafaf4",
-                "surface-container": "#eeeee8",
-                "on-error-container": "#93000a",
-                "on-primary": "#ffffff",
+            colors: {
                 "primary": "#061b0e",
-                "surface-variant": "#e3e3dd",
-                "tertiary-fixed": "#e5e2df",
-                "tertiary-container": "#2c2c2a",
-                "secondary-fixed-dim": "#e0c29f",
-                "error": "#ba1a1a",
-                "on-error": "#ffffff",
-                "on-primary-container": "#819986",
-                "on-primary-fixed": "#0b2013",
-                "background": "#fafaf4",
-                "tertiary-fixed-dim": "#c8c6c3",
-                "surface-dim": "#dadad5",
-                "on-tertiary-container": "#959390",
-                "on-background": "#1a1c19",
-                "surface-container-low": "#f4f4ee",
-                "on-secondary": "#ffffff",
                 "secondary": "#715a3e",
-                "inverse-primary": "#b4cdb8",
-                "primary-fixed": "#d0e9d4",
-                "surface-container-highest": "#e3e3dd",
-                "on-tertiary-fixed-variant": "#474745",
-                "surface-tint": "#4d6453",
-                "on-secondary-fixed": "#281803",
-                "inverse-on-surface": "#f1f1eb",
-                "on-surface-variant": "#434843",
-                "on-secondary-fixed-variant": "#584329",
-                "primary-fixed-dim": "#b4cdb8"
+                "accent": "#d4af37", // Gold for a church feel
             },
-            "fontFamily": {
-                "body-md": ["Manrope"],
-                "headline-lg": ["Noto Serif"],
-                "label-caps": ["Manrope"],
-                "body-lg": ["Manrope"],
-                "headline-md": ["Noto Serif"],
-                "display": ["Noto Serif"]
-            },
-            "fontSize": {
-                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
-                "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
-                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
-                "display": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+            fontFamily: {
+                "body": ["Manrope", "sans-serif"],
+                "display": ["Noto Serif", "serif"]
             }
           }
         }
       }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    <style>
+        .modal { transition: opacity 0.3s ease-in-out; visibility: hidden; opacity: 0; }
+        .modal.active { visibility: visible; opacity: 1; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .animate-fade-up { animation: fadeUp 1s ease-out forwards; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .organic-radius-1 { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-        .organic-radius-2 { border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%; }
-        .magnetic-pull:hover { transform: scale(1.02); }
     </style>
 </head>
-<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
-<!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-white/40 backdrop-blur-xl dark:bg-stone-900/60 border-b border-stone-200/20 dark:border-stone-800/20 shadow-[0_20px_50px_rgba(27,48,34,0.05)]">
-<div class="flex justify-between items-center max-w-7xl mx-auto px-8 h-24">
-<div class="text-2xl font-serif font-bold text-[#1B3022] dark:text-stone-100">Sanctuary</div>
-<div class="hidden md:flex items-center space-x-10">
-<a class="text-[#1B3022] dark:text-white border-b-2 border-[#1B3022] pb-1 font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Home</a>
-<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">About</a>
-<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Media</a>
-<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Giving</a>
-<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Connect</a>
-</div>
-<button class="bg-primary-container text-on-primary px-8 py-4 rounded-full font-label-caps text-label-caps hover:scale-105 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]">
-                Join Us Online
-            </button>
-</div>
+<body class="bg-[#fafaf4] text-gray-900 font-body overflow-x-hidden">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 glass border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xs">PBG</div>
+            <span class="font-display font-bold text-lg leading-tight sm:text-xl text-primary uppercase">Pardon By Grace</span>
+        </div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center space-x-8 text-sm font-bold tracking-wide uppercase">
+            <a href="#" class="hover:text-secondary transition">Home</a>
+            <a href="#about" class="hover:text-secondary transition">About</a>
+            <button onclick="toggleModal('givingModal')" class="hover:text-secondary transition uppercase">Giving</button>
+            <a href="#service-times" class="hover:text-secondary transition">Services</a>
+            <button onclick="toggleModal('joinModal')" class="bg-primary text-white px-6 py-2 rounded-full hover:scale-105 transition">Join Us</button>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="lg:hidden text-primary" onclick="toggleMobileMenu()">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
 </nav>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-white translate-x-full transition-transform duration-300 lg:hidden">
+    <div class="p-6">
+        <button class="float-right" onclick="toggleMobileMenu()"><span class="material-symbols-outlined text-4xl">close</span></button>
+        <div class="mt-20 flex flex-col space-y-8 text-center text-2xl font-display">
+            <a href="#" onclick="toggleMobileMenu()">Home</a>
+            <a href="#about" onclick="toggleMobileMenu()">About Us</a>
+            <button onclick="toggleModal('givingModal'); toggleMobileMenu()">Giving</button>
+            <a href="#service-times" onclick="toggleMobileMenu()">Service Times</a>
+            <button onclick="toggleModal('joinModal'); toggleMobileMenu()" class="bg-primary text-white py-4 rounded-xl">Join Us Live</button>
+        </div>
+    </div>
+</div>
+
 <!-- Hero Section -->
 <header class="relative h-screen flex items-center justify-center overflow-hidden">
-<div class="absolute inset-0 z-0">
-<img class="w-full h-full object-cover" data-alt="Cinematic wide shot of a misty mountain range at sunrise with soft golden light filtering through evergreen trees, peaceful and ethereal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeQ_yd91kQyM5HV4-W3df6op9xl0BxLjpx_m_el6jtTCyUlLl72yyNCeUNjjB8zYA7E3t7ZSk-s6OjCgFJiRN-JLX-ukOBPnRHQLTz1SXk9tZhH42GAmZeG1ZUbi1EcHUnJ8h2XR-ZlMevE8nYA5UhgbfOAaCg3MWhWNA5WNvk4WhOvBjx1n4cdXH_h_JfsOx6wCsYZpdENVE3KKVurSSuEza_sMc0RPtrGVHOt7Eh4Qwv5M1rkpoAjjURqCSZock4fAPVbeTFXGZv"/>
-<div class="absolute inset-0 bg-black/30 backdrop-grayscale-[0.2]"></div>
-</div>
-<div class="relative z-10 text-center px-6 max-w-4xl">
-<span class="font-label-caps text-label-caps text-white/80 tracking-[0.3em] block mb-6">WELCOME TO THE SANCTUARY</span>
-<h1 class="font-display text-display text-white mb-8">A place to breathe, believe, and belong.</h1>
-<p class="font-body-lg text-body-lg text-white/90 mb-12 max-w-2xl mx-auto">Discover a contemporary faith community dedicated to peace, justice, and the radical love of neighbor.</p>
-<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-<button class="bg-white text-primary-container px-10 py-5 rounded-full font-label-caps text-label-caps hover:scale-105 transition-transform duration-300 shadow-xl">
-                    Join Us This Sunday
-                </button>
-<button class="border border-white/50 text-white backdrop-blur-md px-10 py-5 rounded-full font-label-caps text-label-caps hover:bg-white/10 transition-all duration-300">
-                    Our Mission
-                </button>
-</div>
-</div>
-<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
-<span class="material-symbols-outlined text-white text-4xl">expand_more</span>
-</div>
+    <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover scale-105 animate-pulse" style="animation-duration: 8s" src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2000" alt="Church Background"/>
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+    <div class="relative z-10 text-center px-6 max-w-4xl animate-fade-up">
+        <span class="text-accent tracking-[0.4em] font-bold text-sm block mb-4">ESTABLISHED BY PASTOR FRANKLIN OJI</span>
+        <h1 class="font-display text-4xl md:text-7xl text-white mb-6">WINNING THE LOST AT ALL COST</h1>
+        <p class="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto">Discover salvation, deliverance, and spiritual growth in an unshakable community of faith.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onclick="toggleModal('joinModal')" class="w-full sm:w-auto bg-accent text-primary font-bold px-10 py-4 rounded-full shadow-lg hover:bg-white transition">
+                JOIN US THIS SUNDAY
+            </button>
+            <button onclick="toggleModal('missionModal')" class="w-full sm:w-auto border-2 border-white text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary transition">
+                OUR MISSION
+            </button>
+        </div>
+    </div>
 </header>
-<!-- Our Mission Section -->
-<section class="py-32 px-8 max-w-7xl mx-auto">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-<div class="lg:col-span-5 relative">
-<div class="bg-secondary-container organic-radius-1 absolute -inset-4 -z-10 opacity-30"></div>
-<img class="w-full aspect-[4/5] object-cover organic-radius-2 shadow-2xl" data-alt="Warm interior of a modern minimalist community space with people engaged in meaningful conversation over coffee, soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3EHh9QBD-tRU_bAIfLZOyJ7bdelcoWVO4HGRLWzwEA_6LazyM3MFxjdHcA3pPHPTKFcKATH7SfkzufjrHFmGK4uSX-YaonJmWi5QLwVxBFlmKW2VxfMl_BfOdB7JPYkFhlkEi3apEGP3rjkghsnYyNS_0JWlWoC3ykNtZ_-PGc_O98T6uh1N4ZoIf4FRvPHqRV9Eqf8cF3FIEyMHO88DyorLLyj1ChicpzEMmBVmw8XEnw8If87XZw3lZrxjU949z-Gtl7BcwFWAd"/>
-</div>
-<div class="lg:col-span-7 space-y-8">
-<span class="text-secondary font-label-caps text-label-caps">OUR CORE VALUES</span>
-<h2 class="font-headline-lg text-headline-lg text-primary-container">Rooted in Tradition, Growing in Grace.</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                    We believe faith shouldn't be a burden, but a sanctuary. Our mission is to provide a space where intellectual curiosity meets spiritual depth, fostering a community that serves the world with humility and joy.
-                </p>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-<div class="space-y-3">
-<div class="flex items-center gap-3 text-secondary">
-<span class="material-symbols-outlined">nature_people</span>
-<span class="font-bold">Organic Community</span>
-</div>
-<p class="text-on-surface-variant text-body-md">Life is better together. We prioritize authentic relationships over programs.</p>
-</div>
-<div class="space-y-3">
-<div class="flex items-center gap-3 text-secondary">
-<span class="material-symbols-outlined">auto_awesome</span>
-<span class="font-bold">Sacred Space</span>
-</div>
-<p class="text-on-surface-variant text-body-md">Creating intentional environments for reflection, prayer, and artistic expression.</p>
-</div>
-</div>
-</div>
-</div>
+
+<!-- Welcome Section -->
+<section class="py-20 bg-white px-6">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="font-display text-3xl md:text-5xl text-primary mb-6">Welcome to Pardon By Grace</h2>
+        <div class="w-20 h-1 bg-accent mx-auto mb-8"></div>
+        <p class="text-lg text-gray-600 leading-relaxed">
+            Welcome to a place where God’s grace transforms lives. Whether you are seeking answers, looking for a spiritual home, or needing a miracle, we invite you to experience the dynamic power of the Holy Spirit with us.
+        </p>
+    </div>
 </section>
-<!-- Latest Sermon (Featured) -->
-<section class="bg-surface-container py-32">
-<div class="max-w-7xl mx-auto px-8">
-<div class="flex justify-between items-end mb-16">
-<div>
-<span class="text-secondary font-label-caps text-label-caps block mb-4">LATEST TEACHING</span>
-<h2 class="font-headline-lg text-headline-lg text-primary-container">Finding Stillness in the Noise</h2>
-</div>
-<button class="hidden md:block text-primary-container font-label-caps text-label-caps border-b-2 border-primary-container pb-1 hover:text-secondary hover:border-secondary transition-colors">
-                    View Archive
-                </button>
-</div>
-<div class="relative group cursor-pointer overflow-hidden rounded-[2rem] shadow-2xl aspect-video md:aspect-[21/9]">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="High-end editorial shot of an empty modern chapel with wooden pews and a single beam of light hitting the floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoxcR2XSoB9dSvIasuSjWp7O2WOaiYRwsVSpYqeyeOZ7FLcs4EpkcrVy0neZNbur9EnLSc6AjEOcy03i-Ymr2Tp9QoQ5flkMMeHTByI5bAHvT40c5nDxZ_ILJ5BMG_NKYJ00aXiLqKAZ2ZaMBv_pBvQvEf-i-zi0fZA0oN5nuVCuyjDUZQviIHyATZ4pNJVZVYvXA3ooYKoLdo0S1-29FeHPEqkcKMbBxO2Q304EMC3z0mlJR_NaiFYAObDR4wq4h7Ghz_DeDE0nQX"/>
-<div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 via-transparent to-transparent flex items-center justify-center">
-<div class="bg-white/20 backdrop-blur-xl p-8 rounded-full border border-white/30 scale-100 group-hover:scale-110 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-6xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-</div>
-</div>
-<div class="absolute bottom-12 left-12 text-white">
-<p class="font-label-caps text-xs opacity-80 mb-2">OCTOBER 27, 2024 • SERIES: THE ART OF PAUSE</p>
-<h3 class="font-headline-md text-headline-md">Part 4: The Sound of Silence</h3>
-</div>
-</div>
-</div>
+
+<!-- About Us Section -->
+<section id="about" class="py-20 bg-[#eeeee8] px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+            <img class="rounded-2xl shadow-2xl" src="https://images.unsplash.com/photo-1544427928-c49cdfebf494?q=80&w=1000" alt="Church Community"/>
+        </div>
+        <div>
+            <span class="text-secondary font-bold tracking-widest uppercase text-sm">About our Ministry</span>
+            <h2 class="font-display text-4xl text-primary mt-2 mb-6">Founded on Truth & Power</h2>
+            <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                Pardon by Grace International Church is a dynamic and spirit-filled ministry founded on the unshakable truth of God’s word. We serve as a beacon of hope, drawing people into a life-changing relationship with Jesus Christ.
+            </p>
+            <a href="about.html" class="inline-block border-b-2 border-primary pb-1 font-bold text-primary hover:text-secondary hover:border-secondary transition">READ MORE</a>
+        </div>
+    </div>
 </section>
-<!-- Upcoming Events (Bento Grid) -->
-<section class="py-32 px-8 max-w-7xl mx-auto">
-<div class="text-center mb-20">
-<h2 class="font-headline-lg text-headline-lg text-primary-container mb-4">Life at Sanctuary</h2>
-<p class="font-body-lg text-on-surface-variant">There is always a place for you at the table.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[600px]">
-<!-- Event 1 -->
-<div class="md:col-span-2 md:row-span-2 relative rounded-[2rem] overflow-hidden group">
-<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="overhead shot of a long rustic wooden dinner table with candles and food, people sitting around it laughing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDse6gpCPj2PNo8YMnb9568dPeTrI8xDid4NNVGMqxfVCoqv7HHZ0HM0DIyDOuj6kwucy8rCXE_LrfRmnvZNkzQ4rlpflYl1wrYLn3YlghX6HyiZ16NK0wDp3jJWQ5v3QY5BBgEf-c6HT8Z4jOgJcpKT8Wvv-UdWAr-jmsetA_3VsyAqngsTmKqBgPpe_F_39k1lw1A5YFDBaZ5wK47mXTaGRPb4WBzhZXI6dL7_cjyKXJjRqFGUODWuoiDgexp4gk8qXYdplAwcnI9"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-10 flex flex-col justify-end">
-<span class="bg-secondary-container text-on-secondary-container font-label-caps text-[10px] px-3 py-1 rounded-full w-fit mb-4 uppercase">Community</span>
-<h3 class="text-white font-headline-md text-headline-md mb-2">Monthly Table Feast</h3>
-<p class="text-white/80 font-body-md">Nov 12 • 6:30 PM</p>
-</div>
-</div>
-<!-- Event 2 -->
-<div class="md:col-span-2 md:row-span-1 bg-surface-container-high rounded-[2rem] p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
-<div>
-<span class="bg-[#1B3022]/10 text-[#1B3022] font-label-caps text-[10px] px-3 py-1 rounded-full w-fit mb-4 uppercase">Outreach</span>
-<h3 class="text-primary-container font-headline-md text-2xl mb-2">Winter Coat Drive</h3>
-<p class="text-on-surface-variant font-body-md">Collecting items through December 1st for local shelters.</p>
-</div>
-<div class="flex items-center justify-between">
-<span class="text-secondary font-bold">Details</span>
-<span class="material-symbols-outlined text-secondary">arrow_forward</span>
-</div>
-</div>
-<!-- Event 3 -->
-<div class="md:col-span-1 md:row-span-1 bg-primary-container rounded-[2rem] p-8 text-white group cursor-pointer">
-<div class="h-full flex flex-col justify-between">
-<span class="material-symbols-outlined text-4xl mb-4 group-hover:rotate-12 transition-transform">park</span>
-<div>
-<h3 class="font-bold text-lg mb-1">Morning Hike</h3>
-<p class="text-white/60 text-sm">Nov 15 • 7:00 AM</p>
-</div>
-</div>
-</div>
-<!-- Event 4 -->
-<div class="md:col-span-1 md:row-span-1 relative rounded-[2rem] overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="close up of a modern record player on a clean wooden shelf with aesthetic plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC5US992je5o1ujn5CTAjfO03A5ucWvWm6jHECvwYNDbjdDIz9Nqf42uC5JojvGJoHBKjMaaP14Gbug8SvUfupOoRcyqMuOuXXyFMgSCaQ4QZTK3L-OVernOfilPGztdAD-ouiFATOzB-FOzoX2tWWIuulTI_bJq4GE--yTAbwm46xINpTwJzpg3XvBGuYrmiHq6myGJfe7VXc7lfj3gzBBnLd82j2-FAJn4Z_e95C1Zn_pHzMhRC_xxdF-SSoqxKBK0Xn5nBKrMWf"/>
-<div class="absolute inset-0 bg-black/40 flex items-center justify-center p-4 text-center">
-<h3 class="text-white font-bold leading-tight">Sacred Rhythms Jazz Night</h3>
-</div>
-</div>
-</div>
+
+<!-- Founder Section -->
+<section class="py-24 px-6 bg-white">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+        <div class="w-full md:w-1/2">
+            <!-- Placeholder for Founder Image -->
+            <img class="w-full rounded-[3rem] shadow-2xl" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000" alt="Pastor Franklin Oji"/>
+        </div>
+        <div class="w-full md:w-1/2">
+            <h2 class="font-display text-4xl text-primary mb-4">Meet Our Founder</h2>
+            <h3 class="text-accent font-bold text-xl mb-6">Pastor Franklin Oji</h3>
+            <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                Established by Pastor Franklin Oji, the church is committed to its divine mandate: winning lost souls at all cost for God. Under his leadership, the ministry focuses on deep spiritual growth and the manifestation of God's power in modern lives.
+            </p>
+            <p class="italic text-gray-500">"Our focus remains salvation, deliverance, and the radical love of Christ."</p>
+        </div>
+    </div>
 </section>
-<!-- BottomNavBar (Mobile Only Item Labels Mapping) -->
-<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl rounded-full border border-stone-200/30 bg-white/60 backdrop-blur-2xl dark:bg-stone-950/60 shadow-[0_30px_60px_rgba(27,48,34,0.1)] z-50">
-<div class="flex justify-around items-center h-20 px-6">
-<div class="flex flex-col items-center justify-center bg-[#1B3022] text-white rounded-full p-4 magnetic-pull transition-all duration-500 ease-out">
-<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Sermon Player</span>
-</div>
-<div class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 magnetic-pull transition-all duration-500 ease-out">
-<span class="material-symbols-outlined" data-icon="subscriptions">subscriptions</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Media Library</span>
-</div>
-<div class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 magnetic-pull transition-all duration-500 ease-out">
-<span class="material-symbols-outlined" data-icon="search">search</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Search</span>
-</div>
-</div>
-</nav>
+
+<!-- Core Values Section -->
+<section class="py-24 bg-primary text-white px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="font-display text-4xl mb-4">Our Core Values</h2>
+            <p class="text-accent tracking-widest uppercase">The Pillars of our Faith</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition">
+                <h4 class="text-accent font-bold text-xl mb-3">Grace & Forgiveness</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">We believe in the transformative power of God’s grace to restore anyone.</p>
+                <p class="text-xs italic text-gray-400">"For by grace you have been saved through faith..." - Ephesians 2:8</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition">
+                <h4 class="text-accent font-bold text-xl mb-3">Evangelism</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Spreading the gospel is our priority. We are soul hunters for the kingdom.</p>
+                <p class="text-xs italic text-gray-400">"Go into all the world and preach the gospel..." - Mark 16:15</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition">
+                <h4 class="text-accent font-bold text-xl mb-3">Prayer</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">We stand in the gap for souls and nations through persistent intercession.</p>
+                <p class="text-xs italic text-gray-400">"Pray without ceasing." - 1 Thess 5:17</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition">
+                <h4 class="text-accent font-bold text-xl mb-3">Discipleship</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Equipping believers to become strong, mature ambassadors of Christ.</p>
+                <p class="text-xs italic text-gray-400">"Go and make disciples of all nations..." - Matthew 28:19</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition">
+                <h4 class="text-accent font-bold text-xl mb-3">Love & Community</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Serving humanity with compassion and godly love.</p>
+                <p class="text-xs italic text-gray-400">"Love your neighbor as yourself." - Matthew 22:39</p>
+            </div>
+            <div class="bg-accent/20 p-8 rounded-2xl border border-accent/30 flex items-center justify-center text-center">
+                <p class="font-display text-xl italic">"At All Cost..."</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="py-24 bg-white px-6">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-display text-3xl mb-12 text-center">Life in the Church</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <img class="w-full h-64 object-cover rounded-xl" src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800" alt="Church 1">
+            <img class="w-full h-64 object-cover rounded-xl" src="https://images.unsplash.com/photo-1471666875520-c75081f42081?q=80&w=800" alt="Church 2">
+            <img class="w-full h-64 object-cover rounded-xl" src="https://images.unsplash.com/photo-1543165796-5426273eaab3?q=80&w=800" alt="Church 3">
+        </div>
+    </div>
+</section>
+
+<!-- Service Times Section -->
+<section id="service-times" class="py-24 bg-[#eeeee8] px-6">
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-gray-100">
+        <div class="text-center mb-12">
+            <span class="material-symbols-outlined text-accent text-5xl mb-4">schedule</span>
+            <h2 class="font-display text-4xl text-primary">Service Times</h2>
+        </div>
+        <div class="space-y-8 divide-y divide-gray-100">
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="font-bold text-xl">Sunday Service</h3>
+                    <p class="text-gray-600">Join us for worship and word</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-primary">1st Service: 7:00am - 9:30am</p>
+                    <p class="font-bold text-primary">2nd Service: 9:30am - 12noon</p>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="font-bold text-xl">Every Friday</h3>
+                    <p class="text-gray-600">Destiny Recovery Encounter</p>
+                </div>
+                <p class="font-bold text-primary">6:00pm - 8:30pm</p>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="font-bold text-xl">Every Last Sunday</h3>
+                    <p class="text-gray-600 font-bold text-accent">Deliverance Service</p>
+                </div>
+                <p class="font-bold text-primary">7:00am - 11:30am</p>
+            </div>
+        </div>
+        <div class="mt-16 text-center">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" class="bg-primary text-white px-12 py-4 rounded-full font-bold hover:bg-secondary transition">
+                JOIN LIVE ON FACEBOOK
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Footer -->
-<footer class="w-full pt-32 pb-12 bg-stone-50 dark:bg-stone-950 border-t border-stone-200 dark:border-stone-900">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto px-8">
-<div class="space-y-6">
-<div class="text-xl font-serif italic text-[#1B3022] dark:text-stone-200">Sanctuary</div>
-<p class="text-stone-500 font-serif text-sm leading-relaxed">
-                    A progressive, contemplative community seeking the Way of Jesus in the modern world.
-                </p>
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-[#1B3022]">local_library</span>
-<span class="material-symbols-outlined text-[#1B3022]">church</span>
-<span class="material-symbols-outlined text-[#1B3022]">volunteer_activism</span>
-</div>
-</div>
-<div class="space-y-4">
-<h4 class="font-bold text-primary-container">Quick Links</h4>
-<ul class="space-y-2">
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Sermon Archive</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Statement of Faith</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Volunteer</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Contact Us</a></li>
-</ul>
-</div>
-<div class="space-y-4">
-<h4 class="font-bold text-primary-container">Location</h4>
-<p class="text-stone-500 font-serif text-sm leading-relaxed">
-                    124 Serenity Way<br/>
-                    Cascadia, WA 98101<br/>
-                    Sundays at 9:00am &amp; 11:00am
-                </p>
-</div>
-<div class="space-y-4">
-<h4 class="font-bold text-primary-container">Newsletter</h4>
-<p class="text-stone-500 font-serif text-sm mb-4">Soft updates on community life.</p>
-<div class="flex border-b border-stone-300 py-2">
-<input class="bg-transparent border-none focus:ring-0 text-sm flex-1 font-serif" placeholder="email address" type="email"/>
-<button class="text-[#1B3022] font-bold text-sm">Join</button>
-</div>
-</div>
-</div>
-<div class="max-w-7xl mx-auto px-8 mt-24 pt-8 border-t border-stone-200/50 flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-stone-400 text-xs font-serif italic">© 2024 Sanctuary Church. All are welcome.</p>
-<div class="flex gap-8 text-xs text-stone-400 uppercase tracking-widest font-label-caps">
-<a href="#">Privacy</a>
-<a href="#">Terms</a>
-<a href="#">Accessibility</a>
-</div>
-</div>
+<footer class="bg-primary text-white pt-24 pb-12 px-6">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 border-b border-white/10 pb-16">
+        <div class="col-span-1 md:col-span-2">
+            <h2 class="font-display text-2xl mb-6 uppercase tracking-wider">Pardon By Grace International Church</h2>
+            <p class="text-gray-400 max-w-md leading-relaxed mb-8">
+                Winning lost souls at all cost for God. A beacon of hope, salvation, and spiritual growth in Lagos, Nigeria.
+            </p>
+            <div class="flex gap-4">
+                <a href="https://www.facebook.com/profile.php?id=61550063067274" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition"><span class="material-symbols-outlined">facebook</span></a>
+                <a href="https://www.youtube.com/@PardonByGrace" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition"><span class="material-symbols-outlined">play_circle</span></a>
+                <a href="https://www.instagram.com/pardonbygrace/#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition"><span class="material-symbols-outlined">photo_camera</span></a>
+            </div>
+        </div>
+        <div>
+            <h4 class="font-bold mb-6 text-accent">Contact</h4>
+            <p class="text-gray-400 text-sm mb-2">pardonbygrace@gmail.com</p>
+            <p class="text-gray-400 text-sm">2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria.</p>
+        </div>
+        <div>
+            <h4 class="font-bold mb-6 text-accent">Quick Links</h4>
+            <ul class="text-gray-400 text-sm space-y-4">
+                <li><a href="#" class="hover:text-white">Home</a></li>
+                <li><a href="#about" class="hover:text-white">About Us</a></li>
+                <li><button onclick="toggleModal('givingModal')" class="hover:text-white">Giving</button></li>
+                <li><a href="#service-times" class="hover:text-white">Services</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto pt-12 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-widest gap-4">
+        <p>© 2025 Pardon By Grace International Church. All Rights Reserved.</p>
+        <div class="flex gap-6">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </div>
 </footer>
-</body></html>
+
+<!-- MODALS -->
+
+<!-- Modal: Join Us This Sunday -->
+<div id="joinModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80" onclick="toggleModal('joinModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black" onclick="toggleModal('joinModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-display text-2xl text-primary mb-6">Join Us This Sunday</h3>
+        <div class="space-y-4 text-gray-700">
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-accent">location_on</span>
+                <p>2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria. <br><span class="font-bold">ZIP 100111</span></p>
+            </div>
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-accent">mail</span>
+                <p>pardonbygrace@gmail.com</p>
+            </div>
+            <div class="flex gap-3">
+                <span class="material-symbols-outlined text-accent">live_tv</span>
+                <div>
+                    <p class="font-bold">Join us Live:</p>
+                    <div class="flex flex-col gap-2 mt-2">
+                        <a href="https://www.facebook.com/profile.php?id=61550063067274" class="text-blue-600 hover:underline">Facebook Live</a>
+                        <a href="https://www.youtube.com/@PardonByGrace?" class="text-red-600 hover:underline">YouTube Channel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Mission -->
+<div id="missionModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80" onclick="toggleModal('missionModal')"></div>
+    <div class="relative bg-white max-w-2xl w-full rounded-3xl p-10">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black" onclick="toggleModal('missionModal')"><span class="material-symbols-outlined">close</span></button>
+        <span class="text-accent font-bold tracking-widest text-sm uppercase">Our Mandate</span>
+        <h3 class="font-display text-3xl text-primary mt-2 mb-6 uppercase">Winning the Lost at All Cost</h3>
+        <p class="text-gray-700 leading-relaxed">
+            Pardon by Grace International Church is a dynamic and spirit-filled ministry founded on the unshakable truth of God’s word. Established by Pastor Franklin Oji, the church is committed to its divine mandate: winning lost souls at all cost for God. With an unwavering focus on salvation, deliverance, and spiritual growth, Pardon by Grace International Church serves as a beacon of hope, drawing people into a life-changing relationship with Jesus Christ.
+        </p>
+    </div>
+</div>
+
+<!-- Modal: Giving -->
+<div id="givingModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80" onclick="toggleModal('givingModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black" onclick="toggleModal('givingModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-display text-2xl text-primary mb-6">Offering & Tithes</h3>
+        
+        <div class="bg-gray-50 p-6 rounded-2xl mb-6">
+            <p class="text-xs text-gray-500 uppercase font-bold mb-2">Local Bank Transfer (Nigeria)</p>
+            <p class="font-bold text-lg text-primary">Fidelity Bank</p>
+            <p class="text-2xl font-display text-secondary tracking-widest my-2">4110072789</p>
+            <p class="text-sm font-bold">PARDON BY GRACE INTERNATIONAL CHURCH</p>
+        </div>
+
+        <div class="bg-primary text-white p-6 rounded-2xl">
+            <p class="text-sm mb-4">Are you joining us from outside Nigeria?</p>
+            <a href="https://wa.me/2347012266550" target="_blank" class="flex items-center justify-center gap-3 bg-green-600 py-3 rounded-xl font-bold hover:bg-green-700 transition">
+                <span class="material-symbols-outlined">chat</span>
+                CONTACT ON WHATSAPP
+            </a>
+            <p class="text-[10px] mt-2 text-center text-white/60">Call/Chat +234 701 226 6550 for international details</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleModal(id) {
+        document.getElementById(id).classList.toggle('active');
+        // Prevent scroll when modal is open
+        if(document.getElementById(id).classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        if (menu.classList.contains('translate-x-full')) {
+            menu.classList.remove('translate-x-full');
+        } else {
+            menu.classList.add('translate-x-full');
+        }
+    }
+</script>
+
+</body>
+</html>
