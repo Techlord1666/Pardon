@@ -3,10 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Media Library | Pardon By Grace International Church</title>
-    
-    <!-- AOS Animations -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>Media Library | Pardon By Grace</title>
     
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -20,12 +17,7 @@
                 "primary": "#061b0e",
                 "accent": "#d4af37",
                 "tertiary": "#171816",
-                "surface": "#fafaf4",
             },
-            fontFamily: {
-                "body": ["Manrope", "sans-serif"],
-                "display": ["Noto Serif", "serif"]
-            }
           }
         }
       }
@@ -34,178 +26,125 @@
         .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
         .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        #adminUploadBtn { opacity: 0; transition: opacity 0.5s; }
-        footer:hover #adminUploadBtn { opacity: 1; }
+        
+        /* Fixed Footer Upload Button - Dim but visible */
+        #adminUploadBtn { 
+            opacity: 0.2; 
+            transition: all 0.3s; 
+            cursor: pointer;
+        }
+        #adminUploadBtn:hover { opacity: 1; color: #d4af37; }
+        
+        /* Mobile menu fix */
+        #mobileMenu { transition: transform 0.4s ease-in-out; }
     </style>
 </head>
-<body class="bg-tertiary text-surface font-body overflow-x-hidden">
+<body class="bg-[#171816] text-white font-sans overflow-x-hidden">
 
 <!-- Navigation -->
-<nav class="fixed top-0 w-full z-50 bg-white/10 backdrop-blur-xl border-b border-white/10">
-    <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20">
+<nav class="fixed top-0 w-full z-50 bg-[#171816]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
         <a href="index.html" class="flex items-center gap-2">
-            <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40?text=PBG'">
-            <span class="font-display font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
+            <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40x40?text=PBG'">
+            <span class="font-serif font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
         </a>
         
+        <!-- Desktop Links -->
         <div class="hidden lg:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest">
-            <a href="index.html" class="hover:text-accent">Home</a>
-            <a href="about.html" class="hover:text-accent">About</a>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
             <a href="media.html" class="text-accent">Library</a>
-            <button onclick="window.location.href='index.html#giving'" class="hover:text-accent">Giving</button>
+            <button onclick="alert('Please go to home page for giving')">Giving</button>
         </div>
 
+        <!-- Mobile Button -->
         <button class="lg:hidden" onclick="toggleMobileMenu(true)">
             <span class="material-symbols-outlined text-3xl">menu</span>
         </button>
     </div>
 </nav>
 
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="fixed inset-0 z-[60] bg-primary translate-x-full transition-transform duration-500 lg:hidden flex flex-col items-center justify-center space-y-8 text-2xl font-display">
+<!-- Mobile Menu Sidebar -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-[#061b0e] translate-x-full lg:hidden flex flex-col items-center justify-center space-y-8 text-2xl font-serif">
     <button class="absolute top-6 right-6" onclick="toggleMobileMenu(false)"><span class="material-symbols-outlined text-4xl text-white">close</span></button>
-    <a href="index.html" onclick="toggleMobileMenu(false)">Home</a>
-    <a href="about.html" onclick="toggleMobileMenu(false)">About Us</a>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
     <a href="media.html" class="text-accent">Media Library</a>
 </div>
 
-<main class="pt-28 pb-20 px-6 max-w-7xl mx-auto">
-    <!-- Featured Sermon -->
-    <section class="mb-20" data-aos="zoom-out">
-        <div class="relative w-full aspect-video md:aspect-[21/9] overflow-hidden asymmetric-rounding shadow-2xl group">
-            <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2000" alt="Featured"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
-            <div class="absolute bottom-8 left-8 right-8 flex flex-col md:flex-row justify-between items-end gap-6">
-                <div>
-                    <span class="bg-accent text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">Latest Release</span>
-                    <h1 class="text-3xl md:text-5xl font-display mb-2">The Power of Unshakable Faith</h1>
-                    <p class="text-gray-300 max-w-lg">Pastor Franklin Oji shares a deep revelation on standing strong in difficult times.</p>
-                </div>
-                <button class="bg-white text-primary px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-accent transition">
-                    <span class="material-symbols-outlined">play_circle</span> WATCH NOW
-                </button>
-            </div>
-        </div>
-    </section>
+<main class="pt-28 pb-32 px-4 max-w-7xl mx-auto">
+    <h1 class="text-4xl md:text-6xl font-serif mb-4 text-center">Media Library</h1>
+    <p class="text-accent text-center font-bold tracking-widest mb-16 uppercase text-sm">Watch, Listen & Download Sermons</p>
 
-    <!-- Filters -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6" data-aos="fade-up">
-        <div class="flex gap-4 overflow-x-auto w-full md:w-auto pb-2">
-            <button class="px-6 py-2 bg-accent text-primary rounded-full font-bold text-xs whitespace-nowrap">All Media</button>
-            <button class="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-full font-bold text-xs whitespace-nowrap">Video Sermons</button>
-            <button class="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-full font-bold text-xs whitespace-nowrap">Audio Messages</button>
-        </div>
-        <div class="relative w-full md:w-80">
-            <input type="text" class="w-full bg-white/5 border-white/10 rounded-full px-6 py-3 text-sm focus:ring-accent" placeholder="Search sermons...">
-            <span class="material-symbols-outlined absolute right-4 top-3 opacity-40">search</span>
-        </div>
-    </div>
-
-    <!-- Media Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        <!-- Sermon Item 1 -->
-        <div class="group" data-aos="fade-up" data-aos-delay="100">
-            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-white/5">
-                <img class="w-full h-full object-cover group-hover:scale-110 transition duration-700" src="https://images.unsplash.com/photo-1544427928-c49cdfebf494?q=80&w=800" alt="Sermon">
-                <div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <span class="material-symbols-outlined text-5xl">play_circle</span>
+    <!-- GRID OF SERMONS -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- EXAMPLE VIDEO SERMON CARD -->
+        <div class="bg-white/5 p-4 rounded-[2rem] border border-white/5 group">
+            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6">
+                <img src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
                 </div>
             </div>
-            <h3 class="font-display text-xl mb-2 group-hover:text-accent transition">Winning Against All Odds</h3>
-            <p class="text-gray-400 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-sm">person</span> Pastor Franklin Oji</p>
-            <div class="flex gap-4">
-                <a href="#" class="flex-1 bg-white/5 py-3 rounded-full text-xs font-bold text-center hover:bg-accent hover:text-primary transition">WATCH</a>
-                <!-- Link to Google Drive Download Format -->
-                <a href="https://drive.google.com/uc?export=download&id=FILE_ID" class="p-3 bg-white/5 rounded-full hover:bg-primary transition">
+            <h3 class="text-xl font-serif mb-2">Power of Grace</h3>
+            <p class="text-gray-400 text-sm mb-6">Pastor Franklin Oji</p>
+            <div class="flex gap-3">
+                <!-- VIEW LINK -->
+                <a href="YOUR_GOOGLE_DRIVE_VIEW_LINK" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-xs font-bold">WATCH</a>
+                <!-- DOWNLOAD LINK (Notice the uc?export format) -->
+                <a href="https://drive.google.com/uc?export=download&id=1_ABC_YOUR_FILE_ID_HERE" class="bg-white/10 p-3 rounded-full hover:bg-white/20">
                     <span class="material-symbols-outlined text-sm">download</span>
                 </a>
             </div>
         </div>
 
-        <!-- Sermon Item 2 (Audio) -->
-        <div class="group" data-aos="fade-up" data-aos-delay="200">
+        <!-- EXAMPLE AUDIO SERMON CARD -->
+        <div class="bg-white/5 p-4 rounded-[2rem] border border-white/5 group">
             <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary flex items-center justify-center">
-                <span class="material-symbols-outlined text-6xl text-accent/20">graphic_eq</span>
-                <div class="absolute top-4 left-4 bg-accent text-primary text-[8px] font-bold px-2 py-1 rounded">AUDIO MESSAGE</div>
+                <span class="material-symbols-outlined text-6xl text-accent/30">mic_external_on</span>
+                <div class="absolute top-4 left-4 bg-accent text-primary text-[10px] font-bold px-2 py-1 rounded">AUDIO</div>
             </div>
-            <h3 class="font-display text-xl mb-2 group-hover:text-accent transition">The Mystery of Divine Grace</h3>
-            <p class="text-gray-400 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-sm">person</span> Pastor Franklin Oji</p>
-            <div class="flex gap-4">
-                <a href="#" class="flex-1 bg-white/5 py-3 rounded-full text-xs font-bold text-center hover:bg-accent hover:text-primary transition">LISTEN</a>
-                <a href="#" class="p-3 bg-white/5 rounded-full hover:bg-primary transition">
+            <h3 class="text-xl font-serif mb-2">Unshakable Faith</h3>
+            <p class="text-gray-400 text-sm mb-6">Pastor Franklin Oji</p>
+            <div class="flex gap-3">
+                <a href="YOUR_GOOGLE_DRIVE_VIEW_LINK" target="_blank" class="flex-1 bg-white/10 text-center py-3 rounded-full text-xs font-bold hover:bg-white/20">LISTEN</a>
+                <a href="https://drive.google.com/uc?export=download&id=1_ABC_YOUR_FILE_ID_HERE" class="bg-white/10 p-3 rounded-full hover:bg-white/20">
                     <span class="material-symbols-outlined text-sm">download</span>
                 </a>
             </div>
         </div>
+
     </div>
 </main>
 
-<!-- Persistent Sermon Player -->
-<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl bg-white/10 backdrop-blur-2xl rounded-full h-20 px-8 flex items-center justify-between border border-white/10 z-40 shadow-2xl">
-    <div class="flex items-center gap-4">
-        <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary font-bold">PBG</div>
-        <div class="hidden sm:block">
-            <p class="text-[10px] font-bold uppercase text-accent">Now Playing</p>
-            <p class="text-xs font-bold truncate w-32">Morning Devotion...</p>
-        </div>
-    </div>
-    <div class="flex items-center gap-6">
-        <span class="material-symbols-outlined cursor-pointer opacity-60">skip_previous</span>
-        <span class="material-symbols-outlined text-4xl cursor-pointer text-accent">play_circle</span>
-        <span class="material-symbols-outlined cursor-pointer opacity-60">skip_next</span>
-    </div>
-    <div class="hidden sm:flex items-center gap-2">
-        <span class="material-symbols-outlined text-sm opacity-60">volume_up</span>
-        <div class="w-20 h-1 bg-white/20 rounded-full"><div class="w-1/2 h-full bg-accent rounded-full"></div></div>
-    </div>
-</div>
-
 <!-- Footer -->
-<footer class="bg-black/20 pt-20 pb-10 px-6 border-t border-white/5 relative">
-    <div class="max-w-7xl mx-auto text-center">
-        <p class="text-gray-500 text-sm">© 2025 Pardon By Grace International Church</p>
+<footer class="py-20 border-t border-white/5 bg-black/30 px-4 text-center">
+    <div class="max-w-7xl mx-auto">
+        <p class="text-gray-600 text-sm mb-6">© 2025 Pardon By Grace International Church</p>
         
-        <!-- HIDDEN ADMIN BUTTON -->
-        <button id="adminUploadBtn" onclick="requestAdminAccess()" class="mt-4 text-[10px] uppercase tracking-widest text-gray-700 hover:text-accent font-bold">
-            Admin Upload
+        <!-- THE ADMIN BUTTON (Now dim but visible at the bottom) -->
+        <button id="adminUploadBtn" onclick="requestAdminAccess()" class="text-[10px] font-bold uppercase tracking-widest p-4">
+            [ Admin Upload ]
         </button>
     </div>
 </footer>
 
-<!-- ADMIN MODAL -->
+<!-- UPLOAD MODAL -->
 <div id="uploadModal" class="modal">
-    <div class="absolute inset-0 bg-primary/95" onclick="toggleModal('uploadModal', false)"></div>
-    <div class="relative bg-tertiary border border-white/10 w-full max-w-md rounded-3xl p-8 shadow-2xl">
-        <h3 class="text-2xl font-display mb-6 text-accent">Upload to Library</h3>
-        <form class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold uppercase mb-2">Sermon Title</label>
-                <input type="text" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 focus:ring-accent" placeholder="Enter title...">
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase mb-2">Google Drive Link (Audio/Video)</label>
-                <input type="url" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 focus:ring-accent" placeholder="Paste link here...">
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase mb-2">Media Type</label>
-                <select class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-gray-400">
-                    <option>Video Sermon</option>
-                    <option>Audio Message</option>
-                </select>
-            </div>
-            <button type="submit" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Publish to Library</button>
-        </form>
+    <div class="absolute inset-0 bg-black/90" onclick="toggleModal('uploadModal', false)"></div>
+    <div class="relative bg-[#171816] border border-white/10 w-full max-w-md rounded-[2rem] p-8">
+        <h3 class="text-2xl font-serif mb-6 text-accent">Admin Notification</h3>
+        <p class="text-gray-400 mb-6">To add new sermons to this library permanently, you must copy a "Sermon Card" block in your HTML code and paste your Google Drive links inside it.</p>
+        <button onclick="toggleModal('uploadModal', false)" class="w-full bg-accent text-primary py-4 rounded-xl font-bold">I UNDERSTAND</button>
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({ duration: 1000, once: true });
-
     function toggleMobileMenu(open) {
         const menu = document.getElementById('mobileMenu');
-        menu.classList.toggle('translate-x-full', !open);
+        if(open) menu.classList.remove('translate-x-full');
+        else menu.classList.add('translate-x-full');
     }
 
     function toggleModal(id, open) {
@@ -215,11 +154,11 @@
     }
 
     function requestAdminAccess() {
-        let password = prompt("Enter Admin Password to Upload:");
+        let password = prompt("Enter Admin Password:");
         if (password === "pardonbygrace11") {
             toggleModal('uploadModal', true);
         } else {
-            alert("Unauthorized Access!");
+            alert("Incorrect Password!");
         }
     }
 </script>
