@@ -5,11 +5,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Media Library | Pardon By Grace</title>
     
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700" rel="stylesheet"/>
     
     <script id="tailwind-config">
       tailwind.config = {
@@ -25,10 +24,13 @@
         .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
         .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        .admin-only { display: none; } /* Hidden until admin logs in */
-        body.is-admin .admin-only { display: flex; }
-        #adminBtn { opacity: 0.1; cursor: pointer; transition: 0.3s; }
+        
+        .admin-controls { display: none !important; }
+        body.admin-mode .admin-controls { display: flex !important; }
+        
+        #adminBtn { opacity: 0.05; cursor: pointer; transition: 0.3s; }
         #adminBtn:hover { opacity: 1; color: #d4af37; }
+        
         .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -40,149 +42,129 @@
     <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
         <a href="index.html" class="flex items-center gap-2">
             <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40x40?text=PBG'">
-            <span class="font-serif font-bold text-lg uppercase tracking-tighter hidden sm:block">Pardon By Grace</span>
+            <span class="font-serif font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
         </a>
-        <div class="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest">
-            <a href="index.html" class="hover:text-accent">Home</a>
-            <a href="about.html" class="hover:text-accent">About</a>
-            <a href="media.html" class="text-accent">Library</a>
+        <div class="flex items-center gap-4">
+             <button onclick="openUpload()" class="admin-controls bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest">+ Add New</button>
+             <a href="index.html" class="text-[10px] font-bold uppercase tracking-widest hover:text-accent">Home</a>
         </div>
     </div>
 </nav>
 
-<main class="pt-28 pb-40 px-6 max-w-7xl mx-auto">
+<main class="pt-32 pb-40 px-6 max-w-7xl mx-auto">
     <div class="text-center mb-16">
         <h1 class="text-4xl md:text-6xl font-serif mb-4">Sermon Library</h1>
         <p class="text-accent font-bold tracking-[0.3em] uppercase text-xs">Winning the lost at all cost</p>
     </div>
 
-    <!-- Sermon Grid -->
     <div id="sermonGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        <!-- Will show "Loading..." then sermons will appear here -->
-        <p id="emptyMsg" class="col-span-full text-center text-gray-500 py-20 italic">The library is currently empty. Check back soon!</p>
+        <p id="emptyMsg" class="col-span-full text-center text-gray-500 py-20 italic">Loading sermons...</p>
     </div>
 </main>
 
 <footer class="py-20 border-t border-white/5 bg-black/20 text-center">
     <p class="text-gray-600 text-sm mb-4">© 2025 Pardon By Grace International Church</p>
-    <button id="adminBtn" onclick="loginAdmin()" class="text-[10px] font-bold uppercase tracking-widest">[ Admin Access ]</button>
+    <button id="adminBtn" onclick="activateAdmin()" class="text-[10px] font-bold uppercase tracking-widest">[ Admin Access ]</button>
 </footer>
 
-<!-- MODAL: UPLOAD / EDIT FORM -->
+<!-- FORM MODAL -->
 <div id="uploadModal" class="modal">
     <div class="absolute inset-0 bg-black/95" onclick="closeModal()"></div>
     <div class="relative bg-tertiary border border-white/10 w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl">
-        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Add New Sermon</h3>
+        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Sermon Form</h3>
         <input type="hidden" id="editId">
         <div class="space-y-4">
             <input type="text" id="fTitle" placeholder="Sermon Title" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            <input type="text" id="fSpeaker" placeholder="Speaker (e.g. Pastor Franklin Oji)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            <input type="text" id="fImage" placeholder="Thumbnail Image URL (Google Drive/FB Image link)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            <input type="text" id="fView" placeholder="Google Drive View Link" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            <input type="text" id="fFileID" placeholder="Google Drive File ID (for download)" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
+            <input type="text" id="fSpeaker" placeholder="Speaker Name" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
             
-            <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Publish Now</button>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Link</p>
+                <input type="text" id="fMasterLink" placeholder="Paste your Google Drive Link here" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+                <p class="text-[9px] text-gray-500 mt-2 italic">The system will automatically create the image and download link from this URL.</p>
+            </div>
+            
+            <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Save Sermon</button>
         </div>
     </div>
 </div>
 
 <script>
-    // SUPABASE CONFIG
     const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let isAdmin = false;
-
-    // 1. Initial Load
     window.onload = loadSermons;
+
+    // --- AUTOMATIC ID EXTRACTOR ---
+    function extractGoogleId(url) {
+        if (!url || !url.includes('drive.google.com')) return url;
+        try {
+            if (url.includes('id=')) {
+                return url.split('id=')[1].split('&')[0];
+            } else if (url.includes('/d/')) {
+                return url.split('/d/')[1].split('/')[0];
+            }
+        } catch (e) { return url; }
+        return url;
+    }
 
     async function loadSermons() {
         const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
         const grid = document.getElementById('sermonGrid');
-        const emptyMsg = document.getElementById('emptyMsg');
-
+        grid.innerHTML = '';
         if (data && data.length > 0) {
-            emptyMsg.style.display = 'none';
-            grid.innerHTML = '';
             data.forEach(s => renderCard(s));
         } else {
-            grid.innerHTML = '';
-            grid.appendChild(emptyMsg);
-            emptyMsg.style.display = 'block';
+            grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 italic">No sermons found.</p>';
         }
     }
 
-    // 2. Render Sermon Card
     function renderCard(s) {
         const grid = document.getElementById('sermonGrid');
         const div = document.createElement('div');
-        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card group";
+        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card group relative";
+        
+        // AUTO GENERATE IMAGE AND DOWNLOAD FROM STORED ID
+        const cleanId = extractGoogleId(s.download_id);
+        const displayImage = `https://lh3.googleusercontent.com/d/${cleanId}`;
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
+
         div.innerHTML = `
             <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary">
-                <img src="${s.image_url || 'https://via.placeholder.com/400x225?text=Sermon'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <img src="${displayImage}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=Processing+Media...'">
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                     <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
                 </div>
             </div>
             <h3 class="text-xl font-serif mb-1">${s.title}</h3>
-            <p class="text-gray-500 text-sm mb-6">${s.speaker || 'Pastor Franklin Oji'}</p>
+            <p class="text-gray-500 text-sm mb-6">${s.speaker}</p>
             
             <div class="flex gap-2">
                 <a href="${s.view_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
-                <a href="https://drive.google.com/uc?export=download&id=${s.download_id}" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+                <a href="${downloadUrl}" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
                     <span class="material-symbols-outlined text-sm">download</span>
                 </a>
             </div>
 
-            <!-- Admin Controls -->
-            <div class="admin-only mt-4 flex gap-2 border-t border-white/5 pt-4">
-                <button onclick="openEdit('${s.id}', '${s.title}', '${s.speaker}', '${s.image_url}', '${s.view_link}', '${s.download_id}')" class="flex-1 text-[10px] font-bold uppercase text-gray-400 hover:text-white">Edit</button>
-                <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold uppercase text-red-400 hover:text-red-600">Delete</button>
+            <div class="admin-controls mt-4 gap-2 border-t border-white/5 pt-4">
+                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.view_link}\`)" class="flex-1 text-[10px] font-bold text-gray-400">Edit</button>
+                <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold text-red-400">Delete</button>
             </div>
         `;
         grid.appendChild(div);
     }
 
-    // 3. Admin Actions
-    function loginAdmin() {
-        const pw = prompt("Enter Admin Password:");
-        if (pw === "pardonbygrace11") {
-            isAdmin = true;
-            document.body.classList.add('is-admin');
-            openUpload();
-        } else alert("Invalid Password");
-    }
-
-    function openUpload() {
-        document.getElementById('modalTitle').innerText = "Add New Sermon";
-        document.getElementById('editId').value = "";
-        clearForm();
-        document.getElementById('uploadModal').classList.add('active');
-    }
-
-    function openEdit(id, title, speaker, img, view, fileId) {
-        document.getElementById('modalTitle').innerText = "Edit Sermon";
-        document.getElementById('editId').value = id;
-        document.getElementById('fTitle').value = title;
-        document.getElementById('fSpeaker').value = speaker;
-        document.getElementById('fImage').value = img;
-        document.getElementById('fView').value = view;
-        document.getElementById('fFileID').value = fileId;
-        document.getElementById('uploadModal').classList.add('active');
-    }
-
     async function saveSermon() {
         const id = document.getElementById('editId').value;
-        const btn = document.getElementById('saveBtn');
-        btn.innerText = "Processing...";
+        const rawLink = document.getElementById('fMasterLink').value;
+        const cleanId = extractGoogleId(rawLink);
 
         const payload = {
             title: document.getElementById('fTitle').value,
             speaker: document.getElementById('fSpeaker').value,
-            image_url: document.getElementById('fImage').value,
-            view_link: document.getElementById('fView').value,
-            download_id: document.getElementById('fFileID').value
+            view_link: rawLink, // Original link for viewing
+            download_id: cleanId, // Just the ID for auto-generating image/download
+            image_url: cleanId // Using ID as image reference
         };
 
         let result;
@@ -192,25 +174,43 @@
             result = await _supabase.from('sermons').insert([payload]);
         }
 
-        if (result.error) alert("Error: " + result.error.message);
-        else {
-            alert("Success!");
+        if (result.error) alert(result.error.message);
+        else location.reload();
+    }
+
+    function activateAdmin() {
+        if (prompt("Enter Password:") === "pardonbygrace11") {
+            document.body.classList.add('admin-mode');
+            alert("Admin Mode Unlocked.");
+        } else alert("Access Denied");
+    }
+
+    function openUpload() {
+        document.getElementById('modalTitle').innerText = "Add New Sermon";
+        document.getElementById('editId').value = "";
+        clearForm();
+        document.getElementById('uploadModal').classList.add('active');
+    }
+
+    function openEdit(id, title, speaker, view) {
+        document.getElementById('modalTitle').innerText = "Edit Sermon";
+        document.getElementById('editId').value = id;
+        document.getElementById('fTitle').value = title;
+        document.getElementById('fSpeaker').value = speaker;
+        document.getElementById('fMasterLink').value = view;
+        document.getElementById('uploadModal').classList.add('active');
+    }
+
+    async function deleteSermon(id) {
+        if (confirm("Delete this sermon?")) {
+            await _supabase.from('sermons').delete().eq('id', id);
             location.reload();
         }
     }
 
-    async function deleteSermon(id) {
-        const pw = prompt("Enter Delete Password (pgic):");
-        if (pw === "pgic") {
-            const { error } = await _supabase.from('sermons').delete().eq('id', id);
-            if (error) alert(error.message);
-            else location.reload();
-        } else alert("Wrong password! Delete cancelled.");
-    }
-
     function closeModal() { document.getElementById('uploadModal').classList.remove('active'); }
     function clearForm() {
-        ['fTitle','fSpeaker','fImage','fView','fFileID'].forEach(id => document.getElementById(id).value = "");
+        ['fTitle','fSpeaker','fMasterLink'].forEach(id => document.getElementById(id).value = "");
     }
 </script>
 
