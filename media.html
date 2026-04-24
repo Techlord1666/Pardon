@@ -5,6 +5,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Media Library | Pardon By Grace</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -24,13 +28,10 @@
         .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
         .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
-        
         .admin-controls { display: none !important; }
         body.admin-mode .admin-controls { display: flex !important; }
-        
         #adminBtn { opacity: 0.05; cursor: pointer; transition: 0.3s; }
         #adminBtn:hover { opacity: 1; color: #d4af37; }
-        
         .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -71,16 +72,22 @@
 <div id="uploadModal" class="modal">
     <div class="absolute inset-0 bg-black/95" onclick="closeModal()"></div>
     <div class="relative bg-tertiary border border-white/10 w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl">
-        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Sermon Form</h3>
+        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Add New Sermon</h3>
         <input type="hidden" id="editId">
         <div class="space-y-4">
             <input type="text" id="fTitle" placeholder="Sermon Title" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
             <input type="text" id="fSpeaker" placeholder="Speaker Name" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
             
+            <!-- THUMBNAIL BOX (Different Company/Link) -->
             <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Link</p>
-                <input type="text" id="fMasterLink" placeholder="Paste your Google Drive Link here" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
-                <p class="text-[9px] text-gray-500 mt-2 italic">The system will automatically create the image and download link from this URL.</p>
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Thumbnail Image URL</p>
+                <input type="text" id="fImage" placeholder="Paste Thumbnail Link (from other company)" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+            </div>
+
+            <!-- SERMON LINK BOX (For Watch & Download) -->
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Sermon Link</p>
+                <input type="text" id="fMasterLink" placeholder="Paste Google Drive Video Link" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
             </div>
             
             <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Save Sermon</button>
@@ -91,31 +98,33 @@
 <script>
     const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+    
+    // Improved Supabase Client Initialization
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     window.onload = loadSermons;
 
-    // --- AUTOMATIC ID EXTRACTOR ---
     function extractGoogleId(url) {
         if (!url || !url.includes('drive.google.com')) return url;
         try {
-            if (url.includes('id=')) {
-                return url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                return url.split('/d/')[1].split('/')[0];
-            }
-        } catch (e) { return url; }
-        return url;
+            if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
+            else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
+        } catch (e) { return ""; }
+        return "";
     }
 
     async function loadSermons() {
-        const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
-        const grid = document.getElementById('sermonGrid');
-        grid.innerHTML = '';
-        if (data && data.length > 0) {
-            data.forEach(s => renderCard(s));
-        } else {
-            grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 italic">No sermons found.</p>';
+        try {
+            const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
+            const grid = document.getElementById('sermonGrid');
+            grid.innerHTML = '';
+            if (data && data.length > 0) {
+                data.forEach(s => renderCard(s));
+            } else {
+                grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 italic">No sermons found.</p>';
+            }
+        } catch (err) {
+            console.error(err);
         }
     }
 
@@ -124,14 +133,13 @@
         const div = document.createElement('div');
         div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card group relative";
         
-        // AUTO GENERATE IMAGE AND DOWNLOAD FROM STORED ID
-        const cleanId = extractGoogleId(s.download_id);
-        const displayImage = `https://lh3.googleusercontent.com/d/${cleanId}`;
+        // Generate download URL from the ID
+        const cleanId = extractGoogleId(s.view_link);
         const downloadUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
 
         div.innerHTML = `
             <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary">
-                <img src="${displayImage}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=Processing+Media...'">
+                <img src="${s.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=No+Thumbnail'">
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                     <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
                 </div>
@@ -147,7 +155,7 @@
             </div>
 
             <div class="admin-controls mt-4 gap-2 border-t border-white/5 pt-4">
-                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.view_link}\`)" class="flex-1 text-[10px] font-bold text-gray-400">Edit</button>
+                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.image_url}\`, \`${s.view_link}\`)" class="flex-1 text-[10px] font-bold text-gray-400">Edit</button>
                 <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold text-red-400">Delete</button>
             </div>
         `;
@@ -156,32 +164,46 @@
 
     async function saveSermon() {
         const id = document.getElementById('editId').value;
-        const rawLink = document.getElementById('fMasterLink').value;
-        const cleanId = extractGoogleId(rawLink);
+        const sermonLink = document.getElementById('fMasterLink').value;
+        const imageUrl = document.getElementById('fImage').value;
+        const title = document.getElementById('fTitle').value;
 
-        const payload = {
-            title: document.getElementById('fTitle').value,
-            speaker: document.getElementById('fSpeaker').value,
-            view_link: rawLink, // Original link for viewing
-            download_id: cleanId, // Just the ID for auto-generating image/download
-            image_url: cleanId // Using ID as image reference
-        };
-
-        let result;
-        if (id) {
-            result = await _supabase.from('sermons').update(payload).eq('id', id);
-        } else {
-            result = await _supabase.from('sermons').insert([payload]);
+        if(!title || !sermonLink) {
+            alert("Title and Sermon Link are required!");
+            return;
         }
 
-        if (result.error) alert(result.error.message);
-        else location.reload();
+        const payload = {
+            title: title,
+            speaker: document.getElementById('fSpeaker').value,
+            view_link: sermonLink,
+            image_url: imageUrl, // Direct link from other company
+            download_id: extractGoogleId(sermonLink)
+        };
+
+        const btn = document.getElementById('saveBtn');
+        btn.innerText = "Saving...";
+
+        try {
+            let result;
+            if (id) {
+                result = await _supabase.from('sermons').update(payload).eq('id', id);
+            } else {
+                result = await _supabase.from('sermons').insert([payload]);
+            }
+
+            if (result.error) throw result.error;
+            location.reload();
+        } catch (err) {
+            alert("Error: " + err.message);
+            btn.innerText = "Save Sermon";
+        }
     }
 
     function activateAdmin() {
         if (prompt("Enter Password:") === "pardonbygrace11") {
             document.body.classList.add('admin-mode');
-            alert("Admin Mode Unlocked.");
+            alert("Admin Mode Active.");
         } else alert("Access Denied");
     }
 
@@ -192,11 +214,12 @@
         document.getElementById('uploadModal').classList.add('active');
     }
 
-    function openEdit(id, title, speaker, view) {
+    function openEdit(id, title, speaker, img, view) {
         document.getElementById('modalTitle').innerText = "Edit Sermon";
         document.getElementById('editId').value = id;
         document.getElementById('fTitle').value = title;
         document.getElementById('fSpeaker').value = speaker;
+        document.getElementById('fImage').value = img;
         document.getElementById('fMasterLink').value = view;
         document.getElementById('uploadModal').classList.add('active');
     }
@@ -210,7 +233,7 @@
 
     function closeModal() { document.getElementById('uploadModal').classList.remove('active'); }
     function clearForm() {
-        ['fTitle','fSpeaker','fMasterLink'].forEach(id => document.getElementById(id).value = "");
+        ['fTitle','fSpeaker','fImage','fMasterLink'].forEach(id => document.getElementById(id).value = "");
     }
 </script>
 
