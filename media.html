@@ -1,377 +1,228 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html class="light scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Media Library | Pardon By Grace International Church</title>
+    
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
       tailwind.config = {
-        darkMode: "class",
         theme: {
           extend: {
-            "colors": {
-                    "inverse-surface": "#2f312d",
-                    "primary-container": "#1b3022",
-                    "on-secondary-container": "#786044",
-                    "outline": "#737973",
-                    "on-surface": "#1a1c19",
-                    "surface-container-lowest": "#ffffff",
-                    "secondary-container": "#fdddb9",
-                    "on-tertiary": "#ffffff",
-                    "outline-variant": "#c3c8c1",
-                    "surface-bright": "#fafaf4",
-                    "surface-container-high": "#e8e8e3",
-                    "on-primary-fixed-variant": "#364c3c",
-                    "on-tertiary-fixed": "#1c1c1a",
-                    "secondary-fixed": "#fdddb9",
-                    "error-container": "#ffdad6",
-                    "tertiary": "#171816",
-                    "surface": "#fafaf4",
-                    "surface-container": "#eeeee8",
-                    "on-error-container": "#93000a",
-                    "on-primary": "#ffffff",
-                    "primary": "#061b0e",
-                    "surface-variant": "#e3e3dd",
-                    "tertiary-fixed": "#e5e2df",
-                    "tertiary-container": "#2c2c2a",
-                    "secondary-fixed-dim": "#e0c29f",
-                    "error": "#ba1a1a",
-                    "on-error": "#ffffff",
-                    "on-primary-container": "#819986",
-                    "on-primary-fixed": "#0b2013",
-                    "background": "#fafaf4",
-                    "tertiary-fixed-dim": "#c8c6c3",
-                    "surface-dim": "#dadad5",
-                    "on-tertiary-container": "#959390",
-                    "on-background": "#1a1c19",
-                    "surface-container-low": "#f4f4ee",
-                    "on-secondary": "#ffffff",
-                    "secondary": "#715a3e",
-                    "inverse-primary": "#b4cdb8",
-                    "primary-fixed": "#d0e9d4",
-                    "surface-container-highest": "#e3e3dd",
-                    "on-tertiary-fixed-variant": "#474745",
-                    "surface-tint": "#4d6453",
-                    "on-secondary-fixed": "#281803",
-                    "inverse-on-surface": "#f1f1eb",
-                    "on-surface-variant": "#434843",
-                    "on-secondary-fixed-variant": "#584329",
-                    "primary-fixed-dim": "#b4cdb8"
+            colors: {
+                "primary": "#061b0e",
+                "accent": "#d4af37",
+                "tertiary": "#171816",
+                "surface": "#fafaf4",
             },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "fontFamily": {
-                    "body-md": ["Manrope"],
-                    "headline-lg": ["Noto Serif"],
-                    "label-caps": ["Manrope"],
-                    "body-lg": ["Manrope"],
-                    "headline-md": ["Noto Serif"],
-                    "display": ["Noto Serif"]
-            },
-            "fontSize": {
-                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
-                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
-                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
-                    "display": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+            fontFamily: {
+                "body": ["Manrope", "sans-serif"],
+                "display": ["Noto Serif", "serif"]
             }
-          },
-        },
+          }
+        }
       }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .magnetic-pull:hover {
-            transform: translateY(-4px) scale(1.02);
-        }
-        .asymmetric-rounding {
-            border-radius: 60px 20px 60px 20px;
-        }
-        .glass-dark {
-            background: rgba(23, 24, 22, 0.8);
-            backdrop-filter: blur(12px);
-        }
-        .text-glow {
-            text-shadow: 0 0 20px rgba(129, 153, 134, 0.3);
-        }
+    <style>
+        .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
+        .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        #adminUploadBtn { opacity: 0; transition: opacity 0.5s; }
+        footer:hover #adminUploadBtn { opacity: 1; }
     </style>
 </head>
-<body class="bg-tertiary text-surface font-body-md overflow-x-hidden">
-<!-- Top Navigation Bar -->
-<header class="fixed top-0 w-full z-50 bg-white/40 backdrop-blur-xl dark:bg-stone-900/60 border-b border-stone-200/20 dark:border-stone-800/20 shadow-[0_20px_50px_rgba(27,48,34,0.05)]">
-<nav class="flex justify-between items-center max-w-7xl mx-auto px-8 h-24">
-<div class="text-2xl font-serif font-bold text-[#1B3022] dark:text-stone-100">Sanctuary</div>
-<div class="hidden md:flex items-center space-x-12">
-<a class="font-serif text-lg tracking-tight text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] transition-all duration-500 ease-out" href="#">Home</a>
-<a class="font-serif text-lg tracking-tight text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] transition-all duration-500 ease-out" href="#">About</a>
-<a class="font-serif text-lg tracking-tight text-[#1B3022] dark:text-white border-b-2 border-[#1B3022] pb-1 transition-all duration-500 ease-out" href="#">Media</a>
-<a class="font-serif text-lg tracking-tight text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] transition-all duration-500 ease-out" href="#">Giving</a>
-<a class="font-serif text-lg tracking-tight text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] transition-all duration-500 ease-out" href="#">Connect</a>
-</div>
-<button class="bg-primary-container text-on-primary px-8 py-3 rounded-full font-label-caps uppercase text-glow hover:scale-105 transition-transform duration-300">Join Us Online</button>
-</nav>
-</header>
-<main class="pt-32 pb-40 px-8 max-w-7xl mx-auto">
-<!-- Featured Sermon Player -->
-<section class="mb-32 relative">
-<div class="relative w-full aspect-video md:aspect-[21/9] overflow-hidden asymmetric-rounding shadow-[0_40px_100px_rgba(0,0,0,0.4)] group">
-<img alt="Featured Sermon" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" data-alt="cinematic low angle shot of a wooden pulpit in a dimly lit modern sanctuary with soft divine rays of light streaming through high windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlNA86X2pQ8_zS5g4cD_RDpSHUFq7Gla3s-lho13K0x0y7AxcBrIxL_axyYpgxveIQee0GZZWkHjbMLo4mvacqZimb3ei54CFyMCXXCXIQnUNnFXjhVeJ756jS6UANiSvgIJmQOBtCMq3kq8_1xnCPkZ1V578WuFDC56sDqZXDew7CJC-Z7U70mG320ivybOVUb_BhVHTE_xCleASE5RfRqbUQ1T9OaYXIaqZqefwbhr6XmkpX0Ir2Xj-RbWYEncHKjfsFDLNvbmkF"/>
-<div class="absolute inset-0 bg-gradient-to-t from-tertiary via-tertiary/20 to-transparent"></div>
-<div class="absolute bottom-12 left-12 right-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
-<div class="max-w-2xl">
-<span class="inline-block px-4 py-1 mb-4 bg-primary-container text-on-primary text-label-caps rounded-full">Featured Series</span>
-<h1 class="font-display text-headline-lg text-white mb-4">The Quiet Place: Finding Rest in Chaos</h1>
-<p class="font-body-lg text-on-tertiary-container max-w-lg">A deep dive into the spiritual discipline of silence and its transformative power in a noisy world.</p>
-</div>
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-3 bg-white text-tertiary px-8 py-4 rounded-full font-label-caps hover:bg-on-primary-container hover:text-white transition-colors duration-300">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-                            Watch Now
-                        </button>
-</div>
-</div>
-</div>
-</section>
-<!-- Media Filter Bar -->
-<section class="mb-16 flex flex-col md:flex-row justify-between items-center gap-8 border-b border-white/10 pb-8">
-<div class="flex gap-4 overflow-x-auto w-full md:w-auto pb-4 md:pb-0">
-<button class="px-6 py-2 bg-primary-container text-on-primary rounded-full font-label-caps text-xs">All Media</button>
-<button class="px-6 py-2 bg-tertiary-container text-on-tertiary-container rounded-full font-label-caps text-xs hover:bg-primary-container/40 transition-colors">Sermons</button>
-<button class="px-6 py-2 bg-tertiary-container text-on-tertiary-container rounded-full font-label-caps text-xs hover:bg-primary-container/40 transition-colors">Podcasts</button>
-<button class="px-6 py-2 bg-tertiary-container text-on-tertiary-container rounded-full font-label-caps text-xs hover:bg-primary-container/40 transition-colors">Interviews</button>
-</div>
-<div class="relative w-full md:w-72">
-<input class="w-full bg-tertiary-container/50 border-none rounded-full px-6 py-3 text-sm focus:ring-1 focus:ring-on-primary-container text-surface" placeholder="Search library..." type="text"/>
-<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-tertiary-container">search</span>
-</div>
-</section>
-<!-- Media Grid -->
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-<!-- Card 1 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="atmospheric shot of a misty forest at dawn with tall pine trees and soft green tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeu-3AnLZpa0rvz55BaQ5Q5tBtm5kDfvLB7L4RTwIqSWNC0IzGE2Jpi8ObLKnB258hDMASAzPf80uSABcErUVzZFzQwdJeLaCFVml9Mv8rj1aYP0FVIoFxnMncDohA1wHAyU6xhZaNP01k7jf59jp3OcRZ99GonxhkbV6vdQnqDh6Zox-ulAuh0mvs0fy7jJhliUEvsuZIuMjl5NfRasahnvtNFtYZJYB1Z3If2Up499O413dfhQwQxgb6wYSbSfS-7fWbK9dEhpyV"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">38:12</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">Walking Through the Valley</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Pastor Elias Thorne
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">visibility</span> Watch
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-<!-- Card 2 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="close-up of a vintage vinyl record player in a cozy dimly lit room with warm accent lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBinvrqEZCuHNLAYAKQu28OKZlnlu1jsD2iKkMoE8Ha7NoXAfCnmXwaIZQWv5sMtdLTiUZCdZ6keORTYrgpph1mrcDF_jpaS8dtCUSRFSCz39cjHp-Nilk3s_1___uPCoMLAg8AFiC5bD9vanU1opWnXWk-6a02tCrzRsepI0YxE4RdE8dUEsT49Hf3lGcV60oCuIi-H5Hk6tN01Di36IWPHejN6KGg0IaaRuGINPscMJAxtkHrgXkCaFcXBn7U5AgIKJiGdCu8vOuE"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">headphones</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">Audio Only</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">The Rhythms of Grace</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Sarah Jenkins
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">headphones</span> Listen
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-<!-- Card 3 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="abstract artistic shot of glowing embers and soft firelight in the dark creating a warm and reflective mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuBM345BPfASUIfm2oI3TzBHscznM9Cwys3uG9-WBeRzVDKM1_MHCVUOGNV--cKSDoY1KEmgGCv0hibJ7g5Ms6hxDvbpqwoiXYvo0sREjUOJgHz3fhshL9sNrQfHWz-giKwe5KYMeMpSq4Ldvh-9JAgKBLO0WDlrLw3Kd44EK5d2txCCkOTmVn6bEo5xVQQOPJawy6K4Yo814bfCEhJfc-tkGQvz7_s_bj9BeVksvhY-b_xmSrSokYnenDCkKF1-fApjwAdxj1cDXC"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">45:00</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">Modern Miracles</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Dr. Marcus Chen
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">visibility</span> Watch
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-<!-- Card 4 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="morning light breaking through a large minimalist glass window onto a clean polished stone floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPKZ7gYfDmJxgDo2kKcJ5T0Ti1LNWv8oD5L_hG2vllez5uCgYLPOVyK9y4Z74QJCGn2GOdoAHsKd3Omo2qi6gRFW7mbmmWpVdfGbFIEiiKuzMhTHFLMnunhfLTONndocaS_znlcP_6JccLl6QCsYehzTIhdVz5MRRJD06WE3kBkNH8xyzB52BMCDYHEf5ImfxHivoATSHnB8PXU_1RdtZNaFCzA5hLJlPu7z0IOaEdp7B4kumoQWGeZSr7YR5dHGNdntcHKEnJtiBN"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">32:15</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">Architecture of Faith</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Pastor Elias Thorne
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">visibility</span> Watch
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-<!-- Card 5 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="dramatic mountain peaks silhouetted against a deep blue starry night sky with a hint of green aurora" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsPHGhUKoEp1ZjB_Nuo3wzrPI4aoHEZWXhrUySfovd0404a7KF2y7HgGIHq8pXbCYL8rqsXANkErb-0ROdAAWWTZL6ik-76kgzJZG_0kdpmQ6Ky4sMCN5SJzvI4INLtndkLuFpAH4HmFeVtImWcoaQo36r8ifZ6ofi76s-fXgxkzsMwo_DAzn2xnlJyCPn8ZUpiTbBCbF3UE2DomWMTirfccGlMRR_Bc4yzTwhwUV-B5cOosE0lP8RGm7l4KkhTxJMYMYIBS7BYzXg"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">52:40</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">Stars and Sovereignty</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Guest Speaker Dr. Ava Reed
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">visibility</span> Watch
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-<!-- Card 6 -->
-<div class="group cursor-pointer">
-<div class="relative overflow-hidden asymmetric-rounding aspect-[4/3] mb-6 bg-tertiary-container shadow-xl">
-<img alt="Sermon Thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="vibrant and colorful sunset sky over a calm mirror-like lake with silhouettes of trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk_0fdYFD-sYIruRxDsLELnKj9AwR7Q5hK5uiKP0JT4Lrzg6SNFDz-e46oXyMbnfYoYirvohRnjwCzgW4ZoX7PyZoHoZMYk9OBavMCdop8QhHB0LbuFvzqhKZhJ7OLdFbt-A9Urelb8bdAJeUt6HdF8-vBhI-E7UyWw9J98_9sEkeMWmnXM01TmajlBvxTPMc40mhXid2twzOnOxZuM2fRR_abGk3QOIIrDoEbApvykSMV6B7jgieHCz9C95y-FewTqhS2BghRcB-6"/>
-<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center scale-75 group-hover:scale-100 transition-transform duration-500">
-<span class="material-symbols-outlined text-white text-3xl">headphones</span>
-</div>
-</div>
-<div class="absolute bottom-4 left-4 flex gap-2">
-<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] text-white rounded-full font-label-caps">Audio Only</span>
-</div>
-</div>
-<h3 class="font-headline-md text-white mb-2 group-hover:text-on-primary-container transition-colors">Finding Color in Gray Seasons</h3>
-<p class="text-on-tertiary-container text-sm mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">person</span> Worship Leader Mia Bell
-                </p>
-<div class="flex gap-4">
-<button class="flex-1 py-3 px-4 border border-outline-variant/30 rounded-full font-label-caps text-xs flex items-center justify-center gap-2 hover:bg-white hover:text-tertiary transition-all duration-300">
-<span class="material-symbols-outlined text-sm">headphones</span> Listen
-                    </button>
-<button class="p-3 border border-outline-variant/30 rounded-full hover:bg-primary-container transition-colors duration-300">
-<span class="material-symbols-outlined text-sm">download</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Load More -->
-<div class="mt-24 flex justify-center">
-<button class="group flex items-center gap-4 text-white">
-<span class="font-label-caps text-sm tracking-widest">Load More Teachings</span>
-<span class="w-12 h-px bg-white/20 group-hover:w-20 transition-all duration-500"></span>
-</button>
-</div>
-</main>
-<!-- Sermon Player (Persistent Bottom Bar) -->
-<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl rounded-full bg-white/60 backdrop-blur-2xl dark:bg-stone-950/60 shadow-[0_30px_60px_rgba(27,48,34,0.1)] h-20 px-6 flex justify-around items-center z-50">
-<a class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 hover:scale-110 transition-transform duration-300" href="#">
-<span class="material-symbols-outlined">play_circle</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Sermon Player</span>
-</a>
-<a class="flex flex-col items-center justify-center bg-[#1B3022] text-white rounded-full p-4 hover:scale-110 transition-transform duration-300" href="#">
-<span class="material-symbols-outlined">subscriptions</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Media Library</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 hover:scale-110 transition-transform duration-300" href="#">
-<span class="material-symbols-outlined">search</span>
-<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Search</span>
-</a>
-</div>
-<!-- Footer -->
-<footer class="w-full pt-32 pb-12 bg-stone-50 dark:bg-stone-950 border-t border-stone-200 dark:border-stone-900">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto px-8">
-<div class="col-span-1 md:col-span-1">
-<div class="text-xl font-serif italic text-[#1B3022] dark:text-stone-200 mb-6">Sanctuary</div>
-<p class="text-stone-500 font-serif text-sm leading-relaxed">A modern space for timeless faith. Join us as we explore the intersection of spirituality and life.</p>
-</div>
-<div>
-<h4 class="font-label-caps text-xs text-[#1B3022] dark:text-white mb-6">Quick Links</h4>
-<ul class="space-y-4">
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Sermon Archive</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Statement of Faith</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Volunteer</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Contact Us</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-label-caps text-xs text-[#1B3022] dark:text-white mb-6">Connect</h4>
-<ul class="space-y-4">
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Instagram</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">YouTube</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Podcast</a></li>
-<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm hover:underline transition-all" href="#">Newsletter</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-label-caps text-xs text-[#1B3022] dark:text-white mb-6">Join Our Mailing List</h4>
-<div class="flex">
-<input class="bg-transparent border-b border-stone-300 dark:border-stone-800 py-2 focus:border-on-primary-container outline-none text-sm w-full font-serif" placeholder="Email address" type="email"/>
-<button class="p-2 border-b border-stone-300 dark:border-stone-800"><span class="material-symbols-outlined text-stone-400">arrow_forward</span></button>
-</div>
-</div>
-</div>
-<div class="max-w-7xl mx-auto px-8 mt-24 text-stone-500 font-serif text-sm">
-            © 2024 Sanctuary Church. All are welcome.
+<body class="bg-tertiary text-surface font-body overflow-x-hidden">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/10 backdrop-blur-xl border-b border-white/10">
+    <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20">
+        <a href="index.html" class="flex items-center gap-2">
+            <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40?text=PBG'">
+            <span class="font-display font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
+        </a>
+        
+        <div class="hidden lg:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest">
+            <a href="index.html" class="hover:text-accent">Home</a>
+            <a href="about.html" class="hover:text-accent">About</a>
+            <a href="media.html" class="text-accent">Library</a>
+            <button onclick="window.location.href='index.html#giving'" class="hover:text-accent">Giving</button>
         </div>
+
+        <button class="lg:hidden" onclick="toggleMobileMenu(true)">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-primary translate-x-full transition-transform duration-500 lg:hidden flex flex-col items-center justify-center space-y-8 text-2xl font-display">
+    <button class="absolute top-6 right-6" onclick="toggleMobileMenu(false)"><span class="material-symbols-outlined text-4xl text-white">close</span></button>
+    <a href="index.html" onclick="toggleMobileMenu(false)">Home</a>
+    <a href="about.html" onclick="toggleMobileMenu(false)">About Us</a>
+    <a href="media.html" class="text-accent">Media Library</a>
+</div>
+
+<main class="pt-28 pb-20 px-6 max-w-7xl mx-auto">
+    <!-- Featured Sermon -->
+    <section class="mb-20" data-aos="zoom-out">
+        <div class="relative w-full aspect-video md:aspect-[21/9] overflow-hidden asymmetric-rounding shadow-2xl group">
+            <img class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2000" alt="Featured"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+            <div class="absolute bottom-8 left-8 right-8 flex flex-col md:flex-row justify-between items-end gap-6">
+                <div>
+                    <span class="bg-accent text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase mb-4 inline-block">Latest Release</span>
+                    <h1 class="text-3xl md:text-5xl font-display mb-2">The Power of Unshakable Faith</h1>
+                    <p class="text-gray-300 max-w-lg">Pastor Franklin Oji shares a deep revelation on standing strong in difficult times.</p>
+                </div>
+                <button class="bg-white text-primary px-8 py-4 rounded-full font-bold flex items-center gap-2 hover:bg-accent transition">
+                    <span class="material-symbols-outlined">play_circle</span> WATCH NOW
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6" data-aos="fade-up">
+        <div class="flex gap-4 overflow-x-auto w-full md:w-auto pb-2">
+            <button class="px-6 py-2 bg-accent text-primary rounded-full font-bold text-xs whitespace-nowrap">All Media</button>
+            <button class="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-full font-bold text-xs whitespace-nowrap">Video Sermons</button>
+            <button class="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-full font-bold text-xs whitespace-nowrap">Audio Messages</button>
+        </div>
+        <div class="relative w-full md:w-80">
+            <input type="text" class="w-full bg-white/5 border-white/10 rounded-full px-6 py-3 text-sm focus:ring-accent" placeholder="Search sermons...">
+            <span class="material-symbols-outlined absolute right-4 top-3 opacity-40">search</span>
+        </div>
+    </div>
+
+    <!-- Media Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Sermon Item 1 -->
+        <div class="group" data-aos="fade-up" data-aos-delay="100">
+            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-white/5">
+                <img class="w-full h-full object-cover group-hover:scale-110 transition duration-700" src="https://images.unsplash.com/photo-1544427928-c49cdfebf494?q=80&w=800" alt="Sermon">
+                <div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                    <span class="material-symbols-outlined text-5xl">play_circle</span>
+                </div>
+            </div>
+            <h3 class="font-display text-xl mb-2 group-hover:text-accent transition">Winning Against All Odds</h3>
+            <p class="text-gray-400 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-sm">person</span> Pastor Franklin Oji</p>
+            <div class="flex gap-4">
+                <a href="#" class="flex-1 bg-white/5 py-3 rounded-full text-xs font-bold text-center hover:bg-accent hover:text-primary transition">WATCH</a>
+                <!-- Link to Google Drive Download Format -->
+                <a href="https://drive.google.com/uc?export=download&id=FILE_ID" class="p-3 bg-white/5 rounded-full hover:bg-primary transition">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sermon Item 2 (Audio) -->
+        <div class="group" data-aos="fade-up" data-aos-delay="200">
+            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-accent/20">graphic_eq</span>
+                <div class="absolute top-4 left-4 bg-accent text-primary text-[8px] font-bold px-2 py-1 rounded">AUDIO MESSAGE</div>
+            </div>
+            <h3 class="font-display text-xl mb-2 group-hover:text-accent transition">The Mystery of Divine Grace</h3>
+            <p class="text-gray-400 text-sm mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-sm">person</span> Pastor Franklin Oji</p>
+            <div class="flex gap-4">
+                <a href="#" class="flex-1 bg-white/5 py-3 rounded-full text-xs font-bold text-center hover:bg-accent hover:text-primary transition">LISTEN</a>
+                <a href="#" class="p-3 bg-white/5 rounded-full hover:bg-primary transition">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Persistent Sermon Player -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl bg-white/10 backdrop-blur-2xl rounded-full h-20 px-8 flex items-center justify-between border border-white/10 z-40 shadow-2xl">
+    <div class="flex items-center gap-4">
+        <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary font-bold">PBG</div>
+        <div class="hidden sm:block">
+            <p class="text-[10px] font-bold uppercase text-accent">Now Playing</p>
+            <p class="text-xs font-bold truncate w-32">Morning Devotion...</p>
+        </div>
+    </div>
+    <div class="flex items-center gap-6">
+        <span class="material-symbols-outlined cursor-pointer opacity-60">skip_previous</span>
+        <span class="material-symbols-outlined text-4xl cursor-pointer text-accent">play_circle</span>
+        <span class="material-symbols-outlined cursor-pointer opacity-60">skip_next</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm opacity-60">volume_up</span>
+        <div class="w-20 h-1 bg-white/20 rounded-full"><div class="w-1/2 h-full bg-accent rounded-full"></div></div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-black/20 pt-20 pb-10 px-6 border-t border-white/5 relative">
+    <div class="max-w-7xl mx-auto text-center">
+        <p class="text-gray-500 text-sm">© 2025 Pardon By Grace International Church</p>
+        
+        <!-- HIDDEN ADMIN BUTTON -->
+        <button id="adminUploadBtn" onclick="requestAdminAccess()" class="mt-4 text-[10px] uppercase tracking-widest text-gray-700 hover:text-accent font-bold">
+            Admin Upload
+        </button>
+    </div>
 </footer>
-</body></html>
+
+<!-- ADMIN MODAL -->
+<div id="uploadModal" class="modal">
+    <div class="absolute inset-0 bg-primary/95" onclick="toggleModal('uploadModal', false)"></div>
+    <div class="relative bg-tertiary border border-white/10 w-full max-w-md rounded-3xl p-8 shadow-2xl">
+        <h3 class="text-2xl font-display mb-6 text-accent">Upload to Library</h3>
+        <form class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold uppercase mb-2">Sermon Title</label>
+                <input type="text" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 focus:ring-accent" placeholder="Enter title...">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase mb-2">Google Drive Link (Audio/Video)</label>
+                <input type="url" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 focus:ring-accent" placeholder="Paste link here...">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase mb-2">Media Type</label>
+                <select class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-gray-400">
+                    <option>Video Sermon</option>
+                    <option>Audio Message</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Publish to Library</button>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true });
+
+    function toggleMobileMenu(open) {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('translate-x-full', !open);
+    }
+
+    function toggleModal(id, open) {
+        const modal = document.getElementById(id);
+        if(open) modal.classList.add('active');
+        else modal.classList.remove('active');
+    }
+
+    function requestAdminAccess() {
+        let password = prompt("Enter Admin Password to Upload:");
+        if (password === "pardonbygrace11") {
+            toggleModal('uploadModal', true);
+        } else {
+            alert("Unauthorized Access!");
+        }
+    }
+</script>
+
+</body>
+</html>
