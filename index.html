@@ -360,6 +360,15 @@
 </div>
 
 <script>
+    <!-- Animation Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize Animations
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
     function toggleModal(id) {
         document.getElementById(id).classList.toggle('active');
         // Prevent scroll when modal is open
