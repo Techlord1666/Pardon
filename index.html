@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sanctuary — Sacred Modernism</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "inverse-surface": "#2f312d",
+                "primary-container": "#1b3022",
+                "on-secondary-container": "#786044",
+                "outline": "#737973",
+                "on-surface": "#1a1c19",
+                "surface-container-lowest": "#ffffff",
+                "secondary-container": "#fdddb9",
+                "on-tertiary": "#ffffff",
+                "outline-variant": "#c3c8c1",
+                "surface-bright": "#fafaf4",
+                "surface-container-high": "#e8e8e3",
+                "on-primary-fixed-variant": "#364c3c",
+                "on-tertiary-fixed": "#1c1c1a",
+                "secondary-fixed": "#fdddb9",
+                "error-container": "#ffdad6",
+                "tertiary": "#171816",
+                "surface": "#fafaf4",
+                "surface-container": "#eeeee8",
+                "on-error-container": "#93000a",
+                "on-primary": "#ffffff",
+                "primary": "#061b0e",
+                "surface-variant": "#e3e3dd",
+                "tertiary-fixed": "#e5e2df",
+                "tertiary-container": "#2c2c2a",
+                "secondary-fixed-dim": "#e0c29f",
+                "error": "#ba1a1a",
+                "on-error": "#ffffff",
+                "on-primary-container": "#819986",
+                "on-primary-fixed": "#0b2013",
+                "background": "#fafaf4",
+                "tertiary-fixed-dim": "#c8c6c3",
+                "surface-dim": "#dadad5",
+                "on-tertiary-container": "#959390",
+                "on-background": "#1a1c19",
+                "surface-container-low": "#f4f4ee",
+                "on-secondary": "#ffffff",
+                "secondary": "#715a3e",
+                "inverse-primary": "#b4cdb8",
+                "primary-fixed": "#d0e9d4",
+                "surface-container-highest": "#e3e3dd",
+                "on-tertiary-fixed-variant": "#474745",
+                "surface-tint": "#4d6453",
+                "on-secondary-fixed": "#281803",
+                "inverse-on-surface": "#f1f1eb",
+                "on-surface-variant": "#434843",
+                "on-secondary-fixed-variant": "#584329",
+                "primary-fixed-dim": "#b4cdb8"
+            },
+            "fontFamily": {
+                "body-md": ["Manrope"],
+                "headline-lg": ["Noto Serif"],
+                "label-caps": ["Manrope"],
+                "body-lg": ["Manrope"],
+                "headline-md": ["Noto Serif"],
+                "display": ["Noto Serif"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                "display": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .organic-radius-1 { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        .organic-radius-2 { border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%; }
+        .magnetic-pull:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/40 backdrop-blur-xl dark:bg-stone-900/60 border-b border-stone-200/20 dark:border-stone-800/20 shadow-[0_20px_50px_rgba(27,48,34,0.05)]">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-8 h-24">
+<div class="text-2xl font-serif font-bold text-[#1B3022] dark:text-stone-100">Sanctuary</div>
+<div class="hidden md:flex items-center space-x-10">
+<a class="text-[#1B3022] dark:text-white border-b-2 border-[#1B3022] pb-1 font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Home</a>
+<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">About</a>
+<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Media</a>
+<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Giving</a>
+<a class="text-[#1B3022]/70 dark:text-stone-400 hover:text-[#1B3022] font-serif text-lg tracking-tight transition-all duration-500 ease-out" href="#">Connect</a>
+</div>
+<button class="bg-primary-container text-on-primary px-8 py-4 rounded-full font-label-caps text-label-caps hover:scale-105 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]">
+                Join Us Online
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative h-screen flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="Cinematic wide shot of a misty mountain range at sunrise with soft golden light filtering through evergreen trees, peaceful and ethereal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeQ_yd91kQyM5HV4-W3df6op9xl0BxLjpx_m_el6jtTCyUlLl72yyNCeUNjjB8zYA7E3t7ZSk-s6OjCgFJiRN-JLX-ukOBPnRHQLTz1SXk9tZhH42GAmZeG1ZUbi1EcHUnJ8h2XR-ZlMevE8nYA5UhgbfOAaCg3MWhWNA5WNvk4WhOvBjx1n4cdXH_h_JfsOx6wCsYZpdENVE3KKVurSSuEza_sMc0RPtrGVHOt7Eh4Qwv5M1rkpoAjjURqCSZock4fAPVbeTFXGZv"/>
+<div class="absolute inset-0 bg-black/30 backdrop-grayscale-[0.2]"></div>
+</div>
+<div class="relative z-10 text-center px-6 max-w-4xl">
+<span class="font-label-caps text-label-caps text-white/80 tracking-[0.3em] block mb-6">WELCOME TO THE SANCTUARY</span>
+<h1 class="font-display text-display text-white mb-8">A place to breathe, believe, and belong.</h1>
+<p class="font-body-lg text-body-lg text-white/90 mb-12 max-w-2xl mx-auto">Discover a contemporary faith community dedicated to peace, justice, and the radical love of neighbor.</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<button class="bg-white text-primary-container px-10 py-5 rounded-full font-label-caps text-label-caps hover:scale-105 transition-transform duration-300 shadow-xl">
+                    Join Us This Sunday
+                </button>
+<button class="border border-white/50 text-white backdrop-blur-md px-10 py-5 rounded-full font-label-caps text-label-caps hover:bg-white/10 transition-all duration-300">
+                    Our Mission
+                </button>
+</div>
+</div>
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+<span class="material-symbols-outlined text-white text-4xl">expand_more</span>
+</div>
+</header>
+<!-- Our Mission Section -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+<div class="lg:col-span-5 relative">
+<div class="bg-secondary-container organic-radius-1 absolute -inset-4 -z-10 opacity-30"></div>
+<img class="w-full aspect-[4/5] object-cover organic-radius-2 shadow-2xl" data-alt="Warm interior of a modern minimalist community space with people engaged in meaningful conversation over coffee, soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3EHh9QBD-tRU_bAIfLZOyJ7bdelcoWVO4HGRLWzwEA_6LazyM3MFxjdHcA3pPHPTKFcKATH7SfkzufjrHFmGK4uSX-YaonJmWi5QLwVxBFlmKW2VxfMl_BfOdB7JPYkFhlkEi3apEGP3rjkghsnYyNS_0JWlWoC3ykNtZ_-PGc_O98T6uh1N4ZoIf4FRvPHqRV9Eqf8cF3FIEyMHO88DyorLLyj1ChicpzEMmBVmw8XEnw8If87XZw3lZrxjU949z-Gtl7BcwFWAd"/>
+</div>
+<div class="lg:col-span-7 space-y-8">
+<span class="text-secondary font-label-caps text-label-caps">OUR CORE VALUES</span>
+<h2 class="font-headline-lg text-headline-lg text-primary-container">Rooted in Tradition, Growing in Grace.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    We believe faith shouldn't be a burden, but a sanctuary. Our mission is to provide a space where intellectual curiosity meets spiritual depth, fostering a community that serves the world with humility and joy.
+                </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined">nature_people</span>
+<span class="font-bold">Organic Community</span>
+</div>
+<p class="text-on-surface-variant text-body-md">Life is better together. We prioritize authentic relationships over programs.</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-bold">Sacred Space</span>
+</div>
+<p class="text-on-surface-variant text-body-md">Creating intentional environments for reflection, prayer, and artistic expression.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Latest Sermon (Featured) -->
+<section class="bg-surface-container py-32">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex justify-between items-end mb-16">
+<div>
+<span class="text-secondary font-label-caps text-label-caps block mb-4">LATEST TEACHING</span>
+<h2 class="font-headline-lg text-headline-lg text-primary-container">Finding Stillness in the Noise</h2>
+</div>
+<button class="hidden md:block text-primary-container font-label-caps text-label-caps border-b-2 border-primary-container pb-1 hover:text-secondary hover:border-secondary transition-colors">
+                    View Archive
+                </button>
+</div>
+<div class="relative group cursor-pointer overflow-hidden rounded-[2rem] shadow-2xl aspect-video md:aspect-[21/9]">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="High-end editorial shot of an empty modern chapel with wooden pews and a single beam of light hitting the floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoxcR2XSoB9dSvIasuSjWp7O2WOaiYRwsVSpYqeyeOZ7FLcs4EpkcrVy0neZNbur9EnLSc6AjEOcy03i-Ymr2Tp9QoQ5flkMMeHTByI5bAHvT40c5nDxZ_ILJ5BMG_NKYJ00aXiLqKAZ2ZaMBv_pBvQvEf-i-zi0fZA0oN5nuVCuyjDUZQviIHyATZ4pNJVZVYvXA3ooYKoLdo0S1-29FeHPEqkcKMbBxO2Q304EMC3z0mlJR_NaiFYAObDR4wq4h7Ghz_DeDE0nQX"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/80 via-transparent to-transparent flex items-center justify-center">
+<div class="bg-white/20 backdrop-blur-xl p-8 rounded-full border border-white/30 scale-100 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-white text-6xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-12 left-12 text-white">
+<p class="font-label-caps text-xs opacity-80 mb-2">OCTOBER 27, 2024 • SERIES: THE ART OF PAUSE</p>
+<h3 class="font-headline-md text-headline-md">Part 4: The Sound of Silence</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Events (Bento Grid) -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="font-headline-lg text-headline-lg text-primary-container mb-4">Life at Sanctuary</h2>
+<p class="font-body-lg text-on-surface-variant">There is always a place for you at the table.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[600px]">
+<!-- Event 1 -->
+<div class="md:col-span-2 md:row-span-2 relative rounded-[2rem] overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="overhead shot of a long rustic wooden dinner table with candles and food, people sitting around it laughing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDse6gpCPj2PNo8YMnb9568dPeTrI8xDid4NNVGMqxfVCoqv7HHZ0HM0DIyDOuj6kwucy8rCXE_LrfRmnvZNkzQ4rlpflYl1wrYLn3YlghX6HyiZ16NK0wDp3jJWQ5v3QY5BBgEf-c6HT8Z4jOgJcpKT8Wvv-UdWAr-jmsetA_3VsyAqngsTmKqBgPpe_F_39k1lw1A5YFDBaZ5wK47mXTaGRPb4WBzhZXI6dL7_cjyKXJjRqFGUODWuoiDgexp4gk8qXYdplAwcnI9"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-10 flex flex-col justify-end">
+<span class="bg-secondary-container text-on-secondary-container font-label-caps text-[10px] px-3 py-1 rounded-full w-fit mb-4 uppercase">Community</span>
+<h3 class="text-white font-headline-md text-headline-md mb-2">Monthly Table Feast</h3>
+<p class="text-white/80 font-body-md">Nov 12 • 6:30 PM</p>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="md:col-span-2 md:row-span-1 bg-surface-container-high rounded-[2rem] p-8 flex flex-col justify-between hover:shadow-lg transition-shadow">
+<div>
+<span class="bg-[#1B3022]/10 text-[#1B3022] font-label-caps text-[10px] px-3 py-1 rounded-full w-fit mb-4 uppercase">Outreach</span>
+<h3 class="text-primary-container font-headline-md text-2xl mb-2">Winter Coat Drive</h3>
+<p class="text-on-surface-variant font-body-md">Collecting items through December 1st for local shelters.</p>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-secondary font-bold">Details</span>
+<span class="material-symbols-outlined text-secondary">arrow_forward</span>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="md:col-span-1 md:row-span-1 bg-primary-container rounded-[2rem] p-8 text-white group cursor-pointer">
+<div class="h-full flex flex-col justify-between">
+<span class="material-symbols-outlined text-4xl mb-4 group-hover:rotate-12 transition-transform">park</span>
+<div>
+<h3 class="font-bold text-lg mb-1">Morning Hike</h3>
+<p class="text-white/60 text-sm">Nov 15 • 7:00 AM</p>
+</div>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="md:col-span-1 md:row-span-1 relative rounded-[2rem] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close up of a modern record player on a clean wooden shelf with aesthetic plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC5US992je5o1ujn5CTAjfO03A5ucWvWm6jHECvwYNDbjdDIz9Nqf42uC5JojvGJoHBKjMaaP14Gbug8SvUfupOoRcyqMuOuXXyFMgSCaQ4QZTK3L-OVernOfilPGztdAD-ouiFATOzB-FOzoX2tWWIuulTI_bJq4GE--yTAbwm46xINpTwJzpg3XvBGuYrmiHq6myGJfe7VXc7lfj3gzBBnLd82j2-FAJn4Z_e95C1Zn_pHzMhRC_xxdF-SSoqxKBK0Xn5nBKrMWf"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center p-4 text-center">
+<h3 class="text-white font-bold leading-tight">Sacred Rhythms Jazz Night</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- BottomNavBar (Mobile Only Item Labels Mapping) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl rounded-full border border-stone-200/30 bg-white/60 backdrop-blur-2xl dark:bg-stone-950/60 shadow-[0_30px_60px_rgba(27,48,34,0.1)] z-50">
+<div class="flex justify-around items-center h-20 px-6">
+<div class="flex flex-col items-center justify-center bg-[#1B3022] text-white rounded-full p-4 magnetic-pull transition-all duration-500 ease-out">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Sermon Player</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 magnetic-pull transition-all duration-500 ease-out">
+<span class="material-symbols-outlined" data-icon="subscriptions">subscriptions</span>
+<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Media Library</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1B3022]/60 dark:text-stone-400 p-4 magnetic-pull transition-all duration-500 ease-out">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-serif text-xs font-medium uppercase tracking-widest mt-1">Search</span>
+</div>
+</div>
+</nav>
+<!-- Footer -->
+<footer class="w-full pt-32 pb-12 bg-stone-50 dark:bg-stone-950 border-t border-stone-200 dark:border-stone-900">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto px-8">
+<div class="space-y-6">
+<div class="text-xl font-serif italic text-[#1B3022] dark:text-stone-200">Sanctuary</div>
+<p class="text-stone-500 font-serif text-sm leading-relaxed">
+                    A progressive, contemplative community seeking the Way of Jesus in the modern world.
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#1B3022]">local_library</span>
+<span class="material-symbols-outlined text-[#1B3022]">church</span>
+<span class="material-symbols-outlined text-[#1B3022]">volunteer_activism</span>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary-container">Quick Links</h4>
+<ul class="space-y-2">
+<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Sermon Archive</a></li>
+<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Statement of Faith</a></li>
+<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Volunteer</a></li>
+<li><a class="text-stone-500 hover:text-[#1B3022] font-serif text-sm transition-all hover:underline decoration-stone-300" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary-container">Location</h4>
+<p class="text-stone-500 font-serif text-sm leading-relaxed">
+                    124 Serenity Way<br/>
+                    Cascadia, WA 98101<br/>
+                    Sundays at 9:00am &amp; 11:00am
+                </p>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary-container">Newsletter</h4>
+<p class="text-stone-500 font-serif text-sm mb-4">Soft updates on community life.</p>
+<div class="flex border-b border-stone-300 py-2">
+<input class="bg-transparent border-none focus:ring-0 text-sm flex-1 font-serif" placeholder="email address" type="email"/>
+<button class="text-[#1B3022] font-bold text-sm">Join</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 mt-24 pt-8 border-t border-stone-200/50 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-stone-400 text-xs font-serif italic">© 2024 Sanctuary Church. All are welcome.</p>
+<div class="flex gap-8 text-xs text-stone-400 uppercase tracking-widest font-label-caps">
+<a href="#">Privacy</a>
+<a href="#">Terms</a>
+<a href="#">Accessibility</a>
+</div>
+</div>
+</footer>
+</body></html>
