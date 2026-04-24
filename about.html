@@ -11,174 +11,289 @@
     
     <script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
+                    colors: {
                         "primary": "#061b0e",
-                        "primary-container": "#1b3022",
                         "secondary": "#715a3e",
                         "accent": "#d4af37",
                         "background": "#fafaf4",
-                        "surface-container": "#eeeee8"
-                    },
-                    "fontFamily": {
-                        "body": ["Manrope", "sans-serif"],
-                        "display": ["Noto Serif", "serif"]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
     <style>
+        .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
         .organic-shape { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-        .asymmetric-card { border-radius: 60px 10px 60px 10px; }
-        .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        .belief-card { background: white; padding: 2rem; border-radius: 1.5rem; border: 1px solid #e5e7eb; transition: all 0.3s ease; }
+        .belief-card:hover { transform: translateY(-5px); border-color: #d4af37; }
+        #mobileMenu { transition: transform 0.3s ease-in-out; }
     </style>
 </head>
-<body class="bg-background text-gray-900 font-body">
+<body class="bg-background text-gray-900 font-sans leading-relaxed">
 
 <!-- Navigation -->
-<nav class="fixed top-0 w-full z-50 glass-nav border-b border-gray-200">
-    <div class="flex justify-between items-center max-w-7xl mx-auto px-6 sm:px-8 h-20">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+        <!-- Logo -->
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-[10px]">PBG</div>
-            <span class="text-xl font-display font-bold text-primary uppercase tracking-tighter">Pardon By Grace</span>
+            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">PBG</div>
+            <span class="font-serif font-bold text-lg sm:text-xl text-primary uppercase">Pardon By Grace</span>
         </div>
-        <div class="hidden md:flex items-center space-x-8 text-sm font-bold uppercase tracking-widest">
-            <a href="index.html" class="hover:text-secondary transition">Home</a>
-            <a href="about.html" class="text-primary border-b-2 border-primary">About</a>
-            <a href="#" class="hover:text-secondary transition">Giving</a>
-            <a href="#" class="hover:text-secondary transition">Connect</a>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest">
+            <a href="index.html" class="hover:text-accent transition">Home</a>
+            <a href="about.html" class="text-accent border-b-2 border-accent">About</a>
+            <button onclick="toggleModal('givingModal')" class="hover:text-accent transition uppercase">Giving</button>
+            <button onclick="toggleModal('connectModal')" class="hover:text-accent transition uppercase">Connect</button>
         </div>
-        <button class="bg-primary text-white px-6 py-2 rounded-full text-xs font-bold hover:scale-105 transition">JOIN US</button>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="lg:hidden text-primary" onclick="toggleMobileMenu(true)">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
     </div>
 </nav>
 
+<!-- Mobile Sidebar Menu -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-primary translate-x-full lg:hidden">
+    <div class="p-6">
+        <button class="text-white float-right" onclick="toggleMobileMenu(false)">
+            <span class="material-symbols-outlined text-4xl">close</span>
+        </button>
+        <div class="mt-20 flex flex-col space-y-8 text-center text-2xl font-serif text-white">
+            <a href="index.html">Home</a>
+            <a href="about.html" class="text-accent">About Us</a>
+            <button onclick="toggleModal('givingModal'); toggleMobileMenu(false)">Giving</button>
+            <button onclick="toggleModal('connectModal'); toggleMobileMenu(false)">Connect</button>
+        </div>
+    </div>
+</div>
+
 <main class="pt-20">
-    <!-- Hero Section -->
-    <section class="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000" alt="About Hero"/>
-            <div class="absolute inset-0 bg-primary/40"></div>
-        </div>
-        <div class="relative z-10 text-center text-white px-6">
-            <h1 class="font-display text-4xl md:text-6xl mb-4">Our Heart & Mission</h1>
-            <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">Winning the lost at all cost through the power of God's Word.</p>
-        </div>
+    <!-- Hero -->
+    <section class="bg-primary text-white py-20 px-6 text-center">
+        <h1 class="font-serif text-4xl md:text-6xl mb-4">About Our Ministry</h1>
+        <p class="text-accent font-bold tracking-[0.2em] uppercase text-sm">Winning the Lost at All Cost</p>
     </section>
 
-    <!-- 1. Understand God’s Love (Image Left, Text Right) -->
-    <section class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-                <img class="w-full h-[400px] object-cover organic-shape shadow-2xl" src="https://images.unsplash.com/photo-1490730141103-6ca27d91471e?q=80&w=1000" alt="God's Love"/>
+    <!-- Content Sections -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-16 space-y-24">
+
+        <!-- Section 1: Love -->
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="order-2 md:order-1">
+                <img class="w-full h-80 md:h-[450px] object-cover organic-shape shadow-xl" src="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1000" alt="God's Love"/>
             </div>
-            <div class="space-y-6">
-                <h2 class="font-display text-3xl md:text-4xl text-primary">Understand God’s Love</h2>
-                <p class="text-lg text-gray-700 leading-relaxed">
+            <div class="order-1 md:order-2 space-y-6">
+                <h2 class="font-serif text-3xl md:text-4xl text-primary">Understand God’s Love</h2>
+                <p class="text-lg text-gray-700">
                     You know God loves you, but do you really understand what that means? Our heart is for people to know and experience the depth of His love and be made complete in the fullness of life that comes from Him.
                 </p>
             </div>
         </div>
-    </section>
 
-    <!-- 2. Make an Impact (IN A BOX - Text Left, Image Right) -->
-    <section class="py-20 px-6">
-        <div class="max-w-7xl mx-auto bg-primary-container text-white rounded-[3rem] overflow-hidden shadow-2xl">
-            <div class="grid md:grid-cols-2 items-center">
-                <div class="p-10 md:p-20 space-y-6">
-                    <h2 class="font-display text-3xl md:text-4xl text-accent">Make an Impact</h2>
-                    <p class="text-lg text-gray-300 leading-relaxed">
+        <!-- Section 2: Impact (IN A BOX) -->
+        <div class="bg-white rounded-[2.5rem] p-8 md:p-16 border border-gray-200 shadow-sm">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="font-serif text-3xl md:text-4xl text-primary">Make an Impact</h2>
+                    <p class="text-lg text-gray-700">
                         As followers of Christ, we are to care for our neighbors, feed the hungry, defend the powerless, and love the unlovable. Then we will truly make a difference in our community and the world.
                     </p>
                 </div>
-                <div class="h-full">
-                    <img class="w-full h-full min-h-[400px] object-cover" src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=1000" alt="Impact"/>
-                </div>
+                <img class="w-full h-64 md:h-80 object-cover rounded-3xl" src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000" alt="Impact"/>
             </div>
         </div>
-    </section>
 
-    <!-- 3. Discover God’s Word (Image Left, Text Right) -->
-    <section class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-16 items-center">
+        <!-- Section 3: Word -->
+        <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="order-2 md:order-1">
-                <img class="w-full h-[400px] object-cover asymmetric-card shadow-xl" src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1000" alt="Bible Study"/>
+                <img class="w-full h-80 md:h-[450px] object-cover rounded-[50px] shadow-xl" src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1000" alt="The Bible"/>
             </div>
-            <div class="space-y-6 order-1 md:order-2">
-                <h2 class="font-display text-3xl md:text-4xl text-primary">Discover God’s Word</h2>
-                <p class="text-lg text-gray-700 leading-relaxed">
+            <div class="order-1 md:order-2 space-y-6">
+                <h2 class="font-serif text-3xl md:text-4xl text-primary">Discover God’s Word</h2>
+                <p class="text-lg text-gray-700">
                     The Bible is God’s message for us so we can know Him better. We are not only hearers of God’s Word, but we take what we learn and let it transform our lives, grow in our faith and draw us closer to Him.
                 </p>
             </div>
         </div>
-    </section>
 
-    <!-- 4. Receive God’s Blessing (IN A BOX - Text Left, Image Right) -->
-    <section class="py-20 px-6">
-        <div class="max-w-7xl mx-auto bg-surface-container rounded-3xl p-8 md:p-16 border border-gray-200">
+        <!-- Section 4: Blessing (IN A BOX) -->
+        <div class="bg-primary text-white rounded-[2.5rem] p-8 md:p-16 shadow-2xl">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
-                    <h2 class="font-display text-3xl md:text-4xl text-primary">Receive God’s Blessing</h2>
-                    <p class="text-lg text-gray-700 leading-relaxed">
+                    <h2 class="font-serif text-3xl md:text-4xl text-accent">Receive God’s Blessing</h2>
+                    <p class="text-lg text-gray-300">
                         God’s best for you comes when you seek Him with all your heart. As a church, we want to see people draw near to God so we can discover His will for us and receive His blessings, and in turn bless others.
                     </p>
                 </div>
-                <div>
-                    <img class="w-full h-[350px] object-cover rounded-2xl shadow-lg" src="https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1000" alt="Blessing"/>
-                </div>
+                <img class="w-full h-64 md:h-80 object-cover rounded-3xl opacity-90" src="https://images.unsplash.com/photo-1510076857177-7470076d4098?q=80&w=1000" alt="Blessing"/>
             </div>
         </div>
-    </section>
+
+    </div>
 
     <!-- Our Beliefs Section -->
-    <section class="py-24 bg-white px-6">
-        <div class="max-w-4xl mx-auto">
+    <section class="bg-gray-50 py-24 px-6">
+        <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <span class="text-secondary font-bold tracking-widest uppercase text-sm">Statement of Faith</span>
-                <h2 class="font-display text-4xl md:text-5xl text-primary mt-2">Our Beliefs</h2>
+                <h2 class="font-serif text-4xl md:text-5xl text-primary mb-4">Our Beliefs</h2>
+                <div class="w-24 h-1 bg-accent mx-auto"></div>
             </div>
-            
-            <!-- One God Box -->
-            <div class="bg-primary text-white p-10 md:p-16 rounded-[4rem] shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-accent opacity-10 rounded-full -mr-16 -mt-16"></div>
-                <h3 class="font-display text-3xl mb-8 text-accent">One God</h3>
-                <div class="space-y-6 text-gray-200 leading-relaxed text-lg">
-                    <p>
-                        There is one God, who is infinitely perfect, existing eternally in three persons: Father, Son, and Holy Spirit. Jesus Christ is the true God and the true man. 
-                    </p>
-                    <p>
-                        He was conceived by the Holy Spirit and born of the virgin Mary. He died upon the cross, the Just for the unjust, as a substitutionary sacrifice, and all who believe in Him are justified on the ground of His shed blood. 
-                    </p>
-                    <p>
-                        He arose from the dead according to the Scriptures. He is now at the right hand of Majesty on high as our great High Priest. He will come again to establish His kingdom, righteousness and peace.
-                    </p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 1. One God -->
+                <div class="belief-card lg:col-span-3 bg-primary text-white border-none">
+                    <h3 class="text-accent font-bold text-2xl mb-4">One God</h3>
+                    <p class="text-gray-300 mb-6">There is one God, who is infinitely perfect, existing eternally in three persons: Father, Son, and Holy Spirit. Jesus Christ is the true God and the true man...</p>
+                    <p class="text-xs text-accent italic">Deuteronomy 6:4, Matthew 5:48, Matthew 28:19, Philippians 2:6–11</p>
                 </div>
-                
-                <div class="mt-12 pt-8 border-t border-white/10">
-                    <h4 class="text-accent font-bold mb-4 flex items-center gap-2 uppercase tracking-widest text-xs">
-                        <span class="material-symbols-outlined text-sm">menu_book</span> Scripture References
-                    </h4>
-                    <p class="text-sm text-gray-400 font-medium">
-                        Deuteronomy 6:4, Matthew 5:48, Matthew 28:19, Philippians 2:6–11, Luke 1:34–38, 1 Peter 3:18, Hebrews 2:9, Romans 5:9, Acts 2:23–24, Hebrews 8:1, Matthew 26:64
-                    </p>
+
+                <!-- 2. Holy Spirit -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Divinity of the Holy Spirit</h3>
+                    <p class="text-sm text-gray-600 mb-4">The Holy Spirit is a divine person, sent to indwell, guide, teach, empower the believer, and convince the world of sin.</p>
+                    <p class="text-xs text-secondary italic">John 14:15–18, John 16:13; Acts 1:8</p>
+                </div>
+
+                <!-- 3. Authority of Scriptures -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Authority of Scriptures</h3>
+                    <p class="text-sm text-gray-600 mb-4">The Old and New Testaments, inerrant as originally given, were verbally inspired by God and are a complete revelation of His will.</p>
+                    <p class="text-xs text-secondary italic">2 Peter 1:20–21, 2 Timothy 3:15–16</p>
+                </div>
+
+                <!-- 4. Repentance -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Repentance</h3>
+                    <p class="text-sm text-gray-600 mb-4">Commitment to turn away from sin in every area of our lives and to follow Christ to receive His redemption.</p>
+                    <p class="text-xs text-secondary italic">Acts 2:21, 3:19, 1 John 1:9</p>
+                </div>
+
+                <!-- 5. Salvation -->
+                <div class="belief-card bg-accent/5">
+                    <h3 class="text-primary font-bold text-xl mb-4">Salvation</h3>
+                    <p class="text-sm text-gray-600 mb-4">Provided through Jesus Christ for all men; those who repent and believe are born again. We are saved by grace through faith.</p>
+                    <p class="text-xs text-secondary italic">Titus 3:4–7, Ephesians 2:8-9, Romans 10:9-10</p>
+                </div>
+
+                <!-- 6. Holy Spirit Baptism -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Baptism of the Holy Spirit</h3>
+                    <p class="text-sm text-gray-600 mb-4">The will of God that each believer should be filled with the Holy Spirit and sanctified wholly for holy living.</p>
+                    <p class="text-xs text-secondary italic">1 Thessalonians 5:23, Acts 1:8, Romans 6:1–14</p>
+                </div>
+
+                <!-- 7. Marriage -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Marriage</h3>
+                    <p class="text-sm text-gray-600 mb-4">God created marriage. It is a covenant made between a man and a woman that makes them one.</p>
+                    <p class="text-xs text-secondary italic">Gen 2: 22-24; Matt 19:4-6</p>
+                </div>
+
+                <!-- 8. Provision (Box) -->
+                <div class="belief-card lg:col-span-2 bg-white">
+                    <h3 class="text-primary font-bold text-xl mb-4">God's Will for Provision</h3>
+                    <p class="text-sm text-gray-600 mb-6">It is the Father's will for believers to become whole, healthy and successful in all areas of life: Spiritual, Mental, Emotional, Physical, and Financial.</p>
+                    <div class="grid grid-cols-2 gap-4 text-[10px] uppercase font-bold text-secondary">
+                        <div>Physical: Isaiah 53:4-5</div>
+                        <div>Mental: 2 Timothy 1:7</div>
+                        <div>Financial: Malachi 3:10</div>
+                        <div>Spiritual: John 3:3</div>
+                    </div>
+                </div>
+
+                <!-- 9. Resurrection -->
+                <div class="belief-card">
+                    <h3 class="text-primary font-bold text-xl mb-4">Resurrection</h3>
+                    <p class="text-sm text-gray-600 mb-4">Jesus was physically resurrected. Both the saved and the lost will be resurrected to their eternal destinations.</p>
+                    <p class="text-xs text-secondary italic">Luke 24:39, John 20:26-28</p>
+                </div>
+
+                <!-- 10. The Church Body -->
+                <div class="belief-card lg:col-span-3">
+                    <h3 class="text-primary font-bold text-xl mb-4">The Church Body</h3>
+                    <p class="text-sm text-gray-600 mb-4">The Church consists of all those who believe on the Lord Jesus Christ. The local church is a body of believers joined together for worship, edification, and witness.</p>
+                    <p class="text-xs text-secondary italic">Ephesians 1:22–23, Matthew 28:19–20, Acts 2:41–47</p>
                 </div>
             </div>
         </div>
     </section>
 </main>
 
-<!-- Footer -->
-<footer class="bg-primary text-white py-12 px-6 border-t border-white/5">
-    <div class="max-w-7xl mx-auto text-center">
-        <div class="text-lg font-display font-bold mb-4">PARDON BY GRACE INTERNATIONAL CHURCH</div>
-        <p class="text-gray-500 text-sm">Winning the Lost at all Cost</p>
-        <div class="mt-8 pt-8 border-t border-white/5 text-xs text-gray-600">
-            © 2025 Pardon By Grace. All rights reserved.
+<!-- MODALS -->
+
+<!-- Modal: Giving -->
+<div id="givingModal" class="modal">
+    <div class="absolute inset-0 bg-black/80" onclick="toggleModal('givingModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden">
+        <button class="absolute top-4 right-4 text-gray-400" onclick="toggleModal('givingModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-serif text-2xl text-primary mb-6">Giving (Tithe & Offering)</h3>
+        <div class="bg-gray-50 p-6 rounded-2xl mb-4">
+            <p class="text-xs font-bold text-accent uppercase mb-2">Nigerian Account</p>
+            <p class="text-lg font-bold">Fidelity Bank</p>
+            <p class="text-3xl font-serif text-primary my-2">4110072789</p>
+            <p class="text-xs uppercase">Pardon By Grace International Church</p>
+        </div>
+        <div class="bg-primary text-white p-6 rounded-2xl">
+            <p class="text-sm mb-4">International members, please chat us for transfer details:</p>
+            <a href="https://wa.me/2347012266550" class="flex items-center justify-center gap-2 bg-green-600 py-3 rounded-xl font-bold">
+                WhatsApp: 07012266550
+            </a>
         </div>
     </div>
+</div>
+
+<!-- Modal: Connect -->
+<div id="connectModal" class="modal">
+    <div class="absolute inset-0 bg-black/80" onclick="toggleModal('connectModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8">
+        <button class="absolute top-4 right-4 text-gray-400" onclick="toggleModal('connectModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-serif text-2xl text-primary mb-6">Connect With Us</h3>
+        <div class="space-y-4">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" class="flex items-center gap-4 p-4 border rounded-2xl hover:bg-gray-50">
+                <span class="material-symbols-outlined text-blue-600">facebook</span> Join us on Facebook
+            </a>
+            <a href="https://www.youtube.com/@PardonByGrace" class="flex items-center gap-4 p-4 border rounded-2xl hover:bg-gray-50">
+                <span class="material-symbols-outlined text-red-600">play_circle</span> Watch on YouTube
+            </a>
+            <div class="flex items-center gap-4 p-4 border rounded-2xl">
+                <span class="material-symbols-outlined text-accent">mail</span> pardonbygrace@gmail.com
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-primary text-white py-12 px-6 text-center">
+    <p class="font-serif opacity-80">© 2025 Pardon By Grace International Church</p>
 </footer>
+
+<script>
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        if (modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        } else {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function toggleMobileMenu(open) {
+        const menu = document.getElementById('mobileMenu');
+        if (open) {
+            menu.classList.remove('translate-x-full');
+        } else {
+            menu.classList.add('translate-x-full');
+        }
+    }
+</script>
 
 </body>
 </html>
