@@ -35,9 +35,7 @@
         .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* NO DOWNLOAD DROPDOWN CSS HERE */
-
-        /* Layout for Sermon Card (closer to Facebook group style) */
+        /* Layout for Sermon Card (Facebook group style) */
         .sermon-card-inner {
             display: flex;
             align-items: center; /* Vertically align items in the middle */
@@ -67,7 +65,7 @@
             align-items: center;
             justify-content: space-between; /* Push title/speaker left, button right */
             width: 100%; /* Take full width of details */
-            flex-wrap: wrap; /* Allow buttons to wrap if too many */
+            flex-wrap: wrap; /* Allow buttons to wrap if too many on small screens */
             gap: 0.5rem; /* Gap between buttons/title */
         }
         .sermon-title-speaker {
@@ -422,7 +420,6 @@
     // Closes any active modal
     function closeModal() {
         document.getElementById('uploadModal').classList.remove('active');
-        // No activeDropdown to close in this version
     }
 
     // Clears the form fields in the modal
