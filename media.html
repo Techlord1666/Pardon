@@ -40,32 +40,35 @@
             position: absolute;
             background-color: #171816; /* tertiary */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem; /* rounded-[2rem] from card, adjusting for dropdown */
+            border-radius: 1rem;
             padding: 0.75rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            z-index: 50;
-            bottom: 100%; /* Position above the download button */
-            right: 0; /* Align to the right of the button */
-            transform: translateY(-10px); /* Adjust position slightly */
+            z-index: 50; /* Ensure it's above other content */
+            top: auto; /* Allow auto positioning */
+            bottom: calc(100% + 10px); /* Position above the button, with a gap */
+            right: 0; /* Align to the right of the button's wrapper */
+            transform: translateY(0); /* Start at natural position */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
             min-width: 150px;
-            text-align: right; /* Align text within dropdown */
+            text-align: right;
+            display: flex; /* Make it a flex container for links */
+            flex-direction: column; /* Stack links vertically */
         }
         .download-options.active {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
+            transform: translateY(-5px); /* Slight lift animation */
         }
         .download-options a {
             display: block;
             padding: 0.5rem 0.75rem;
             color: #d4af37; /* accent */
-            font-size: 0.75rem; /* text-[10px] */
+            font-size: 0.75rem;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.1em; /* tracking-widest */
+            letter-spacing: 0.1em;
             border-radius: 0.5rem;
             transition: background-color 0.2s ease;
         }
@@ -73,38 +76,69 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
 
-        /* NEW: Styling for the sermon card layout */
-        .sermon-content-wrapper {
+        /* NEW Layout for Sermon Card (closer to Facebook group style) */
+        .sermon-card-inner {
             display: flex;
-            flex-direction: column; /* Default to column for small screens */
-            gap: 1.5rem; /* Gap between image and text */
-        }
-        @media (min-width: 768px) { /* md breakpoint */
-            .sermon-content-wrapper {
-                flex-direction: row; /* Row for larger screens */
-                align-items: flex-start; /* Align top */
-            }
+            align-items: center; /* Vertically align items in the middle */
+            gap: 1.5rem; /* Space between image and text */
         }
         .sermon-image-container {
-            width: 100%; /* Full width on small screens */
-            flex-shrink: 0; /* Don't shrink image container */
+            flex-shrink: 0; /* Prevent image from shrinking */
+            width: 100px; /* Fixed width for the image */
+            height: 100px; /* Fixed height for a square aspect ratio */
+            border-radius: 1rem; /* Adjust rounding as desired */
+            overflow: hidden; /* Hide overflow for rounding */
+            position: relative; /* For play icon */
         }
-        @media (min-width: 768px) {
-            .sermon-image-container {
-                width: 40%; /* Take 40% width on larger screens */
-                max-width: 200px; /* Limit image width */
-            }
+        .sermon-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure image covers the area */
         }
         .sermon-details {
-            flex-grow: 1; /* Allow text to take remaining space */
+            flex-grow: 1; /* Allow text content to take remaining space */
             display: flex;
             flex-direction: column;
+            justify-content: center; /* Vertically center content */
+        }
+        .sermon-header-and-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Push title/speaker left, button right */
+            width: 100%; /* Take full width of details */
+        }
+        .sermon-title-speaker {
+            flex-grow: 1; /* Allow title/speaker to take up space */
+            margin-right: 1rem; /* Space before download button */
+            overflow: hidden; /* Prevent text from overflowing */
+            text-overflow: ellipsis; /* Add ellipsis if text is too long */
+            white-space: nowrap; /* Keep text on one line for ellipsis */
         }
         .sermon-actions {
             display: flex;
             align-items: center;
-            margin-top: auto; /* Push actions to the bottom */
-            gap: 0.5rem;
+            /* margin-left: auto; Removed as it's handled by justify-content: space-between on parent */
+            gap: 0.5rem; 
+            flex-shrink: 0; /* Prevent download button from shrinking */
+        }
+        /* Hide the play button overlay for this compact layout, or adjust its style */
+        .sermon-image-container .absolute {
+            display: none; /* Hide play icon for this compact layout */
+        }
+        /* Adjust specific text sizes for compact card */
+        .sermon-details h3 {
+            font-size: 1rem; /* Smaller title for compact card */
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+        .sermon-details p {
+            font-size: 0.85rem; /* Smaller speaker name */
+            margin-bottom: 0;
+            color: #9ca3af; /* A lighter gray for speaker */
+        }
+        .sermon-card .admin-controls {
+             margin-top: 1rem;
+             padding-top: 1rem;
         }
     </style>
 </head>
@@ -175,7 +209,7 @@
 
 <script>
     const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImexciI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
     // Global variable to keep track of active dropdown
@@ -209,6 +243,7 @@
         try {
             if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
             else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
+            else if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0]; // Handle common download links
         } catch (e) { 
             console.error("Error extracting Google Drive ID:", e);
             return ""; 
@@ -240,29 +275,28 @@
         const audioDownloadUrl = audioDownloadId ? `https://drive.google.com/uc?export=download&id=${audioDownloadId}` : '#';
 
         div.innerHTML = `
-            <div class="sermon-content-wrapper">
-                <div class="relative overflow-hidden asymmetric-rounding aspect-video bg-primary sermon-image-container group">
-                    <img src="${finalThumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=Image+Error'">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                        <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
-                    </div>
-                </div>
+            <div class="sermon-card-inner">
+                <a href="${s.video_link}" target="_blank" rel="noopener noreferrer" class="sermon-image-container">
+                    <img src="${finalThumbnail}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100x100?text=PBG'">
+                </a>
 
                 <div class="sermon-details">
-                    <h3 class="text-xl font-serif mb-1">${s.title}</h3>
-                    <p class="text-gray-500 text-sm mb-6">${s.speaker}</p>
-                    
-                    <div class="sermon-actions relative mt-auto"> <!-- Added mt-auto to push to bottom if sermon-details grows -->
-                        <a href="${s.video_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
+                    <div class="sermon-header-and-button">
+                        <div class="sermon-title-speaker">
+                            <h3 class="font-serif">${s.title}</h3>
+                            <p class="text-gray-500">${s.speaker}</p>
+                        </div>
                         
-                        <div class="relative"> <!-- Wrapper for download button and dropdown -->
-                            <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition relative z-20">
-                                <span class="material-symbols-outlined text-sm">download</span>
-                            </button>
-                            <div class="download-options" id="downloadOptions-${s.id}">
-                                ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer">Download Video</a>` : ''}
-                                ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer">Download Audio</a>` : ''}
-                                ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
+                        <div class="sermon-actions">
+                            <div class="relative"> <!-- Wrapper for download button and dropdown -->
+                                <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition relative z-20">
+                                    Download
+                                </button>
+                                <div class="download-options" id="downloadOptions-${s.id}">
+                                    ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer">Video</a>` : ''}
+                                    ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer">Audio</a>` : ''}
+                                    ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -413,7 +447,7 @@
         dropdown.classList.toggle('active');
         activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
 
-        // Prevent immediate closing if clicked again
+        // Prevent immediate closing if clicked again (important for mobile UX)
         event.stopPropagation();
     }
 
