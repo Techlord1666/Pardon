@@ -242,9 +242,9 @@
             if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
             else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
             else if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0]; // For direct download URLs
-            else if (url.includes('file/')) return url.split('file/')[1].split('/')[0]; // Common share link format
+            else if (url.includes('file/d/')) return url.split('file/d/')[1].split('/')[0]; // Common share link format
         } catch (e) { 
-            console.error("Error extracting Google Drive ID:", e);
+            console.error("Error extracting Google Drive ID from URL:", url, e);
             return ""; 
         }
         return "";
@@ -298,7 +298,7 @@
                         
                         <div class="sermon-actions">
                             <div class="relative"> <!-- Wrapper for download button and dropdown -->
-                                <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition relative z-20">
+                                <button onclick="openDownloadOptions(event, this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition relative z-20">
                                     Download
                                 </button>
                                 <div class="download-options" id="downloadOptions-${s.id}">
@@ -322,10 +322,13 @@
 
     // Handles image file upload to Supabase Storage
     async function uploadImage(file) {
-        if (!file) return null;
+        if (!file) {
+            console.warn("No file selected for upload.");
+            return null;
+        }
 
         const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
-        console.log("Uploading image:", fileName);
+        console.log("Attempting to upload image:", fileName);
         const { data, error } = await _supabase.storage
             .from('sermon-thumbnails') // Ensure this bucket exists in Supabase Storage
             .upload(fileName, file, {
@@ -334,7 +337,7 @@
             });
 
         if (error) {
-            console.error('Error uploading image:', error);
+            console.error('Error uploading image to Supabase Storage:', error);
             alert('Error uploading image: ' + error.message);
             return null;
         }
@@ -375,7 +378,7 @@
                 return; // Stop if image upload failed
             }
         }
-        // If no new image and no existing URL, use a placeholder or handle as error
+        // If no new image and no existing URL, use a placeholder
         if (!imageUrl) {
             imageUrl = 'https://via.placeholder.com/400x225?text=No+Image'; // Default placeholder if no image
             console.warn("No image URL provided or uploaded, using placeholder.");
@@ -477,25 +480,30 @@
     }
 
     // Toggles the download options dropdown
-    function openDownloadOptions(buttonElement, videoUrl, audioUrl) {
+    function openDownloadOptions(event, buttonElement, videoUrl, audioUrl) {
+        console.log("openDownloadOptions called."); // *** LOG 1 ***
+        event.stopPropagation(); // Stop event bubbling to prevent immediate closing
+
         // Prevent opening if no valid download options
         if (videoUrl === '#' && audioUrl === '#') {
             alert("No download links available for this sermon.");
+            console.log("No valid download URLs."); // *** LOG 2 ***
             return;
         }
 
         const downloadOptionsWrapper = buttonElement.closest('.relative'); 
         const dropdown = downloadOptionsWrapper.querySelector('.download-options');
+        console.log("Found dropdown:", dropdown); // *** LOG 3 ***
 
         // Close currently active dropdown if it's not this one
         if (activeDropdown && activeDropdown !== dropdown) {
             activeDropdown.classList.remove('active');
+            console.log("Closed previous dropdown."); // *** LOG 4 ***
         }
 
         dropdown.classList.toggle('active');
         activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
-
-        event.stopPropagation(); // Prevents this click from immediately closing the dropdown via the document listener
+        console.log("Dropdown state toggled, activeDropdown:", activeDropdown); // *** LOG 5 ***
     }
 
     // Closes dropdowns if a click occurs outside of them
@@ -503,6 +511,7 @@
         // Check if there's an active dropdown AND the click target is NOT inside that dropdown
         // AND the click target is NOT the button that opened a dropdown.
         if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.sermon-actions .relative button')) {
+            console.log("Closing dropdown due to outside click."); // *** LOG 6 ***
             activeDropdown.classList.remove('active');
             activeDropdown = null;
         }
