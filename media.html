@@ -117,7 +117,6 @@
         .sermon-actions {
             display: flex;
             align-items: center;
-            /* margin-left: auto; Removed as it's handled by justify-content: space-between on parent */
             gap: 0.5rem; 
             flex-shrink: 0; /* Prevent download button from shrinking */
         }
@@ -208,23 +207,21 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImexciI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+    // !! IMPORTANT !! Replace with YOUR Supabase project URL and PUBLIC_ANON_KEY
+    const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    // Global variable to keep track of active dropdown
-    let activeDropdown = null;
+    let activeDropdown = null; // Global variable to keep track of active dropdown
 
     window.onload = loadSermons;
 
-    // --- NEW SMART IMAGE FIXER ---
+    // Converts Google Drive share links or Supabase storage URLs to direct image links
     function convertToDirectLink(url) {
         if (!url) return '';
-        // If it's a Supabase storage URL, directly return it.
         if (url.includes(SUPABASE_URL) && url.includes('/storage/v1/object/public/')) {
-            return url;
+            return url; // Already a direct Supabase public URL
         }
-        // If it's a Google Drive link, convert it to a direct image link
         if (url.includes('drive.google.com')) {
             let id = '';
             if (url.includes('id=')) {
@@ -232,18 +229,20 @@
             } else if (url.includes('/d/')) {
                 id = url.split('/d/')[1].split('/')[0];
             }
-            return `https://lh3.googleusercontent.com/d/${id}`; // This is a common pattern for public GDrive images
+            // This URL pattern often works for displaying publicly shared GDrive images
+            return `https://lh3.googleusercontent.com/d/${id}`; 
         }
-        // If it's already a direct link (like from another company), leave it alone
-        return url;
+        return url; // Return as is if not GDrive or Supabase
     }
 
+    // Extracts Google Drive file ID from various Google Drive URL formats
     function extractGoogleId(url) {
         if (!url || !url.includes('drive.google.com')) return "";
         try {
             if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
             else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
-            else if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0]; // Handle common download links
+            else if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0]; // For direct download URLs
+            else if (url.includes('file/')) return url.split('file/')[1].split('/')[0]; // Common share link format
         } catch (e) { 
             console.error("Error extracting Google Drive ID:", e);
             return ""; 
@@ -251,17 +250,26 @@
         return "";
     }
 
+    // Fetches sermons from Supabase and renders them
     async function loadSermons() {
+        console.log("Loading sermons from Supabase...");
         const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
         const grid = document.getElementById('sermonGrid');
-        grid.innerHTML = '';
-        if (data && data.length > 0) {
+        grid.innerHTML = ''; // Clear existing content
+
+        if (error) {
+            console.error("Error fetching sermons:", error);
+            grid.innerHTML = `<p class="col-span-full text-center text-red-500 py-20 italic">Error loading sermons: ${error.message}</p>`;
+        } else if (data && data.length > 0) {
+            console.log("Fetched sermons:", data);
             data.forEach(s => renderCard(s));
         } else {
+            console.log("No sermons found.");
             grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 italic">No sermons found.</p>';
         }
     }
 
+    // Renders a single sermon card
     function renderCard(s) {
         const grid = document.getElementById('sermonGrid');
         const div = document.createElement('div');
@@ -271,6 +279,7 @@
         const videoDownloadId = extractGoogleId(s.video_link);
         const audioDownloadId = extractGoogleId(s.audio_link);
 
+        // Generate Google Drive direct download links if IDs are available
         const videoDownloadUrl = videoDownloadId ? `https://drive.google.com/uc?export=download&id=${videoDownloadId}` : '#';
         const audioDownloadUrl = audioDownloadId ? `https://drive.google.com/uc?export=download&id=${audioDownloadId}` : '#';
 
@@ -311,41 +320,51 @@
         grid.appendChild(div);
     }
 
-    // --- NEW: Handle image file upload ---
+    // Handles image file upload to Supabase Storage
     async function uploadImage(file) {
         if (!file) return null;
 
         const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+        console.log("Uploading image:", fileName);
         const { data, error } = await _supabase.storage
-            .from('sermon-thumbnails') // Create a bucket named 'sermon-thumbnails' in Supabase Storage
+            .from('sermon-thumbnails') // Ensure this bucket exists in Supabase Storage
             .upload(fileName, file, {
                 cacheControl: '3600',
-                upsert: false
+                upsert: false // Set to true if you want to overwrite existing files with the same name
             });
 
         if (error) {
+            console.error('Error uploading image:', error);
             alert('Error uploading image: ' + error.message);
             return null;
         }
         
-        // Get public URL
         const { data: publicUrlData } = _supabase.storage
             .from('sermon-thumbnails')
             .getPublicUrl(fileName);
 
+        console.log("Image uploaded, public URL:", publicUrlData.publicUrl);
         return publicUrlData.publicUrl;
     }
 
+    // Saves or updates a sermon record in Supabase
     async function saveSermon() {
         const id = document.getElementById('editId').value;
         const videoLink = document.getElementById('fVideoLink').value;
-        const audioLink = document.getElementById('fAudioLink').value; // New audio link field
+        const audioLink = document.getElementById('fAudioLink').value;
         const imageFile = document.getElementById('fImageUpload').files[0];
-        let imageUrl = document.getElementById('fImageUrl').value; // Get existing URL if no new upload
+        let imageUrl = document.getElementById('fImageUrl').value; // Existing URL if no new upload
 
         const btn = document.getElementById('saveBtn');
         btn.innerText = "Uploading & Saving...";
         btn.disabled = true; // Disable button during upload/save
+
+        if (!document.getElementById('fTitle').value || !document.getElementById('fSpeaker').value || !videoLink) {
+            alert("Please fill in Sermon Title, Speaker Name, and Video Link.");
+            btn.innerText = "Save Sermon";
+            btn.disabled = false;
+            return;
+        }
 
         // If a new image file is selected, upload it
         if (imageFile) {
@@ -356,8 +375,12 @@
                 return; // Stop if image upload failed
             }
         }
-        // If no new image and no existing URL, maybe use a placeholder or error.
-        // For now, we'll allow imageUrl to be empty if no upload and no previous image.
+        // If no new image and no existing URL, use a placeholder or handle as error
+        if (!imageUrl) {
+            imageUrl = 'https://via.placeholder.com/400x225?text=No+Image'; // Default placeholder if no image
+            console.warn("No image URL provided or uploaded, using placeholder.");
+        }
+
 
         const payload = {
             title: document.getElementById('fTitle').value,
@@ -369,6 +392,7 @@
             audio_download_id: extractGoogleId(audioLink)
         };
 
+        console.log("Saving sermon payload:", payload);
         let result;
         if (id) {
             result = await _supabase.from('sermons').update(payload).eq('id', id);
@@ -376,49 +400,67 @@
             result = await _supabase.from('sermons').insert([payload]);
         }
 
-        if (result.error) alert(result.error.message);
-        else location.reload();
+        if (result.error) {
+            console.error("Supabase save error:", result.error);
+            alert('Error saving sermon: ' + result.error.message);
+            btn.innerText = "Save Sermon";
+            btn.disabled = false;
+        } else {
+            console.log("Sermon saved successfully:", result.data);
+            location.reload(); // Reload to show new/updated sermons
+        }
     }
 
+    // Activates admin mode with a password check
     function activateAdmin() {
-        if (prompt("Enter Password:") === "pardonbygrace11") {
+        if (prompt("Enter Password:") === "pardonbygrace11") { // !! CHANGE THIS PASSWORD FOR PRODUCTION !!
             document.body.classList.add('admin-mode');
             alert("Admin Mode Active.");
         } else alert("Access Denied");
     }
 
+    // Opens the upload/edit modal
     function openUpload() {
         document.getElementById('modalTitle').innerText = "Add New Sermon";
         document.getElementById('editId').value = "";
         clearForm();
-        document.getElementById('currentImageName').innerText = ""; // Clear image name
-        document.getElementById('fImageUrl').value = ""; // Clear hidden image URL
+        document.getElementById('currentImageName').innerText = ""; 
+        document.getElementById('fImageUrl').value = ""; 
         document.getElementById('uploadModal').classList.add('active');
-        document.getElementById('saveBtn').disabled = false; // Enable save button
+        document.getElementById('saveBtn').disabled = false; 
     }
 
+    // Opens the modal for editing an existing sermon
     function openEdit(id, title, speaker, imgUrl, videoLink, audioLink) {
         document.getElementById('modalTitle').innerText = "Edit Sermon";
         document.getElementById('editId').value = id;
         document.getElementById('fTitle').value = title;
         document.getElementById('fSpeaker').value = speaker;
-        document.getElementById('fImageUrl').value = imgUrl; // Store the current image URL
-        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop().split('?')[0]}` : "No image uploaded yet."; // Show current image name, remove query params
+        document.getElementById('fImageUrl').value = imgUrl; 
+        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop().split('?')[0]}` : "No image uploaded yet.";
         document.getElementById('fVideoLink').value = videoLink;
-        document.getElementById('fAudioLink').value = audioLink; // Set audio link
+        document.getElementById('fAudioLink').value = audioLink; 
         document.getElementById('fImageUpload').value = null; // Clear file input
         document.getElementById('uploadModal').classList.add('active');
-        document.getElementById('saveBtn').disabled = false; // Enable save button
+        document.getElementById('saveBtn').disabled = false; 
     }
 
+    // Deletes a sermon record from Supabase
     async function deleteSermon(id) {
         if (confirm("Delete this sermon?")) {
-            // Optional: You could also delete the image from Supabase Storage here if you store its path
-            await _supabase.from('sermons').delete().eq('id', id);
-            location.reload();
+            console.log("Deleting sermon with ID:", id);
+            const { error } = await _supabase.from('sermons').delete().eq('id', id);
+            if (error) {
+                console.error("Error deleting sermon:", error);
+                alert('Error deleting sermon: ' + error.message);
+            } else {
+                console.log("Sermon deleted successfully.");
+                location.reload();
+            }
         }
     }
 
+    // Closes any active modal
     function closeModal() {
         document.getElementById('uploadModal').classList.remove('active');
         // Close any active download dropdowns when modal closes
@@ -428,14 +470,20 @@
         }
     }
 
+    // Clears the form fields in the modal
     function clearForm() {
         ['fTitle','fSpeaker','fVideoLink','fAudioLink'].forEach(id => document.getElementById(id).value = "");
         document.getElementById('fImageUpload').value = ""; // Clear file input
     }
 
-    // --- Download options dropdown ---
+    // Toggles the download options dropdown
     function openDownloadOptions(buttonElement, videoUrl, audioUrl) {
-        // Find the closest parent div that wraps both the button and its dropdown
+        // Prevent opening if no valid download options
+        if (videoUrl === '#' && audioUrl === '#') {
+            alert("No download links available for this sermon.");
+            return;
+        }
+
         const downloadOptionsWrapper = buttonElement.closest('.relative'); 
         const dropdown = downloadOptionsWrapper.querySelector('.download-options');
 
@@ -447,13 +495,13 @@
         dropdown.classList.toggle('active');
         activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
 
-        // Prevent immediate closing if clicked again (important for mobile UX)
-        event.stopPropagation();
+        event.stopPropagation(); // Prevents this click from immediately closing the dropdown via the document listener
     }
 
-    // Close dropdowns if clicked outside
+    // Closes dropdowns if a click occurs outside of them
     document.addEventListener('click', function(event) {
-        // Ensure the click is not inside an active dropdown or on a button that triggers one
+        // Check if there's an active dropdown AND the click target is NOT inside that dropdown
+        // AND the click target is NOT the button that opened a dropdown.
         if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.sermon-actions .relative button')) {
             activeDropdown.classList.remove('active');
             activeDropdown = null;
