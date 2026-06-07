@@ -45,17 +45,18 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             z-index: 50;
             bottom: 100%; /* Position above the download button */
-            left: 50%;
-            transform: translateX(-50%) translateY(-10px); /* Adjust position slightly */
+            right: 0; /* Align to the right of the button */
+            transform: translateY(-10px); /* Adjust position slightly */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
             min-width: 150px;
+            text-align: right; /* Align text within dropdown */
         }
         .download-options.active {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
         }
         .download-options a {
             display: block;
@@ -70,6 +71,40 @@
         }
         .download-options a:hover {
             background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* NEW: Styling for the sermon card layout */
+        .sermon-content-wrapper {
+            display: flex;
+            flex-direction: column; /* Default to column for small screens */
+            gap: 1.5rem; /* Gap between image and text */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .sermon-content-wrapper {
+                flex-direction: row; /* Row for larger screens */
+                align-items: flex-start; /* Align top */
+            }
+        }
+        .sermon-image-container {
+            width: 100%; /* Full width on small screens */
+            flex-shrink: 0; /* Don't shrink image container */
+        }
+        @media (min-width: 768px) {
+            .sermon-image-container {
+                width: 40%; /* Take 40% width on larger screens */
+                max-width: 200px; /* Limit image width */
+            }
+        }
+        .sermon-details {
+            flex-grow: 1; /* Allow text to take remaining space */
+            display: flex;
+            flex-direction: column;
+        }
+        .sermon-actions {
+            display: flex;
+            align-items: center;
+            margin-top: auto; /* Push actions to the bottom */
+            gap: 0.5rem;
         }
     </style>
 </head>
@@ -195,37 +230,42 @@
     function renderCard(s) {
         const grid = document.getElementById('sermonGrid');
         const div = document.createElement('div');
-        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card group relative";
+        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card"; 
         
-        // Fix the image link before showing it
         const finalThumbnail = convertToDirectLink(s.image_url);
-        const videoDownloadId = extractGoogleId(s.video_link); // Assuming 'view_link' is now 'video_link'
-        const audioDownloadId = extractGoogleId(s.audio_link); // New field
+        const videoDownloadId = extractGoogleId(s.video_link);
+        const audioDownloadId = extractGoogleId(s.audio_link);
 
-        // Base download URL for Google Drive
         const videoDownloadUrl = videoDownloadId ? `https://drive.google.com/uc?export=download&id=${videoDownloadId}` : '#';
         const audioDownloadUrl = audioDownloadId ? `https://drive.google.com/uc?export=download&id=${audioDownloadId}` : '#';
 
-
         div.innerHTML = `
-            <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary">
-                <img src="${finalThumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=Image+Error'">
-                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                    <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
+            <div class="sermon-content-wrapper">
+                <div class="relative overflow-hidden asymmetric-rounding aspect-video bg-primary sermon-image-container group">
+                    <img src="${finalThumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x225?text=Image+Error'">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span class="material-symbols-outlined text-5xl text-accent">play_circle</span>
+                    </div>
                 </div>
-            </div>
-            <h3 class="text-xl font-serif mb-1">${s.title}</h3>
-            <p class="text-gray-500 text-sm mb-6">${s.speaker}</p>
-            
-            <div class="flex gap-2 relative">
-                <a href="${s.video_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
-                <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition relative z-20">
-                    <span class="material-symbols-outlined text-sm">download</span>
-                </button>
-                <div class="download-options" id="downloadOptions-${s.id}">
-                    ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank">Download Video</a>` : ''}
-                    ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank">Download Audio</a>` : ''}
-                    ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
+
+                <div class="sermon-details">
+                    <h3 class="text-xl font-serif mb-1">${s.title}</h3>
+                    <p class="text-gray-500 text-sm mb-6">${s.speaker}</p>
+                    
+                    <div class="sermon-actions relative mt-auto"> <!-- Added mt-auto to push to bottom if sermon-details grows -->
+                        <a href="${s.video_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
+                        
+                        <div class="relative"> <!-- Wrapper for download button and dropdown -->
+                            <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition relative z-20">
+                                <span class="material-symbols-outlined text-sm">download</span>
+                            </button>
+                            <div class="download-options" id="downloadOptions-${s.id}">
+                                ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer">Download Video</a>` : ''}
+                                ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer">Download Audio</a>` : ''}
+                                ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -288,8 +328,8 @@
         const payload = {
             title: document.getElementById('fTitle').value,
             speaker: document.getElementById('fSpeaker').value,
-            video_link: videoLink, // Changed from view_link
-            audio_link: audioLink, // New field
+            video_link: videoLink, 
+            audio_link: audioLink, 
             image_url: imageUrl,
             video_download_id: extractGoogleId(videoLink),
             audio_download_id: extractGoogleId(audioLink)
@@ -329,7 +369,7 @@
         document.getElementById('fTitle').value = title;
         document.getElementById('fSpeaker').value = speaker;
         document.getElementById('fImageUrl').value = imgUrl; // Store the current image URL
-        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop()}` : "No image uploaded yet."; // Show current image name
+        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop().split('?')[0]}` : "No image uploaded yet."; // Show current image name, remove query params
         document.getElementById('fVideoLink').value = videoLink;
         document.getElementById('fAudioLink').value = audioLink; // Set audio link
         document.getElementById('fImageUpload').value = null; // Clear file input
@@ -339,7 +379,7 @@
 
     async function deleteSermon(id) {
         if (confirm("Delete this sermon?")) {
-            // Optional: You could also delete the image from Supabase Storage here
+            // Optional: You could also delete the image from Supabase Storage here if you store its path
             await _supabase.from('sermons').delete().eq('id', id);
             location.reload();
         }
@@ -359,10 +399,11 @@
         document.getElementById('fImageUpload').value = ""; // Clear file input
     }
 
-    // --- NEW: Download options dropdown ---
+    // --- Download options dropdown ---
     function openDownloadOptions(buttonElement, videoUrl, audioUrl) {
-        const parentDiv = buttonElement.closest('.relative'); // The div containing both button and dropdown
-        const dropdown = parentDiv.querySelector('.download-options');
+        // Find the closest parent div that wraps both the button and its dropdown
+        const downloadOptionsWrapper = buttonElement.closest('.relative'); 
+        const dropdown = downloadOptionsWrapper.querySelector('.download-options');
 
         // Close currently active dropdown if it's not this one
         if (activeDropdown && activeDropdown !== dropdown) {
@@ -378,7 +419,8 @@
 
     // Close dropdowns if clicked outside
     document.addEventListener('click', function(event) {
-        if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.relative button')) {
+        // Ensure the click is not inside an active dropdown or on a button that triggers one
+        if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.sermon-actions .relative button')) {
             activeDropdown.classList.remove('active');
             activeDropdown = null;
         }
