@@ -35,48 +35,9 @@
         .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Styles for the download options dropdown */
-        .download-options {
-            position: absolute;
-            background-color: #171816; /* tertiary */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            padding: 0.75rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            z-index: 50; /* Ensure it's above other content */
-            top: auto; /* Allow auto positioning */
-            bottom: calc(100% + 10px); /* Position above the button, with a gap */
-            right: 0; /* Align to the right of the button's wrapper */
-            transform: translateY(0); /* Start at natural position */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-            min-width: 150px;
-            text-align: right;
-            display: flex; /* Make it a flex container for links */
-            flex-direction: column; /* Stack links vertically */
-        }
-        .download-options.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(-5px); /* Slight lift animation */
-        }
-        .download-options a {
-            display: block;
-            padding: 0.5rem 0.75rem;
-            color: #d4af37; /* accent */
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease;
-        }
-        .download-options a:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
+        /* NO DOWNLOAD DROPDOWN CSS HERE */
 
-        /* NEW Layout for Sermon Card (closer to Facebook group style) */
+        /* Layout for Sermon Card (closer to Facebook group style) */
         .sermon-card-inner {
             display: flex;
             align-items: center; /* Vertically align items in the middle */
@@ -106,10 +67,12 @@
             align-items: center;
             justify-content: space-between; /* Push title/speaker left, button right */
             width: 100%; /* Take full width of details */
+            flex-wrap: wrap; /* Allow buttons to wrap if too many */
+            gap: 0.5rem; /* Gap between buttons/title */
         }
         .sermon-title-speaker {
             flex-grow: 1; /* Allow title/speaker to take up space */
-            margin-right: 1rem; /* Space before download button */
+            margin-right: 0.5rem; /* Space before download buttons */
             overflow: hidden; /* Prevent text from overflowing */
             text-overflow: ellipsis; /* Add ellipsis if text is too long */
             white-space: nowrap; /* Keep text on one line for ellipsis */
@@ -118,7 +81,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem; 
-            flex-shrink: 0; /* Prevent download button from shrinking */
+            flex-shrink: 0; /* Prevent buttons from shrinking */
         }
         /* Hide the play button overlay for this compact layout, or adjust its style */
         .sermon-image-container .absolute {
@@ -212,7 +175,7 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    let activeDropdown = null; // Global variable to keep track of active dropdown
+    // No activeDropdown variable needed for this direct button approach
 
     window.onload = loadSermons;
 
@@ -297,16 +260,9 @@
                         </div>
                         
                         <div class="sermon-actions">
-                            <div class="relative"> <!-- Wrapper for download button and dropdown -->
-                                <button onclick="openDownloadOptions(event, this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition relative z-20">
-                                    Download
-                                </button>
-                                <div class="download-options" id="downloadOptions-${s.id}">
-                                    ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer">Video</a>` : ''}
-                                    ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer">Audio</a>` : ''}
-                                    ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
-                                </div>
-                            </div>
+                            ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition">Video</a>` : ''}
+                            ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition">Audio</a>` : ''}
+                            ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads</span>' : ''}
                         </div>
                     </div>
                 </div>
@@ -466,11 +422,7 @@
     // Closes any active modal
     function closeModal() {
         document.getElementById('uploadModal').classList.remove('active');
-        // Close any active download dropdowns when modal closes
-        if (activeDropdown) {
-            activeDropdown.classList.remove('active');
-            activeDropdown = null;
-        }
+        // No activeDropdown to close in this version
     }
 
     // Clears the form fields in the modal
@@ -479,43 +431,7 @@
         document.getElementById('fImageUpload').value = ""; // Clear file input
     }
 
-    // Toggles the download options dropdown
-    function openDownloadOptions(event, buttonElement, videoUrl, audioUrl) {
-        console.log("openDownloadOptions called."); // *** LOG 1 ***
-        event.stopPropagation(); // Stop event bubbling to prevent immediate closing
-
-        // Prevent opening if no valid download options
-        if (videoUrl === '#' && audioUrl === '#') {
-            alert("No download links available for this sermon.");
-            console.log("No valid download URLs."); // *** LOG 2 ***
-            return;
-        }
-
-        const downloadOptionsWrapper = buttonElement.closest('.relative'); 
-        const dropdown = downloadOptionsWrapper.querySelector('.download-options');
-        console.log("Found dropdown:", dropdown); // *** LOG 3 ***
-
-        // Close currently active dropdown if it's not this one
-        if (activeDropdown && activeDropdown !== dropdown) {
-            activeDropdown.classList.remove('active');
-            console.log("Closed previous dropdown."); // *** LOG 4 ***
-        }
-
-        dropdown.classList.toggle('active');
-        activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
-        console.log("Dropdown state toggled, activeDropdown:", activeDropdown); // *** LOG 5 ***
-    }
-
-    // Closes dropdowns if a click occurs outside of them
-    document.addEventListener('click', function(event) {
-        // Check if there's an active dropdown AND the click target is NOT inside that dropdown
-        // AND the click target is NOT the button that opened a dropdown.
-        if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.sermon-actions .relative button')) {
-            console.log("Closing dropdown due to outside click."); // *** LOG 6 ***
-            activeDropdown.classList.remove('active');
-            activeDropdown = null;
-        }
-    });
+    // No openDownloadOptions or document.addEventListener('click') for dropdowns needed in this direct button approach
 
 </script>
 
