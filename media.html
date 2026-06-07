@@ -34,6 +34,43 @@
         #adminBtn:hover { opacity: 1; color: #d4af37; }
         .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Styles for the download options dropdown */
+        .download-options {
+            position: absolute;
+            background-color: #171816; /* tertiary */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem; /* rounded-[2rem] from card, adjusting for dropdown */
+            padding: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            bottom: 100%; /* Position above the download button */
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px); /* Adjust position slightly */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            min-width: 150px;
+        }
+        .download-options.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        .download-options a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: #d4af37; /* accent */
+            font-size: 0.75rem; /* text-[10px] */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em; /* tracking-widest */
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+        .download-options a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 <body class="bg-tertiary text-white font-sans overflow-x-hidden">
@@ -78,14 +115,22 @@
             <input type="text" id="fTitle" placeholder="Sermon Title" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
             <input type="text" id="fSpeaker" placeholder="Speaker Name" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
             
+            <!-- Cover Image Upload -->
             <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Thumbnail Image URL</p>
-                <input type="text" id="fImage" placeholder="Paste Thumbnail Link" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Thumbnail Image</p>
+                <input type="file" id="fImageUpload" accept="image/*" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+                <p id="currentImageName" class="text-gray-400 text-xs mt-2 italic"></p>
+                <input type="hidden" id="fImageUrl" > <!-- To store the URL after upload -->
             </div>
 
             <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Sermon Link</p>
-                <input type="text" id="fMasterLink" placeholder="Paste Google Drive Video Link" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Video Link</p>
+                <input type="text" id="fVideoLink" placeholder="Paste Google Drive Video Link" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
+            </div>
+
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Audio Link (Optional)</p>
+                <input type="text" id="fAudioLink" placeholder="Paste Google Drive Audio Link (MP3, M4A, etc.)" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
             </div>
             
             <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Save Sermon</button>
@@ -97,12 +142,19 @@
     const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Global variable to keep track of active dropdown
+    let activeDropdown = null;
 
     window.onload = loadSermons;
 
     // --- NEW SMART IMAGE FIXER ---
     function convertToDirectLink(url) {
         if (!url) return '';
+        // If it's a Supabase storage URL, directly return it.
+        if (url.includes(SUPABASE_URL) && url.includes('/storage/v1/object/public/')) {
+            return url;
+        }
         // If it's a Google Drive link, convert it to a direct image link
         if (url.includes('drive.google.com')) {
             let id = '';
@@ -111,7 +163,7 @@
             } else if (url.includes('/d/')) {
                 id = url.split('/d/')[1].split('/')[0];
             }
-            return `https://lh3.googleusercontent.com/d/${id}`;
+            return `https://lh3.googleusercontent.com/d/${id}`; // This is a common pattern for public GDrive images
         }
         // If it's already a direct link (like from another company), leave it alone
         return url;
@@ -122,7 +174,10 @@
         try {
             if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
             else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
-        } catch (e) { return ""; }
+        } catch (e) { 
+            console.error("Error extracting Google Drive ID:", e);
+            return ""; 
+        }
         return "";
     }
 
@@ -144,8 +199,13 @@
         
         // Fix the image link before showing it
         const finalThumbnail = convertToDirectLink(s.image_url);
-        const cleanId = extractGoogleId(s.view_link);
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
+        const videoDownloadId = extractGoogleId(s.video_link); // Assuming 'view_link' is now 'video_link'
+        const audioDownloadId = extractGoogleId(s.audio_link); // New field
+
+        // Base download URL for Google Drive
+        const videoDownloadUrl = videoDownloadId ? `https://drive.google.com/uc?export=download&id=${videoDownloadId}` : '#';
+        const audioDownloadUrl = audioDownloadId ? `https://drive.google.com/uc?export=download&id=${audioDownloadId}` : '#';
+
 
         div.innerHTML = `
             <div class="relative overflow-hidden asymmetric-rounding aspect-video mb-6 bg-primary">
@@ -157,36 +217,83 @@
             <h3 class="text-xl font-serif mb-1">${s.title}</h3>
             <p class="text-gray-500 text-sm mb-6">${s.speaker}</p>
             
-            <div class="flex gap-2">
-                <a href="${s.view_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
-                <a href="${downloadUrl}" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition">
+            <div class="flex gap-2 relative">
+                <a href="${s.video_link}" target="_blank" class="flex-1 bg-accent text-primary text-center py-3 rounded-full text-[10px] font-bold uppercase">Watch / Listen</a>
+                <button onclick="openDownloadOptions(this, '${videoDownloadUrl}', '${audioDownloadUrl}')" class="bg-white/10 p-3 rounded-full hover:bg-white/20 transition relative z-20">
                     <span class="material-symbols-outlined text-sm">download</span>
-                </a>
+                </button>
+                <div class="download-options" id="downloadOptions-${s.id}">
+                    ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank">Download Video</a>` : ''}
+                    ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank">Download Audio</a>` : ''}
+                    ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads available</span>' : ''}
+                </div>
             </div>
 
             <div class="admin-controls mt-4 gap-2 border-t border-white/5 pt-4">
-                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.image_url}\`, \`${s.view_link}\`)" class="flex-1 text-[10px] font-bold text-gray-400 hover:text-white transition">Edit</button>
+                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.image_url}\`, \`${s.video_link}\`, \`${s.audio_link || ''}\`)" class="flex-1 text-[10px] font-bold text-gray-400 hover:text-white transition">Edit</button>
                 <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold text-red-400 hover:text-red-600 transition">Delete</button>
             </div>
         `;
         grid.appendChild(div);
     }
 
+    // --- NEW: Handle image file upload ---
+    async function uploadImage(file) {
+        if (!file) return null;
+
+        const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+        const { data, error } = await _supabase.storage
+            .from('sermon-thumbnails') // Create a bucket named 'sermon-thumbnails' in Supabase Storage
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (error) {
+            alert('Error uploading image: ' + error.message);
+            return null;
+        }
+        
+        // Get public URL
+        const { data: publicUrlData } = _supabase.storage
+            .from('sermon-thumbnails')
+            .getPublicUrl(fileName);
+
+        return publicUrlData.publicUrl;
+    }
+
     async function saveSermon() {
         const id = document.getElementById('editId').value;
-        const sermonLink = document.getElementById('fMasterLink').value;
-        const imageUrl = document.getElementById('fImage').value;
-        
+        const videoLink = document.getElementById('fVideoLink').value;
+        const audioLink = document.getElementById('fAudioLink').value; // New audio link field
+        const imageFile = document.getElementById('fImageUpload').files[0];
+        let imageUrl = document.getElementById('fImageUrl').value; // Get existing URL if no new upload
+
+        const btn = document.getElementById('saveBtn');
+        btn.innerText = "Uploading & Saving...";
+        btn.disabled = true; // Disable button during upload/save
+
+        // If a new image file is selected, upload it
+        if (imageFile) {
+            imageUrl = await uploadImage(imageFile);
+            if (!imageUrl) {
+                btn.innerText = "Save Sermon";
+                btn.disabled = false;
+                return; // Stop if image upload failed
+            }
+        }
+        // If no new image and no existing URL, maybe use a placeholder or error.
+        // For now, we'll allow imageUrl to be empty if no upload and no previous image.
+
         const payload = {
             title: document.getElementById('fTitle').value,
             speaker: document.getElementById('fSpeaker').value,
-            view_link: sermonLink,
+            video_link: videoLink, // Changed from view_link
+            audio_link: audioLink, // New field
             image_url: imageUrl,
-            download_id: extractGoogleId(sermonLink)
+            video_download_id: extractGoogleId(videoLink),
+            audio_download_id: extractGoogleId(audioLink)
         };
-
-        const btn = document.getElementById('saveBtn');
-        btn.innerText = "Saving...";
 
         let result;
         if (id) {
@@ -210,30 +317,73 @@
         document.getElementById('modalTitle').innerText = "Add New Sermon";
         document.getElementById('editId').value = "";
         clearForm();
+        document.getElementById('currentImageName').innerText = ""; // Clear image name
+        document.getElementById('fImageUrl').value = ""; // Clear hidden image URL
         document.getElementById('uploadModal').classList.add('active');
+        document.getElementById('saveBtn').disabled = false; // Enable save button
     }
 
-    function openEdit(id, title, speaker, img, view) {
+    function openEdit(id, title, speaker, imgUrl, videoLink, audioLink) {
         document.getElementById('modalTitle').innerText = "Edit Sermon";
         document.getElementById('editId').value = id;
         document.getElementById('fTitle').value = title;
         document.getElementById('fSpeaker').value = speaker;
-        document.getElementById('fImage').value = img;
-        document.getElementById('fMasterLink').value = view;
+        document.getElementById('fImageUrl').value = imgUrl; // Store the current image URL
+        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop()}` : "No image uploaded yet."; // Show current image name
+        document.getElementById('fVideoLink').value = videoLink;
+        document.getElementById('fAudioLink').value = audioLink; // Set audio link
+        document.getElementById('fImageUpload').value = null; // Clear file input
         document.getElementById('uploadModal').classList.add('active');
+        document.getElementById('saveBtn').disabled = false; // Enable save button
     }
 
     async function deleteSermon(id) {
         if (confirm("Delete this sermon?")) {
+            // Optional: You could also delete the image from Supabase Storage here
             await _supabase.from('sermons').delete().eq('id', id);
             location.reload();
         }
     }
 
-    function closeModal() { document.getElementById('uploadModal').classList.remove('active'); }
-    function clearForm() {
-        ['fTitle','fSpeaker','fImage','fMasterLink'].forEach(id => document.getElementById(id).value = "");
+    function closeModal() {
+        document.getElementById('uploadModal').classList.remove('active');
+        // Close any active download dropdowns when modal closes
+        if (activeDropdown) {
+            activeDropdown.classList.remove('active');
+            activeDropdown = null;
+        }
     }
+
+    function clearForm() {
+        ['fTitle','fSpeaker','fVideoLink','fAudioLink'].forEach(id => document.getElementById(id).value = "");
+        document.getElementById('fImageUpload').value = ""; // Clear file input
+    }
+
+    // --- NEW: Download options dropdown ---
+    function openDownloadOptions(buttonElement, videoUrl, audioUrl) {
+        const parentDiv = buttonElement.closest('.relative'); // The div containing both button and dropdown
+        const dropdown = parentDiv.querySelector('.download-options');
+
+        // Close currently active dropdown if it's not this one
+        if (activeDropdown && activeDropdown !== dropdown) {
+            activeDropdown.classList.remove('active');
+        }
+
+        dropdown.classList.toggle('active');
+        activeDropdown = dropdown.classList.contains('active') ? dropdown : null;
+
+        // Prevent immediate closing if clicked again
+        event.stopPropagation();
+    }
+
+    // Close dropdowns if clicked outside
+    document.addEventListener('click', function(event) {
+        if (activeDropdown && !activeDropdown.contains(event.target) && !event.target.closest('.relative button')) {
+            activeDropdown.classList.remove('active');
+            activeDropdown = null;
+        }
+    });
+
 </script>
 
 </body>
