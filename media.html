@@ -1,435 +1,256 @@
 <!DOCTYPE html>
-<html class="light scroll-smooth" lang="en">
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Media Library | Pardon By Grace</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="logo.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sermon Library | Pardon By Grace</title>
+<link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700" rel="stylesheet"/>
-    
-    <script id="tailwind-config">
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: { "primary": "#061b0e", "accent": "#d4af37", "tertiary": "#171816" },
-            fontFamily: { "serif": ["Noto Serif", "serif"], "sans": ["Manrope", "sans-serif"] }
-          }
-        }
-      }
-    </script>
-    <style>
-        .asymmetric-rounding { border-radius: 40px 10px 40px 10px; }
-        .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
-        .modal.active { display: flex; }
-        .admin-controls { display: none !important; }
-        body.admin-mode .admin-controls { display: flex !important; }
-        #adminBtn { opacity: 0.05; cursor: pointer; transition: 0.3s; }
-        #adminBtn:hover { opacity: 1; color: #d4af37; }
-        .sermon-card { animation: fadeIn 0.6s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Layout for Sermon Card (Facebook group style) */
-        .sermon-card-inner {
-            display: flex;
-            align-items: center; /* Vertically align items in the middle */
-            gap: 1.5rem; /* Space between image and text */
-        }
-        .sermon-image-container {
-            flex-shrink: 0; /* Prevent image from shrinking */
-            width: 100px; /* Fixed width for the image */
-            height: 100px; /* Fixed height for a square aspect ratio */
-            border-radius: 1rem; /* Adjust rounding as desired */
-            overflow: hidden; /* Hide overflow for rounding */
-            position: relative; /* For play icon */
-        }
-        .sermon-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensure image covers the area */
-        }
-        .sermon-details {
-            flex-grow: 1; /* Allow text content to take remaining space */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Vertically center content */
-        }
-        .sermon-header-and-button {
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* Push title/speaker left, button right */
-            width: 100%; /* Take full width of details */
-            flex-wrap: wrap; /* Allow buttons to wrap if too many on small screens */
-            gap: 0.5rem; /* Gap between buttons/title */
-        }
-        .sermon-title-speaker {
-            flex-grow: 1; /* Allow title/speaker to take up space */
-            margin-right: 0.5rem; /* Space before download buttons */
-            overflow: hidden; /* Prevent text from overflowing */
-            text-overflow: ellipsis; /* Add ellipsis if text is too long */
-            white-space: nowrap; /* Keep text on one line for ellipsis */
-        }
-        .sermon-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem; 
-            flex-shrink: 0; /* Prevent buttons from shrinking */
-        }
-        /* Hide the play button overlay for this compact layout, or adjust its style */
-        .sermon-image-container .absolute {
-            display: none; /* Hide play icon for this compact layout */
-        }
-        /* Adjust specific text sizes for compact card */
-        .sermon-details h3 {
-            font-size: 1rem; /* Smaller title for compact card */
-            line-height: 1.2;
-            margin-bottom: 0.25rem;
-        }
-        .sermon-details p {
-            font-size: 0.85rem; /* Smaller speaker name */
-            margin-bottom: 0;
-            color: #9ca3af; /* A lighter gray for speaker */
-        }
-        .sermon-card .admin-controls {
-             margin-top: 1rem;
-             padding-top: 1rem;
-        }
-    </style>
-</head>
-<body class="bg-tertiary text-white font-sans overflow-x-hidden">
-
-<!-- Navigation -->
-<nav class="fixed top-0 w-full z-50 bg-tertiary/90 backdrop-blur-md border-b border-white/5">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-        <a href="index.html" class="flex items-center gap-2">
-            <img src="logo.png" alt="PBG" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40x40?text=PBG'">
-            <span class="font-serif font-bold text-lg uppercase tracking-tighter">Pardon By Grace</span>
-        </a>
-        <div class="flex items-center gap-4">
-             <button onclick="openUpload()" class="admin-controls bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest">+ Add New</button>
-             <a href="index.html" class="text-[10px] font-bold uppercase tracking-widest hover:text-accent">Home</a>
-        </div>
-    </div>
-</nav>
-
-<main class="pt-32 pb-40 px-6 max-w-7xl mx-auto">
-    <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-6xl font-serif mb-4">Sermon Library</h1>
-        <p class="text-accent font-bold tracking-[0.3em] uppercase text-xs">Winning the lost at all cost</p>
-    </div>
-
-    <div id="sermonGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        <p id="emptyMsg" class="col-span-full text-center text-gray-500 py-20 italic">Loading sermons...</p>
-    </div>
-</main>
-
-<footer class="py-20 border-t border-white/5 bg-black/20 text-center">
-    <p class="text-gray-600 text-sm mb-4">© 2025 Pardon By Grace International Church</p>
-    <button id="adminBtn" onclick="activateAdmin()" class="text-[10px] font-bold uppercase tracking-widest">[ Admin Access ]</button>
-</footer>
-
-<!-- FORM MODAL -->
-<div id="uploadModal" class="modal">
-    <div class="absolute inset-0 bg-black/95" onclick="closeModal()"></div>
-    <div class="relative bg-tertiary border border-white/10 w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl">
-        <h3 id="modalTitle" class="text-2xl font-serif mb-6 text-accent text-center">Add New Sermon</h3>
-        <input type="hidden" id="editId">
-        <div class="space-y-4">
-            <input type="text" id="fTitle" placeholder="Sermon Title" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            <input type="text" id="fSpeaker" placeholder="Speaker Name" class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-white">
-            
-            <!-- Cover Image Upload -->
-            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Thumbnail Image</p>
-                <input type="file" id="fImageUpload" accept="image/*" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
-                <p id="currentImageName" class="text-gray-400 text-xs mt-2 italic"></p>
-                <input type="hidden" id="fImageUrl" > <!-- To store the URL after upload -->
-            </div>
-
-            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Video Link</p>
-                <input type="text" id="fVideoLink" placeholder="Paste Google Drive Video Link" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
-            </div>
-
-            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
-                <p class="text-[10px] font-bold text-accent uppercase mb-2">Google Drive Audio Link (Optional)</p>
-                <input type="text" id="fAudioLink" placeholder="Paste Google Drive Audio Link (MP3, M4A, etc.)" class="w-full bg-transparent border-none p-0 focus:ring-0 text-white text-sm">
-            </div>
-            
-            <button id="saveBtn" onclick="saveSermon()" class="w-full bg-accent text-primary py-4 rounded-xl font-bold uppercase tracking-widest mt-4">Save Sermon</button>
-        </div>
-    </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..500" rel="stylesheet"/>
 
 <script>
-    // !! IMPORTANT !! Replace with YOUR Supabase project URL and PUBLIC_ANON_KEY
-    const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co'; 
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // No activeDropdown variable needed for this direct button approach
-
-    window.onload = loadSermons;
-
-    // Converts Google Drive share links or Supabase storage URLs to direct image links
-    function convertToDirectLink(url) {
-        if (!url) return '';
-        if (url.includes(SUPABASE_URL) && url.includes('/storage/v1/object/public/')) {
-            return url; // Already a direct Supabase public URL
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#ffffff",
+          sand: "#f6f3ec",
+          ink: "#101a14",
+          "ink-soft": "#5c6a61",
+          forest: "#0c2b1c",
+          gold: "#a9812f",
+          "gold-soft": "#cba660",
+          line: "#e7e3d6"
+        },
+        fontFamily: {
+          serif: ["Fraunces", "serif"],
+          sans: ["Manrope", "sans-serif"]
         }
-        if (url.includes('drive.google.com')) {
-            let id = '';
-            if (url.includes('id=')) {
-                id = url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                id = url.split('/d/')[1].split('/')[0];
-            }
-            // This URL pattern often works for displaying publicly shared GDrive images
-            return `https://lh3.googleusercontent.com/d/${id}`; 
-        }
-        return url; // Return as is if not GDrive or Supabase
+      }
+    }
+  }
+</script>
+
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 20px; vertical-align: middle; }
+
+  /* dog-eared page corner — the one signature flourish, echoing a well-worn hymnal */
+  .page-corner { border-radius: 22px 4px 22px 4px; }
+
+  .card-enter { animation: riseIn .5s ease-out both; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  .divider-mark { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .divider-mark::before, .divider-mark::after { content: ""; height: 1px; width: 44px; background: #a9812f; opacity: .5; }
+  .divider-mark span { width: 6px; height: 6px; background: #a9812f; transform: rotate(45deg); display: inline-block; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px;
+  }
+
+  ::selection { background: #cba660; color: #101a14; }
+
+  .skeleton { background: linear-gradient(90deg, #f0ede3 25%, #f8f6ef 37%, #f0ede3 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-enter, .skeleton { animation: none; }
+  }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="logo.png" alt="Pardon By Grace" class="h-9 w-auto" onerror="this.style.display='none'">
+      <span class="font-serif font-semibold text-lg tracking-tight text-forest">Pardon By Grace</span>
+    </a>
+    <a href="index.html" class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-soft hover:text-forest transition">Home</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="pt-40 pb-16 px-6 max-w-6xl mx-auto text-center">
+  <p class="text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-5">Winning the lost at all cost</p>
+  <h1 class="font-serif text-5xl md:text-6xl text-forest leading-[1.05] mb-5">
+    The Sermon <span class="italic font-medium">Library</span>
+  </h1>
+  <p class="text-ink-soft text-base max-w-md mx-auto mb-10">
+    Every message, kept close. Stream a sermon or take it with you — download the video or audio straight to your phone.
+  </p>
+
+  <div class="max-w-sm mx-auto relative">
+    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-ink-soft">search</span>
+    <input id="searchInput" type="text" placeholder="Search by title or speaker"
+      class="w-full bg-sand border border-line rounded-full pl-11 pr-4 py-3 text-sm text-ink placeholder:text-ink-soft/70 focus:bg-white focus:border-gold-soft transition"
+      oninput="filterSermons(this.value)">
+  </div>
+</header>
+
+<div class="divider-mark mb-16"><span></span></div>
+
+<!-- Sermon grid -->
+<main class="px-6 max-w-6xl mx-auto pb-32">
+  <div id="sermonGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="skeleton h-32 rounded-2xl"></div>
+    <div class="skeleton h-32 rounded-2xl"></div>
+    <div class="skeleton h-32 rounded-2xl"></div>
+    <div class="skeleton h-32 rounded-2xl"></div>
+  </div>
+  <p id="emptyMsg" class="hidden text-center text-ink-soft py-20 italic">No sermons found.</p>
+</main>
+
+<!-- Footer -->
+<footer class="bg-forest text-white/85">
+  <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
+    <div class="md:col-span-2">
+      <div class="flex items-center gap-3 mb-4">
+        <img src="logo.png" alt="" class="h-8 w-auto" onerror="this.style.display='none'">
+        <span class="font-serif text-xl">Pardon By Grace</span>
+      </div>
+      <p class="text-white/60 text-sm max-w-sm leading-relaxed">
+        A church family devoted to reaching the lost, teaching the Word, and walking together in grace.
+      </p>
+    </div>
+    <div>
+      <p class="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Explore</p>
+      <ul class="space-y-2 text-sm text-white/70">
+        <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+        <li><a href="media-library.html" class="hover:text-white transition">Sermon Library</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Join Us</p>
+      <ul class="space-y-2 text-sm text-white/70">
+        <li>Sundays · 9:00 AM</li>
+        <li>Bible Study · Wednesdays</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-6 px-6 text-center text-white/40 text-xs">
+    © 2025 Pardon By Grace International Church. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let allSermons = [];
+
+  window.onload = loadSermons;
+
+  function convertToDirectLink(url) {
+    if (!url) return '';
+    if (url.includes(SUPABASE_URL) && url.includes('/storage/v1/object/public/')) return url;
+    if (url.includes('drive.google.com')) {
+      let id = '';
+      if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+      else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+      return `https://lh3.googleusercontent.com/d/${id}`;
+    }
+    return url;
+  }
+
+  function extractGoogleId(url) {
+    if (!url || !url.includes('drive.google.com')) return "";
+    try {
+      if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
+      if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0];
+      if (url.includes('file/d/')) return url.split('file/d/')[1].split('/')[0];
+      if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
+    } catch (e) { console.error("Error extracting Google Drive ID:", url, e); }
+    return "";
+  }
+
+  async function loadSermons() {
+    const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
+    const grid = document.getElementById('sermonGrid');
+    const emptyMsg = document.getElementById('emptyMsg');
+
+    if (error) {
+      grid.innerHTML = `<p class="col-span-full text-center text-red-500 py-20 italic">Error loading sermons: ${error.message}</p>`;
+      return;
     }
 
-    // Extracts Google Drive file ID from various Google Drive URL formats
-    function extractGoogleId(url) {
-        if (!url || !url.includes('drive.google.com')) return "";
-        try {
-            if (url.includes('id=')) return url.split('id=')[1].split('&')[0];
-            else if (url.includes('/d/')) return url.split('/d/')[1].split('/')[0];
-            else if (url.includes('/uc?id=')) return url.split('/uc?id=')[1].split('&')[0]; // For direct download URLs
-            else if (url.includes('file/d/')) return url.split('file/d/')[1].split('/')[0]; // Common share link format
-        } catch (e) { 
-            console.error("Error extracting Google Drive ID from URL:", url, e);
-            return ""; 
-        }
-        return "";
+    allSermons = data || [];
+    renderGrid(allSermons);
+  }
+
+  function renderGrid(list) {
+    const grid = document.getElementById('sermonGrid');
+    const emptyMsg = document.getElementById('emptyMsg');
+    grid.innerHTML = '';
+
+    if (!list.length) {
+      emptyMsg.classList.remove('hidden');
+      return;
     }
+    emptyMsg.classList.add('hidden');
+    list.forEach((s, i) => renderCard(s, i));
+  }
 
-    // Fetches sermons from Supabase and renders them
-    async function loadSermons() {
-        console.log("Loading sermons from Supabase...");
-        const { data, error } = await _supabase.from('sermons').select('*').order('created_at', { ascending: false });
-        const grid = document.getElementById('sermonGrid');
-        grid.innerHTML = ''; // Clear existing content
+  function filterSermons(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) { renderGrid(allSermons); return; }
+    const filtered = allSermons.filter(s =>
+      (s.title || '').toLowerCase().includes(q) || (s.speaker || '').toLowerCase().includes(q)
+    );
+    renderGrid(filtered);
+  }
 
-        if (error) {
-            console.error("Error fetching sermons:", error);
-            grid.innerHTML = `<p class="col-span-full text-center text-red-500 py-20 italic">Error loading sermons: ${error.message}</p>`;
-        } else if (data && data.length > 0) {
-            console.log("Fetched sermons:", data);
-            data.forEach(s => renderCard(s));
-        } else {
-            console.log("No sermons found.");
-            grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-20 italic">No sermons found.</p>';
-        }
-    }
+  function renderCard(s, index) {
+    const grid = document.getElementById('sermonGrid');
+    const div = document.createElement('div');
+    div.className = "card-enter bg-white border border-line rounded-2xl p-4 flex items-center gap-4 hover:border-gold-soft hover:shadow-[0_8px_28px_-14px_rgba(16,26,20,0.25)] transition";
+    div.style.animationDelay = `${Math.min(index * 60, 400)}ms`;
 
-    // Renders a single sermon card
-    function renderCard(s) {
-        const grid = document.getElementById('sermonGrid');
-        const div = document.createElement('div');
-        div.className = "bg-white/5 p-4 rounded-[2rem] border border-white/5 sermon-card"; 
-        
-        const finalThumbnail = convertToDirectLink(s.image_url);
-        const videoDownloadId = extractGoogleId(s.video_link);
-        const audioDownloadId = extractGoogleId(s.audio_link);
+    const finalThumbnail = convertToDirectLink(s.image_url);
+    const videoId = extractGoogleId(s.video_link);
+    const audioId = extractGoogleId(s.audio_link);
+    const videoDownloadUrl = videoId ? `https://drive.google.com/uc?export=download&id=${videoId}` : '';
+    const audioDownloadUrl = audioId ? `https://drive.google.com/uc?export=download&id=${audioId}` : '';
 
-        // Generate Google Drive direct download links if IDs are available
-        const videoDownloadUrl = videoDownloadId ? `https://drive.google.com/uc?export=download&id=${videoDownloadId}` : '#';
-        const audioDownloadUrl = audioDownloadId ? `https://drive.google.com/uc?export=download&id=${audioDownloadId}` : '#';
+    div.innerHTML = `
+      <a href="${s.video_link || '#'}" target="_blank" rel="noopener noreferrer"
+         class="page-corner shrink-0 w-20 h-20 overflow-hidden relative group bg-sand">
+        <img src="${finalThumbnail}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/160x160/f6f3ec/a9812f?text=PBG'">
+        <span class="absolute inset-0 bg-forest/0 group-hover:bg-forest/30 flex items-center justify-center transition">
+          <span class="material-symbols-outlined text-white opacity-0 group-hover:opacity-100 transition">play_arrow</span>
+        </span>
+      </a>
 
-        div.innerHTML = `
-            <div class="sermon-card-inner">
-                <a href="${s.video_link}" target="_blank" rel="noopener noreferrer" class="sermon-image-container">
-                    <img src="${finalThumbnail}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100x100?text=PBG'">
-                </a>
+      <div class="min-w-0 flex-1">
+        <h3 class="font-serif text-base text-ink truncate">${s.title || 'Untitled Sermon'}</h3>
+        <p class="text-ink-soft text-sm truncate mb-3">${s.speaker || ''}</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          ${videoDownloadUrl ? `<button data-url="${videoDownloadUrl}" onclick="downloadDirect(this)" class="flex items-center gap-1 bg-forest text-white px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-forest/90 transition"><span class="material-symbols-outlined !text-[16px]">download</span>Video</button>` : ''}
+          ${audioDownloadUrl ? `<button data-url="${audioDownloadUrl}" onclick="downloadDirect(this)" class="flex items-center gap-1 bg-sand text-forest border border-line px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gold-soft transition"><span class="material-symbols-outlined !text-[16px]">download</span>Audio</button>` : ''}
+          ${!videoDownloadUrl && !audioDownloadUrl ? '<span class="text-ink-soft text-xs">No downloads available</span>' : ''}
+        </div>
+      </div>
+    `;
+    grid.appendChild(div);
+  }
 
-                <div class="sermon-details">
-                    <div class="sermon-header-and-button">
-                        <div class="sermon-title-speaker">
-                            <h3 class="font-serif">${s.title}</h3>
-                            <p class="text-gray-500">${s.speaker}</p>
-                        </div>
-                        
-                        <div class="sermon-actions">
-                            ${videoDownloadId ? `<a href="${videoDownloadUrl}" target="_blank" rel="noopener noreferrer" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition">Video</a>` : ''}
-                            ${audioDownloadId ? `<a href="${audioDownloadUrl}" target="_blank" rel="noopener noreferrer" class="bg-accent text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition">Audio</a>` : ''}
-                            ${!videoDownloadId && !audioDownloadId ? '<span class="text-gray-500 text-xs px-2 py-1">No downloads</span>' : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="admin-controls mt-4 gap-2 border-t border-white/5 pt-4">
-                <button onclick="openEdit('${s.id}', \`${s.title}\`, \`${s.speaker}\`, \`${s.image_url}\`, \`${s.video_link}\`, \`${s.audio_link || ''}\`)" class="flex-1 text-[10px] font-bold text-gray-400 hover:text-white transition">Edit</button>
-                <button onclick="deleteSermon('${s.id}')" class="flex-1 text-[10px] font-bold text-red-400 hover:text-red-600 transition">Delete</button>
-            </div>
-        `;
-        grid.appendChild(div);
-    }
-
-    // Handles image file upload to Supabase Storage
-    async function uploadImage(file) {
-        if (!file) {
-            console.warn("No file selected for upload.");
-            return null;
-        }
-
-        const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
-        console.log("Attempting to upload image:", fileName);
-        const { data, error } = await _supabase.storage
-            .from('sermon-thumbnails') // Ensure this bucket exists in Supabase Storage
-            .upload(fileName, file, {
-                cacheControl: '3600',
-                upsert: false // Set to true if you want to overwrite existing files with the same name
-            });
-
-        if (error) {
-            console.error('Error uploading image to Supabase Storage:', error);
-            alert('Error uploading image: ' + error.message);
-            return null;
-        }
-        
-        const { data: publicUrlData } = _supabase.storage
-            .from('sermon-thumbnails')
-            .getPublicUrl(fileName);
-
-        console.log("Image uploaded, public URL:", publicUrlData.publicUrl);
-        return publicUrlData.publicUrl;
-    }
-
-    // Saves or updates a sermon record in Supabase
-    async function saveSermon() {
-        const id = document.getElementById('editId').value;
-        const videoLink = document.getElementById('fVideoLink').value;
-        const audioLink = document.getElementById('fAudioLink').value;
-        const imageFile = document.getElementById('fImageUpload').files[0];
-        let imageUrl = document.getElementById('fImageUrl').value; // Existing URL if no new upload
-
-        const btn = document.getElementById('saveBtn');
-        btn.innerText = "Uploading & Saving...";
-        btn.disabled = true; // Disable button during upload/save
-
-        if (!document.getElementById('fTitle').value || !document.getElementById('fSpeaker').value || !videoLink) {
-            alert("Please fill in Sermon Title, Speaker Name, and Video Link.");
-            btn.innerText = "Save Sermon";
-            btn.disabled = false;
-            return;
-        }
-
-        // If a new image file is selected, upload it
-        if (imageFile) {
-            imageUrl = await uploadImage(imageFile);
-            if (!imageUrl) {
-                btn.innerText = "Save Sermon";
-                btn.disabled = false;
-                return; // Stop if image upload failed
-            }
-        }
-        // If no new image and no existing URL, use a placeholder
-        if (!imageUrl) {
-            imageUrl = 'https://via.placeholder.com/400x225?text=No+Image'; // Default placeholder if no image
-            console.warn("No image URL provided or uploaded, using placeholder.");
-        }
-
-
-        const payload = {
-            title: document.getElementById('fTitle').value,
-            speaker: document.getElementById('fSpeaker').value,
-            video_link: videoLink, 
-            audio_link: audioLink, 
-            image_url: imageUrl,
-            video_download_id: extractGoogleId(videoLink),
-            audio_download_id: extractGoogleId(audioLink)
-        };
-
-        console.log("Saving sermon payload:", payload);
-        let result;
-        if (id) {
-            result = await _supabase.from('sermons').update(payload).eq('id', id);
-        } else {
-            result = await _supabase.from('sermons').insert([payload]);
-        }
-
-        if (result.error) {
-            console.error("Supabase save error:", result.error);
-            alert('Error saving sermon: ' + result.error.message);
-            btn.innerText = "Save Sermon";
-            btn.disabled = false;
-        } else {
-            console.log("Sermon saved successfully:", result.data);
-            location.reload(); // Reload to show new/updated sermons
-        }
-    }
-
-    // Activates admin mode with a password check
-    function activateAdmin() {
-        if (prompt("Enter Password:") === "pardonbygrace11") { // !! CHANGE THIS PASSWORD FOR PRODUCTION !!
-            document.body.classList.add('admin-mode');
-            alert("Admin Mode Active.");
-        } else alert("Access Denied");
-    }
-
-    // Opens the upload/edit modal
-    function openUpload() {
-        document.getElementById('modalTitle').innerText = "Add New Sermon";
-        document.getElementById('editId').value = "";
-        clearForm();
-        document.getElementById('currentImageName').innerText = ""; 
-        document.getElementById('fImageUrl').value = ""; 
-        document.getElementById('uploadModal').classList.add('active');
-        document.getElementById('saveBtn').disabled = false; 
-    }
-
-    // Opens the modal for editing an existing sermon
-    function openEdit(id, title, speaker, imgUrl, videoLink, audioLink) {
-        document.getElementById('modalTitle').innerText = "Edit Sermon";
-        document.getElementById('editId').value = id;
-        document.getElementById('fTitle').value = title;
-        document.getElementById('fSpeaker').value = speaker;
-        document.getElementById('fImageUrl').value = imgUrl; 
-        document.getElementById('currentImageName').innerText = imgUrl ? `Current: ${imgUrl.split('/').pop().split('?')[0]}` : "No image uploaded yet.";
-        document.getElementById('fVideoLink').value = videoLink;
-        document.getElementById('fAudioLink').value = audioLink; 
-        document.getElementById('fImageUpload').value = null; // Clear file input
-        document.getElementById('uploadModal').classList.add('active');
-        document.getElementById('saveBtn').disabled = false; 
-    }
-
-    // Deletes a sermon record from Supabase
-    async function deleteSermon(id) {
-        if (confirm("Delete this sermon?")) {
-            console.log("Deleting sermon with ID:", id);
-            const { error } = await _supabase.from('sermons').delete().eq('id', id);
-            if (error) {
-                console.error("Error deleting sermon:", error);
-                alert('Error deleting sermon: ' + error.message);
-            } else {
-                console.log("Sermon deleted successfully.");
-                location.reload();
-            }
-        }
-    }
-
-    // Closes any active modal
-    function closeModal() {
-        document.getElementById('uploadModal').classList.remove('active');
-    }
-
-    // Clears the form fields in the modal
-    function clearForm() {
-        ['fTitle','fSpeaker','fVideoLink','fAudioLink'].forEach(id => document.getElementById(id).value = "");
-        document.getElementById('fImageUpload').value = ""; // Clear file input
-    }
-
-    // No openDownloadOptions or document.addEventListener('click') for dropdowns needed in this direct button approach
-
+  // Triggers the file download in place — the page never navigates away.
+  // Note: for very large files, Google Drive may show its own "can't scan
+  // for viruses" confirmation step, which is a limitation of Drive itself.
+  function downloadDirect(btn) {
+    const url = btn.getAttribute('data-url');
+    if (!url) return;
+    const original = btn.innerHTML;
+    btn.innerHTML = `<span class="material-symbols-outlined !text-[16px] animate-pulse">hourglass_top</span>Starting…`;
+    window.location.href = url;
+    setTimeout(() => { btn.innerHTML = original; }, 2500);
+  }
 </script>
 
 </body>
