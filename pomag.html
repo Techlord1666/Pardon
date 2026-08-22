@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>POMAG | PGIC Outreach & Mission Advancement Group</title>
+<meta name="description" content="Positioning POMAG for Effective Kingdom Advancement — the outreach and mission advancement arm of PGIC.">
+<link rel="icon" type="image/png" href="logo.png">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..500" rel="stylesheet"/>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#ffffff",
+          sand: "#f7f4ec",
+          ink: "#0e1b13",
+          "ink-soft": "#5c6b61",
+          forest: "#0a2318",
+          "forest-2": "#123420",
+          gold: "#b3872f",
+          "gold-light": "#e3c583",
+          line: "#e7e2d4"
+        },
+        fontFamily: { serif: ["Fraunces", "serif"], sans: ["Manrope", "sans-serif"] }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-padding-top: 90px; }
+  body { background: #ffffff; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 22px; vertical-align: middle; }
+
+  /* ---------- Reveal-on-scroll ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,.8,.3,1), transform .7s cubic-bezier(.16,.8,.3,1); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal-group > * { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal-group.in-view > * { opacity: 1; transform: translateY(0); }
+  .reveal-group.in-view > *:nth-child(1){transition-delay:.05s}
+  .reveal-group.in-view > *:nth-child(2){transition-delay:.12s}
+  .reveal-group.in-view > *:nth-child(3){transition-delay:.19s}
+  .reveal-group.in-view > *:nth-child(4){transition-delay:.26s}
+  .reveal-group.in-view > *:nth-child(5){transition-delay:.33s}
+  .reveal-group.in-view > *:nth-child(6){transition-delay:.40s}
+  .reveal-group.in-view > *:nth-child(7){transition-delay:.47s}
+  .reveal-group.in-view > *:nth-child(8){transition-delay:.54s}
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-group > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .hero-orbit, .drift { animation: none !important; }
+  }
+
+  /* ---------- Signature globe mark ---------- */
+  .globe-mark { color: currentColor; }
+  .drift { animation: driftRotate 90s linear infinite; transform-origin: 160px 160px; }
+  @keyframes driftRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .hero-orbit { animation: pulseGlow 6s ease-in-out infinite; }
+  @keyframes pulseGlow { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+  /* ---------- Divider ---------- */
+  .divider { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .divider .rule { height: 1px; width: 0; background: #b3872f; opacity: .6; transition: width 1s cubic-bezier(.16,.8,.3,1); }
+  .divider.in-view .rule { width: 48px; }
+  .divider .diamond { width: 6px; height: 6px; background: #b3872f; transform: rotate(45deg) scale(0); transition: transform .5s ease .3s; }
+  .divider.in-view .diamond { transform: rotate(45deg) scale(1); }
+  .divider-dark .rule { background: #e3c583; }
+  .divider-dark .diamond { background: #e3c583; }
+
+  /* ---------- Bracket number badge ---------- */
+  .bracket-num { position: relative; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; }
+  .bracket-num::before, .bracket-num::after {
+    content: ""; position: absolute; width: 14px; height: 14px; border-color: #b3872f; transition: all .35s ease;
+  }
+  .bracket-num::before { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+  .bracket-num::after { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+  .card-hover:hover .bracket-num::before { top: -4px; left: -4px; }
+  .card-hover:hover .bracket-num::after { bottom: -4px; right: -4px; }
+
+  /* ---------- Nav scrollspy underline ---------- */
+  .nav-link { position: relative; }
+  .nav-link::after { content: ""; position: absolute; left: 0; bottom: -4px; height: 1px; width: 0; background: #b3872f; transition: width .3s ease; }
+  .nav-link.active::after { width: 100%; }
+
+  /* ---------- Mobile menu ---------- */
+  #mobileMenu { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  #mobileMenu.open { max-height: 600px; }
+
+  ::selection { background: #e3c583; color: #0e1b13; }
+  a:focus-visible, button:focus-visible { outline: 2px solid #b3872f; outline-offset: 3px; border-radius: 3px; }
+
+  .scripture { font-family: 'Fraunces', serif; font-style: italic; }
+
+  /* ---------- Litany lines (Prophetic Declaration) ---------- */
+  .litany-line { opacity: 0; transform: translateY(14px); transition: opacity .8s ease, transform .8s ease; }
+  .litany-line.in-view { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased overflow-x-hidden">
+
+<!-- Hidden SVG symbol: the recurring dotted-globe / radiant-light mark -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="worldMark" viewBox="0 0 320 320">
+    <g class="drift">
+      <line x1="160" y1="160" x2="315.0" y2="160.0" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+      <line x1="160" y1="160" x2="266.2" y2="204.0" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="269.6" y2="269.6" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="204.0" y2="266.2" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="160.0" y2="315.0" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+      <line x1="160" y1="160" x2="116.0" y2="266.2" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="50.4" y2="269.6" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="53.8" y2="204.0" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="5.0" y2="160.0" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+      <line x1="160" y1="160" x2="53.8" y2="116.0" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="50.4" y2="50.4" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="116.0" y2="53.8" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="160.0" y2="5.0" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+      <line x1="160" y1="160" x2="204.0" y2="53.8" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="269.6" y2="50.4" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+      <line x1="160" y1="160" x2="266.2" y2="116.0" stroke="currentColor" stroke-width="1" opacity="0.22"/>
+    </g>
+    <circle cx="160" cy="160" r="140" fill="none" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+    <circle cx="160.0" cy="297.9" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="181.1" cy="297.9" r="1.35" fill="currentColor" opacity="0.43"/>
+    <circle cx="138.9" cy="297.9" r="1.35" fill="currentColor" opacity="0.43"/>
+    <circle cx="160.0" cy="281.2" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="214.7" cy="281.2" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="105.3" cy="281.2" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="160.0" cy="250.0" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="223.0" cy="250.0" r="1.63" fill="currentColor" opacity="0.59"/>
+    <circle cx="262.0" cy="250.0" r="1.18" fill="currentColor" opacity="0.32"/>
+    <circle cx="58.0" cy="250.0" r="1.18" fill="currentColor" opacity="0.32"/>
+    <circle cx="97.0" cy="250.0" r="1.63" fill="currentColor" opacity="0.59"/>
+    <circle cx="160.0" cy="207.9" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="221.1" cy="207.9" r="1.7" fill="currentColor" opacity="0.64"/>
+    <circle cx="268.3" cy="207.9" r="1.41" fill="currentColor" opacity="0.46"/>
+    <circle cx="290.6" cy="207.9" r="1.01" fill="currentColor" opacity="0.22"/>
+    <circle cx="29.4" cy="207.9" r="1.01" fill="currentColor" opacity="0.22"/>
+    <circle cx="51.7" cy="207.9" r="1.41" fill="currentColor" opacity="0.46"/>
+    <circle cx="98.9" cy="207.9" r="1.7" fill="currentColor" opacity="0.64"/>
+    <circle cx="160.0" cy="160.0" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="220.7" cy="160.0" r="1.71" fill="currentColor" opacity="0.65"/>
+    <circle cx="269.5" cy="160.0" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="296.5" cy="160.0" r="1.1" fill="currentColor" opacity="0.27"/>
+    <circle cx="23.5" cy="160.0" r="1.1" fill="currentColor" opacity="0.27"/>
+    <circle cx="50.5" cy="160.0" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="99.3" cy="160.0" r="1.71" fill="currentColor" opacity="0.65"/>
+    <circle cx="160.0" cy="112.1" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="221.1" cy="112.1" r="1.7" fill="currentColor" opacity="0.64"/>
+    <circle cx="268.3" cy="112.1" r="1.41" fill="currentColor" opacity="0.46"/>
+    <circle cx="290.6" cy="112.1" r="1.01" fill="currentColor" opacity="0.22"/>
+    <circle cx="29.4" cy="112.1" r="1.01" fill="currentColor" opacity="0.22"/>
+    <circle cx="51.7" cy="112.1" r="1.41" fill="currentColor" opacity="0.46"/>
+    <circle cx="98.9" cy="112.1" r="1.7" fill="currentColor" opacity="0.64"/>
+    <circle cx="160.0" cy="70.0" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="223.0" cy="70.0" r="1.63" fill="currentColor" opacity="0.59"/>
+    <circle cx="262.0" cy="70.0" r="1.18" fill="currentColor" opacity="0.32"/>
+    <circle cx="58.0" cy="70.0" r="1.18" fill="currentColor" opacity="0.32"/>
+    <circle cx="97.0" cy="70.0" r="1.63" fill="currentColor" opacity="0.59"/>
+    <circle cx="160.0" cy="38.8" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="214.7" cy="38.8" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="105.3" cy="38.8" r="1.46" fill="currentColor" opacity="0.49"/>
+    <circle cx="160.0" cy="22.1" r="1.8" fill="currentColor" opacity="0.7"/>
+    <circle cx="181.1" cy="22.1" r="1.35" fill="currentColor" opacity="0.43"/>
+    <circle cx="138.9" cy="22.1" r="1.35" fill="currentColor" opacity="0.43"/>
+  </symbol>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<nav id="mainNav" class="fixed top-0 w-full z-50 transition-colors duration-300 border-b border-transparent">
+  <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+    <a href="#hero" class="flex items-center gap-3">
+      <svg class="w-8 h-8 text-gold" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+      <span id="navLabel" class="font-serif font-semibold text-lg tracking-tight transition-colors">POMAG</span>
+    </a>
+    <div class="hidden lg:flex items-center gap-7">
+      <a href="#about" class="nav-link text-[11px] font-bold uppercase tracking-[0.15em]">About</a>
+      <a href="#vision" class="nav-link text-[11px] font-bold uppercase tracking-[0.15em]">Vision</a>
+      <a href="#objectives" class="nav-link text-[11px] font-bold uppercase tracking-[0.15em]">Objectives</a>
+      <a href="#leadership" class="nav-link text-[11px] font-bold uppercase tracking-[0.15em]">Leadership</a>
+      <a href="#process" class="nav-link text-[11px] font-bold uppercase tracking-[0.15em]">Outreach</a>
+      <a href="#involved" class="nav-link bg-gold text-white px-5 py-2.5 rounded-full !text-[11px]">Get Involved</a>
+    </div>
+    <button id="menuBtn" class="lg:hidden" aria-label="Open menu">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+  <div id="mobileMenu" class="lg:hidden bg-forest">
+    <div class="px-6 py-4 flex flex-col gap-1">
+      <a href="#about" class="mobile-link py-3 text-white/85 text-sm border-b border-white/10">About POMAG</a>
+      <a href="#vision" class="mobile-link py-3 text-white/85 text-sm border-b border-white/10">Vision</a>
+      <a href="#objectives" class="mobile-link py-3 text-white/85 text-sm border-b border-white/10">Objectives</a>
+      <a href="#leadership" class="mobile-link py-3 text-white/85 text-sm border-b border-white/10">Leadership</a>
+      <a href="#process" class="mobile-link py-3 text-white/85 text-sm border-b border-white/10">Outreach Process</a>
+      <a href="#involved" class="mobile-link py-3 text-gold-light text-sm">Get Involved</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header id="hero" class="relative min-h-[100svh] flex items-center bg-forest text-white overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-forest via-forest to-forest-2"></div>
+  <svg class="hero-orbit absolute -right-24 top-1/2 -translate-y-1/2 w-[560px] h-[560px] text-gold-light opacity-60 pointer-events-none" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+  <svg class="absolute -left-40 -bottom-40 w-[420px] h-[420px] text-white/10 pointer-events-none" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+
+  <div class="relative max-w-5xl mx-auto px-6 pt-32 pb-20 text-center">
+    <p id="heroEyebrow" class="hero-in text-gold-light text-[11px] font-bold tracking-[0.4em] uppercase mb-7">PGIC Outreach &amp; Mission Advancement Group</p>
+    <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl leading-[1.08] mb-7">
+      <span class="hero-in block">Positioning POMAG for</span>
+      <span class="hero-in block italic font-medium text-gold-light">Effective Kingdom Advancement</span>
+    </h1>
+    <p class="hero-in text-white/70 text-base md:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+      Raising Kingdom ambassadors to evangelize, disciple, revive territories, and prepare the grounds for sustainable church expansion.
+    </p>
+    <div class="hero-in flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+      <a href="#involved" class="w-full sm:w-auto bg-gold hover:bg-gold-light text-forest px-8 py-4 rounded-full text-[12px] font-bold uppercase tracking-widest transition">Join the Mission</a>
+      <a href="#about" class="w-full sm:w-auto border border-white/25 hover:border-gold-light hover:text-gold-light px-8 py-4 rounded-full text-[12px] font-bold uppercase tracking-widest transition">Learn About POMAG</a>
+    </div>
+
+    <div class="hero-in max-w-lg mx-auto border-t border-white/15 pt-8 space-y-3">
+      <p class="scripture text-lg text-white/85">"Go therefore and make disciples of all nations..."</p>
+      <p class="text-gold-light text-[11px] font-bold tracking-[0.2em] uppercase">— Matthew 28:19–20</p>
+      <p class="scripture text-lg text-white/85 pt-3">"You shall be witnesses unto Me..."</p>
+      <p class="text-gold-light text-[11px] font-bold tracking-[0.2em] uppercase">— Acts 1:8</p>
+    </div>
+  </div>
+
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 hover:text-gold-light transition animate-bounce" aria-label="Scroll to next section">
+    <span class="material-symbols-outlined">keyboard_arrow_down</span>
+  </a>
+</header>
+
+<!-- ===================== WHO WE ARE ===================== -->
+<section id="about" class="py-28 px-6 bg-paper">
+  <div class="max-w-4xl mx-auto text-center">
+    <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Who We Are</p>
+    <h2 class="reveal font-serif text-3xl md:text-4xl text-ink leading-snug mb-8">
+      A strategic Kingdom structure created to strengthen<br class="hidden md:block"> evangelism, discipleship, revival, retention, and future church expansion.
+    </h2>
+    <p class="reveal text-ink-soft leading-relaxed max-w-2xl mx-auto mb-4">
+      POMAG is not simply another church group. It is a practical vehicle through which the vision and mission of PGIC can be expanded beyond the four walls of the church.
+    </p>
+    <div class="reveal mt-10 bg-sand border border-line rounded-3xl px-8 py-10 max-w-2xl mx-auto">
+      <p class="scripture text-xl md:text-2xl text-forest leading-snug">
+        "The success of a church is not measured by seating capacity, but by its sending capacity."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY POMAG EXISTS ===================== -->
+<section class="py-28 px-6 bg-sand">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Why POMAG Was Established</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Five reasons this mandate exists</h2>
+    </div>
+    <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <div class="bracket-num mb-5"><span class="font-serif text-gold text-lg">01</span></div>
+        <h3 class="font-serif text-lg text-ink mb-2">Win Souls</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">Souls must be won.</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <div class="bracket-num mb-5"><span class="font-serif text-gold text-lg">02</span></div>
+        <h3 class="font-serif text-lg text-ink mb-2">Retain Converts</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">New converts must be followed up, discipled, and retained.</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <div class="bracket-num mb-5"><span class="font-serif text-gold text-lg">03</span></div>
+        <h3 class="font-serif text-lg text-ink mb-2">Reach Territories</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">Unreached territories must be reached with the Gospel.</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <div class="bracket-num mb-5"><span class="font-serif text-gold text-lg">04</span></div>
+        <h3 class="font-serif text-lg text-ink mb-2">Spread Revival</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">Revival must spread into communities and territories.</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <div class="bracket-num mb-5"><span class="font-serif text-gold text-lg">05</span></div>
+        <h3 class="font-serif text-lg text-ink mb-2">Establish Strategic Branches</h3>
+        <p class="text-ink-soft text-sm leading-relaxed">Strategic opportunities for future branches must be identified and developed.</p>
+      </div>
+      <div class="bg-forest rounded-2xl p-7 flex items-center">
+        <p class="scripture text-white text-base leading-relaxed">"Those who turn many to righteousness shall shine..." <span class="block not-italic text-gold-light text-[11px] font-bold tracking-widest uppercase mt-3">Daniel 12:3</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PGIC ALIGNMENT ===================== -->
+<section class="py-28 px-6 bg-paper">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">PGIC Alignment</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Aligned With the Vision of PGIC</h2>
+    </div>
+    <div class="reveal-group grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="bg-sand border border-line rounded-2xl p-8 text-center">
+        <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-4">PGIC Vision</p>
+        <p class="scripture text-xl text-forest leading-snug">"Winning the lost at all cost."</p>
+      </div>
+      <div class="bg-sand border border-line rounded-2xl p-8 text-center">
+        <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-4">PGIC Mission</p>
+        <p class="scripture text-xl text-forest leading-snug">"Reconciling people back to God through the message of holiness in Christ Jesus, and making disciples for the body of Christ as ambassadors of His Kingdom."</p>
+      </div>
+      <div class="bg-sand border border-line rounded-2xl p-8 text-center">
+        <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-4">Prophetic Mandate</p>
+        <p class="scripture text-xl text-forest leading-snug">"Building an army through the true Word of God."</p>
+      </div>
+    </div>
+    <p class="reveal text-center text-ink-soft italic">POMAG exists to practically drive these three pillars.</p>
+  </div>
+</section>
+
+<!-- ===================== AIM OF POMAG ===================== -->
+<section class="py-28 px-6 bg-sand">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-6">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">The Aim of POMAG</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink mb-6">Advancing the Kingdom through six aims</h2>
+      <p class="reveal text-ink-soft max-w-2xl mx-auto mb-16">POMAG exists to advance the Kingdom through strategic evangelism, discipleship, revival, outreach, and church expansion.</p>
+    </div>
+    <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">campaign</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Advance aggressive Kingdom evangelism</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">diversity_3</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Strengthen soul-winning structures</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">travel_explore</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Expand PGIC into unreached territories</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">local_fire_department</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Establish sustainable revival centers and future branches</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">volunteer_activism</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Retain converts through follow-up and discipleship</p>
+      </div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-7">
+        <span class="material-symbols-outlined text-gold mb-4">trending_up</span>
+        <p class="text-ink text-sm leading-relaxed font-medium">Support church growth through strategic outreach operations</p>
+      </div>
+    </div>
+    <div class="reveal text-center">
+      <p class="font-serif italic text-2xl md:text-3xl text-forest">"If not us, then who? If not now, then when?"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POMAG VISION ===================== -->
+<section id="vision" class="py-28 px-6 bg-paper">
+  <div class="max-w-5xl mx-auto text-center">
+    <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Our Vision</p>
+    <h2 class="reveal scripture text-2xl md:text-4xl text-forest leading-snug mb-6 max-w-3xl mx-auto">
+      "To raise committed Kingdom ambassadors who will evangelize, disciple, revive territories, and prepare grounds for sustainable church expansion."
+    </h2>
+    <p class="reveal text-ink-soft mb-14">POMAG is not raising spectators. Instead, POMAG is raising:</p>
+    <div class="reveal-group grid grid-cols-2 md:grid-cols-4 gap-5 mb-14">
+      <div class="card-hover bg-sand border border-line rounded-2xl py-10 px-4">
+        <span class="material-symbols-outlined text-gold !text-[32px] mb-3">record_voice_over</span>
+        <p class="font-serif text-ink">Soul Winners</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl py-10 px-4">
+        <span class="material-symbols-outlined text-gold !text-[32px] mb-3">groups</span>
+        <p class="font-serif text-ink">Disciple Makers</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl py-10 px-4">
+        <span class="material-symbols-outlined text-gold !text-[32px] mb-3">bolt</span>
+        <p class="font-serif text-ink">Revival Carriers</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl py-10 px-4">
+        <span class="material-symbols-outlined text-gold !text-[32px] mb-3">public</span>
+        <p class="font-serif text-ink">Kingdom Ambassadors</p>
+      </div>
+    </div>
+    <p class="reveal scripture text-lg text-ink-soft">"You have not chosen Me, but I have chosen you..." <span class="block not-italic text-gold text-[11px] font-bold tracking-widest uppercase mt-2">John 15:16</span></p>
+  </div>
+</section>
+
+<!-- ===================== CORE OBJECTIVES ===================== -->
+<section id="objectives" class="py-28 px-6 bg-sand">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Our Core Objectives</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Seven objectives that guide every outreach</h2>
+    </div>
+    <div class="reveal-group space-y-4 mb-14">
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">01</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Soul Winning</h3><p class="text-ink-soft text-sm">Winning people for Christ through intentional evangelism.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">02</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Territory Evangelism</h3><p class="text-ink-soft text-sm">Taking the Gospel into unreached territories.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">03</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Community Revival Outreaches</h3><p class="text-ink-soft text-sm">Organizing outreach activities that bring revival into communities.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">04</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Follow-Up &amp; Retention</h3><p class="text-ink-soft text-sm">Following up with converts and helping them become established disciples.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">05</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Branch Feasibility Identification</h3><p class="text-ink-soft text-sm">Identifying territories with potential for future church branches.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">06</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Outreach Coordination</h3><p class="text-ink-soft text-sm">Coordinating outreach operations effectively.</p></div>
+      </div>
+      <div class="card-hover flex items-start gap-6 bg-white border border-line rounded-2xl p-6">
+        <span class="font-serif text-gold text-2xl shrink-0 w-10">07</span>
+        <div><h3 class="font-serif text-lg text-ink mb-1">Kingdom Impact Assessment</h3><p class="text-ink-soft text-sm">Measuring and evaluating the impact of outreach activities.</p></div>
+      </div>
+    </div>
+    <p class="reveal text-center font-serif italic text-xl text-forest max-w-2xl mx-auto">"Winning souls without retaining them is incomplete obedience to the Great Commission."</p>
+  </div>
+</section>
+
+<!-- ===================== LEADERSHIP & GOVERNANCE (dark, visually distinct) ===================== -->
+<section class="py-28 px-6 bg-forest text-white relative overflow-hidden">
+  <svg class="absolute -right-32 -top-32 w-[420px] h-[420px] text-white/5 pointer-events-none" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+  <div class="relative max-w-4xl mx-auto text-center">
+    <p class="reveal text-gold-light text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Leadership &amp; Accountability</p>
+    <h2 class="reveal font-serif text-3xl md:text-4xl mb-8">POMAG Is Not an Independent Ministry</h2>
+    <p class="reveal text-white/70 leading-relaxed max-w-2xl mx-auto mb-10">
+      POMAG operates under the <span class="text-gold-light font-medium">Church Council Board (CCB)</span> and the <span class="text-gold-light font-medium">Senior Pastor</span>. Every outreach activity requires approval, strategic clearance, and accountability.
+    </p>
+    <div class="reveal bg-white/5 border border-white/15 rounded-2xl px-8 py-8 max-w-xl mx-auto mb-10">
+      <p class="scripture text-lg text-white/90">"Obey them that have the rule over you..."</p>
+      <p class="text-gold-light text-[11px] font-bold tracking-widest uppercase mt-3">Hebrews 13:17</p>
+    </div>
+    <p class="reveal text-white/60 text-sm italic">The success of POMAG depends largely on effective oversight and support from the CCB.</p>
+  </div>
+</section>
+
+<!-- ===================== LEADERSHIP STRUCTURE ===================== -->
+<section id="leadership" class="py-28 px-6 bg-paper">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">POMAG Leadership Structure</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Eight roles carrying the mandate</h2>
+    </div>
+    <div class="reveal-group grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">01</span></div><p class="font-medium text-ink">Director</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">02</span></div><p class="font-medium text-ink">Assistant Director</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">03</span></div><p class="font-medium text-ink">Evangelism Coordinator</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">04</span></div><p class="font-medium text-ink">Follow-Up &amp; Retention Coordinator</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">05</span></div><p class="font-medium text-ink">Territorial &amp; Branch Development Coordinator</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">06</span></div><p class="font-medium text-ink">Prayer &amp; Intercession Coordinator</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">07</span></div><p class="font-medium text-ink">Welfare &amp; Logistics Coordinator</p></div>
+      <div class="card-hover flex items-center gap-4 bg-sand border border-line rounded-xl p-5"><div class="bracket-num shrink-0"><span class="font-serif text-gold">08</span></div><p class="font-medium text-ink">Records &amp; Administrative Secretary</p></div>
+    </div>
+    <div class="reveal text-center space-y-3 mb-10">
+      <p class="font-serif italic text-xl text-forest">"Leadership is not position. Leadership is responsibility."</p>
+      <p class="font-serif italic text-xl text-forest">"Titles make people important before men; service makes people important before God."</p>
+    </div>
+    <p class="reveal text-center text-ink-soft text-sm">Every appointment is covered in prayer for wisdom. <span class="italic">"Select capable men..."</span> — Exodus 18:21</p>
+  </div>
+</section>
+
+<!-- ===================== MEMBER EXPECTATIONS ===================== -->
+<section class="py-28 px-6 bg-sand">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">What We Expect From Every Member</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Joining POMAG means responsibility, not merely membership</h2>
+    </div>
+    <div class="reveal-group grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">self_improvement</span><p class="text-ink text-sm font-medium">Spiritually sound</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">verified</span><p class="text-ink text-sm font-medium">Faithful</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">school</span><p class="text-ink text-sm font-medium">Teachable</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">fact_check</span><p class="text-ink text-sm font-medium">Accountable</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">campaign</span><p class="text-ink text-sm font-medium">Evangelistically minded</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">favorite</span><p class="text-ink text-sm font-medium">Loyal to the vision</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">spa</span><p class="text-ink text-sm font-medium">Committed to holiness</p></div>
+      <div class="card-hover bg-white border border-line rounded-2xl p-6 text-center"><span class="material-symbols-outlined text-gold !text-[28px] mb-3">handshake</span><p class="text-ink text-sm font-medium">Respectful of authority</p></div>
+    </div>
+    <p class="reveal text-center text-ink-soft text-sm italic">1 Timothy 3:2–7</p>
+  </div>
+</section>
+
+<!-- ===================== OUTREACH PROCESS ===================== -->
+<section id="process" class="py-28 px-6 bg-paper">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Our Outreach Process</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">Eight steps, followed in order, every time</h2>
+    </div>
+    <div class="reveal-group relative">
+      <div class="hidden md:block absolute left-[27px] top-3 bottom-3 w-px bg-line"></div>
+      <div class="space-y-3">
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">01</span></div><div><h3 class="font-serif text-ink mb-1">Prayer</h3><p class="text-ink-soft text-sm">Every outreach begins with prayer.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">02</span></div><div><h3 class="font-serif text-ink mb-1">Approval</h3><p class="text-ink-soft text-sm">Obtain the required approval.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">03</span></div><div><h3 class="font-serif text-ink mb-1">Location Assessment</h3><p class="text-ink-soft text-sm">Assess the target territory/location.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">04</span></div><div><h3 class="font-serif text-ink mb-1">Mobilization</h3><p class="text-ink-soft text-sm">Prepare and mobilize the outreach team.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">05</span></div><div><h3 class="font-serif text-ink mb-1">Evangelism</h3><p class="text-ink-soft text-sm">Carry out the evangelism/outreach.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">06</span></div><div><h3 class="font-serif text-ink mb-1">Follow-Up</h3><p class="text-ink-soft text-sm">Follow up with people reached.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">07</span></div><div><h3 class="font-serif text-ink mb-1">Retention</h3><p class="text-ink-soft text-sm">Help converts become established.</p></div></div>
+        <div class="flex items-start gap-6 bg-sand border border-line rounded-2xl p-6"><div class="bracket-num shrink-0 bg-paper rounded-full"><span class="font-serif text-gold">08</span></div><div><h3 class="font-serif text-ink mb-1">Reporting</h3><p class="text-ink-soft text-sm">Document and report the outcome.</p></div></div>
+      </div>
+    </div>
+    <p class="reveal text-center mt-12 text-forest font-semibold text-sm uppercase tracking-widest">No outreach shall be conducted outside these principles.</p>
+  </div>
+</section>
+
+<!-- ===================== STRATEGIC CHARGE (dark, bold) ===================== -->
+<section class="py-32 px-6 bg-forest text-white relative overflow-hidden">
+  <svg class="absolute left-1/2 -translate-x-1/2 -top-20 w-[600px] h-[600px] text-white/[0.04] pointer-events-none" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+  <div class="relative max-w-4xl mx-auto text-center">
+    <p class="reveal text-gold-light text-[11px] font-bold tracking-[0.35em] uppercase mb-6">We Are a Kingdom Advancement Force</p>
+    <div class="reveal-group space-y-4 mb-12">
+      <p class="font-serif text-2xl md:text-3xl text-white/90">"We are not gathering to create another church group."</p>
+      <p class="font-serif text-2xl md:text-3xl text-white/90">"We are building a Kingdom advancement force."</p>
+      <p class="font-serif text-2xl md:text-3xl text-gold-light italic">"We are raising labourers for the harvest."</p>
+    </div>
+    <p class="reveal scripture text-white/70 mb-2">"The harvest truly is plentiful..."</p>
+    <p class="reveal text-gold-light text-[11px] font-bold tracking-widest uppercase mb-14">Matthew 9:37–38</p>
+    <p class="reveal text-white/60 italic mb-14">"The church grows when members become missionaries, and not merely attendees."</p>
+    <div class="reveal border-t border-white/15 pt-10 max-w-2xl mx-auto">
+      <p class="font-serif text-xl md:text-2xl text-white leading-relaxed">
+        "Every territory reached is a testimony.<br>Every soul retained is a victory.<br>Every disciple raised is an investment in eternity."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KINGDOM IMPACT ===================== -->
+<section class="py-28 px-6 bg-paper">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Kingdom Impact</p>
+      <h2 class="reveal font-serif text-3xl md:text-4xl text-ink">What effective advancement produces</h2>
+    </div>
+    <div class="reveal-group grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div class="card-hover bg-sand border border-line rounded-2xl p-7 text-center">
+        <span class="material-symbols-outlined text-gold !text-[30px] mb-3">emoji_people</span>
+        <h3 class="font-serif text-ink mb-1">Souls Won</h3>
+        <p class="text-ink-soft text-xs">People reached with the Gospel.</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl p-7 text-center">
+        <span class="material-symbols-outlined text-gold !text-[30px] mb-3">map</span>
+        <h3 class="font-serif text-ink mb-1">Territories Reached</h3>
+        <p class="text-ink-soft text-xs">New communities and territories reached.</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl p-7 text-center">
+        <span class="material-symbols-outlined text-gold !text-[30px] mb-3">local_fire_department</span>
+        <h3 class="font-serif text-ink mb-1">Revival Centers</h3>
+        <p class="text-ink-soft text-xs">Sustainable revival centers established.</p>
+      </div>
+      <div class="card-hover bg-sand border border-line rounded-2xl p-7 text-center">
+        <span class="material-symbols-outlined text-gold !text-[30px] mb-3">church</span>
+        <h3 class="font-serif text-ink mb-1">New Branches</h3>
+        <p class="text-ink-soft text-xs">Strategic new branches emerging.</p>
+      </div>
+    </div>
+    <p class="reveal text-center text-ink-soft max-w-xl mx-auto italic">As these grow, PGIC gains greater visibility, and the Kingdom of God advances through PGIC.</p>
+  </div>
+</section>
+
+<!-- ===================== GET INVOLVED ===================== -->
+<section id="involved" class="py-28 px-6 bg-sand">
+  <div class="max-w-3xl mx-auto text-center">
+    <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Get Involved</p>
+    <h2 class="reveal font-serif text-3xl md:text-5xl text-ink mb-6">Ready to Advance the Kingdom?</h2>
+    <p class="reveal text-ink-soft leading-relaxed mb-10 max-w-xl mx-auto">
+      Become part of a movement committed to evangelism, discipleship, revival, territory expansion, and sustainable church growth.
+    </p>
+    <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#contact" class="w-full sm:w-auto bg-forest text-white px-8 py-4 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-forest-2 transition">Join POMAG</a>
+      <a href="#contact" class="w-full sm:w-auto bg-gold text-white px-8 py-4 rounded-full text-[12px] font-bold uppercase tracking-widest hover:bg-gold-light transition">Get Involved</a>
+      <a href="#contact" class="w-full sm:w-auto border border-line px-8 py-4 rounded-full text-[12px] font-bold uppercase tracking-widest hover:border-gold transition">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== YOUR VOICE MATTERS / RESOLUTIONS / CONTACT ===================== -->
+<section id="contact" class="py-28 px-6 bg-paper">
+  <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+    <div>
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Your Voice Matters</p>
+      <h2 class="reveal font-serif text-2xl md:text-3xl text-ink mb-5">Questions, suggestions, recommendations</h2>
+      <p class="reveal text-ink-soft leading-relaxed mb-6">
+        Input is welcomed from CCB members, ministers, and workers as POMAG continues to take shape.
+      </p>
+      <p class="reveal text-ink-soft text-sm italic">Contact details will be added here once available.</p>
+    </div>
+    <div>
+      <p class="reveal text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-4">Our Commitments</p>
+      <h2 class="reveal font-serif text-2xl md:text-3xl text-ink mb-5">Resolutions from the inaugural meeting</h2>
+      <ul class="reveal-group space-y-3">
+        <li class="flex items-center gap-3 text-ink-soft text-sm"><span class="material-symbols-outlined text-gold !text-[18px]">check_circle</span>Leadership structure</li>
+        <li class="flex items-center gap-3 text-ink-soft text-sm"><span class="material-symbols-outlined text-gold !text-[18px]">check_circle</span>Reporting system</li>
+        <li class="flex items-center gap-3 text-ink-soft text-sm"><span class="material-symbols-outlined text-gold !text-[18px]">check_circle</span>Outreach schedule</li>
+        <li class="flex items-center gap-3 text-ink-soft text-sm"><span class="material-symbols-outlined text-gold !text-[18px]">check_circle</span>Prayer structure</li>
+        <li class="flex items-center gap-3 text-ink-soft text-sm"><span class="material-symbols-outlined text-gold !text-[18px]">check_circle</span>Communication structure</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROPHETIC DECLARATION (litany animation) ===================== -->
+<section class="py-32 px-6 bg-forest text-white relative overflow-hidden">
+  <svg class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] text-white/[0.05] pointer-events-none" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+  <div class="relative max-w-3xl mx-auto text-center">
+    <p class="reveal text-gold-light text-[11px] font-bold tracking-[0.35em] uppercase mb-14">Prophetic Declaration</p>
+    <div id="litany" class="space-y-6 mb-14">
+      <p class="litany-line font-serif text-2xl md:text-3xl">Souls shall be won.</p>
+      <p class="litany-line font-serif text-2xl md:text-3xl">Territories shall be reached.</p>
+      <p class="litany-line font-serif text-2xl md:text-3xl">Revival Centers shall multiply.</p>
+      <p class="litany-line font-serif text-2xl md:text-3xl">New branches shall emerge strategically.</p>
+      <p class="litany-line font-serif text-2xl md:text-3xl">PGIC shall gain greater visibility.</p>
+      <p class="litany-line font-serif text-2xl md:text-3xl text-gold-light italic">The Kingdom of God shall advance through PGIC.</p>
+    </div>
+    <div class="reveal border-t border-white/15 pt-8">
+      <p class="scripture text-white/80 text-lg">"A little one shall become a thousand..."</p>
+      <p class="text-gold-light text-[11px] font-bold tracking-widest uppercase mt-2">Isaiah 60:22</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL DECLARATION ===================== -->
+<section class="py-32 px-6 bg-forest-2 text-center relative overflow-hidden border-t border-white/10">
+  <div class="reveal-group relative max-w-3xl mx-auto">
+    <h2 class="font-serif text-3xl md:text-5xl text-gold-light mb-8">POMAG — Arise and Shine</h2>
+    <p class="font-serif text-xl md:text-2xl text-white/90 mb-3">"Winning the Lost at All Cost!"</p>
+    <p class="font-serif text-xl md:text-2xl text-white/90 mb-3">"Building an Army Through the True Word of God!"</p>
+    <p class="font-serif text-xl md:text-2xl text-white/90">"POMAG Arise and Shine!"</p>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="bg-ink text-white/80">
+  <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
+    <div class="md:col-span-2">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="w-8 h-8 text-gold" viewBox="0 0 320 320"><use href="#worldMark"/></svg>
+        <span class="font-serif text-lg text-white">PGIC Outreach &amp; Mission Advancement Group</span>
+      </div>
+      <p class="text-white/50 text-sm max-w-sm leading-relaxed mb-4">Positioning POMAG for Effective Kingdom Advancement.</p>
+    </div>
+    <div>
+      <p class="text-gold-light text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Navigate</p>
+      <ul class="space-y-2 text-sm text-white/60">
+        <li><a href="#hero" class="hover:text-white transition">Home</a></li>
+        <li><a href="#about" class="hover:text-white transition">About POMAG</a></li>
+        <li><a href="#vision" class="hover:text-white transition">Vision</a></li>
+        <li><a href="#objectives" class="hover:text-white transition">Objectives</a></li>
+        <li><a href="#leadership" class="hover:text-white transition">Leadership</a></li>
+        <li><a href="#process" class="hover:text-white transition">Outreach Process</a></li>
+        <li><a href="#involved" class="hover:text-white transition">Get Involved</a></li>
+        <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-gold-light text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Contact</p>
+      <p class="text-white/50 text-sm italic">Details to be added.</p>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-6 px-6 text-center text-white/40 text-xs">
+    © 2025 PGIC Outreach &amp; Mission Advancement Group (POMAG).
+  </div>
+</footer>
+
+<script>
+  // ---------- Hero entrance ----------
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.hero-in').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(18px)';
+      el.style.transition = 'opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1)';
+      setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 150 + i * 130);
+    });
+  });
+
+  // ---------- Scroll reveal ----------
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-group, .divider').forEach(el => revealObserver.observe(el));
+
+  // ---------- Litany (prophetic declaration) staggered reveal ----------
+  const litanyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const lines = entry.target.querySelectorAll('.litany-line');
+        lines.forEach((line, i) => {
+          setTimeout(() => line.classList.add('in-view'), i * 450);
+        });
+        litanyObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const litanyEl = document.getElementById('litany');
+  if (litanyEl) litanyObserver.observe(litanyEl);
+
+  // ---------- Nav background on scroll ----------
+  const nav = document.getElementById('mainNav');
+  const navLabel = document.getElementById('navLabel');
+  const navLinks = document.querySelectorAll('.nav-link');
+  function updateNavStyle() {
+    if (window.scrollY > 60) {
+      nav.classList.add('bg-white/95', 'backdrop-blur-md', 'border-line');
+      nav.classList.remove('border-transparent');
+      navLabel.classList.add('text-forest');
+      navLabel.classList.remove('text-white');
+      navLinks.forEach(l => { l.classList.add('text-ink-soft'); l.classList.remove('text-white'); });
+    } else {
+      nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'border-line');
+      nav.classList.add('border-transparent');
+      navLabel.classList.remove('text-forest');
+      navLabel.classList.add('text-white');
+      navLinks.forEach(l => { l.classList.remove('text-ink-soft'); l.classList.add('text-white'); });
+    }
+  }
+  window.addEventListener('scroll', updateNavStyle);
+  updateNavStyle();
+
+  // ---------- Scrollspy ----------
+  const sections = ['about','vision','objectives','leadership','process','involved'].map(id => document.getElementById(id)).filter(Boolean);
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const link = document.querySelector(`.nav-link[href="#${id}"]`);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => spyObserver.observe(s));
+
+  // ---------- Mobile menu ----------
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    const icon = menuBtn.querySelector('.material-symbols-outlined');
+    icon.textContent = mobileMenu.classList.contains('open') ? 'close' : 'menu';
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      menuBtn.querySelector('.material-symbols-outlined').textContent = 'menu';
+    });
+  });
+</script>
+
+</body>
+</html>
