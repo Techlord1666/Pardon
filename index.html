@@ -489,11 +489,13 @@
     <div class="p-6">
         <button class="float-right hover:rotate-90 transition-transform duration-300" onclick="toggleMobileMenu()"><span class="material-symbols-outlined text-4xl">close</span></button>
         <div class="mt-20 flex flex-col space-y-8 text-center text-2xl font-display" id="mobileMenuItems">
-            <a href="#" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Home</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">About Us</a>
-             <a href="media.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="300">Library</a>
+            <a href="index.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Home</a>
+            <a href="about.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">About</a>
+            <a href="pomag.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">POMAG</a>
+            <a href="media.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Library</a>
+            <a href="store.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Pardon Books</a>
             <button onclick="toggleModal('givingModal'); toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Giving</button>
-            <a href="#service-times" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Service Times</a>
+            <button onclick="toggleModal('connectModal'); toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Connect With Us</button>
             <button onclick="toggleModal('joinModal'); toggleMobileMenu()" class="mobile-menu-item bg-primary text-white py-4 rounded-xl hover:bg-secondary transition transform hover:scale-105">Join Us Live</button>
         </div>
     </div>
@@ -708,6 +710,37 @@
     </div>
 </section>
 
+<!-- Contact Us Section -->
+<section class="py-24 bg-white px-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-72 h-72 bg-accent/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-4xl mx-auto text-center relative z-10" data-aos="fade-up" data-aos-duration="800">
+        <span class="material-symbols-outlined text-accent text-5xl mb-4 icon-spin">connect_without_contact</span>
+        <h2 class="font-display text-3xl md:text-5xl text-primary mb-6">Let's Connect</h2>
+        <p class="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl mx-auto">
+            Reach out on social media, send us a message, or find everything you need to get in touch — all in one place.
+        </p>
+        <button onclick="toggleModal('connectModal')" class="bg-accent text-primary font-bold px-12 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300 btn-glow magnetic-btn">
+            CONTACT US
+        </button>
+
+        <!-- Quick social row -->
+        <div class="flex items-center justify-center gap-4 mt-10" data-aos="fade-up" data-aos-delay="200">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="Facebook">
+                <span class="material-symbols-outlined">facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@PardonByGrace" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="YouTube">
+                <span class="material-symbols-outlined">play_circle</span>
+            </a>
+            <a href="https://www.instagram.com/pardonbygrace#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="Instagram">
+                <span class="material-symbols-outlined">photo_camera</span>
+            </a>
+            <a href="https://wa.me/2347012266550" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="WhatsApp">
+                <span class="material-symbols-outlined">chat</span>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Footer -->
 <footer class="bg-primary text-white pt-24 pb-12 px-6 relative overflow-hidden">
     <!-- Decorative background -->
@@ -820,6 +853,50 @@
                 CONTACT ON WHATSAPP
             </a>
             <p class="text-[10px] mt-2 text-center text-white/60">Call/Chat +234 701 226 6550 for international details</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Connect / Contact Us -->
+<div id="connectModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('connectModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden modal-content-anim max-h-[85vh] overflow-y-auto">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black hover:rotate-90 transition duration-300" onclick="toggleModal('connectModal')"><span class="material-symbols-outlined">close</span></button>
+        <span class="text-accent font-bold tracking-widest text-sm uppercase">Get In Touch</span>
+        <h3 class="font-display text-2xl text-primary mt-2 mb-6">Connect With Us</h3>
+
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-blue-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-blue-600 group-hover:scale-110 transition-transform">facebook</span>
+                <span class="font-bold text-sm">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@PardonByGrace" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-red-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-red-600 group-hover:scale-110 transition-transform">play_circle</span>
+                <span class="font-bold text-sm">YouTube</span>
+            </a>
+            <a href="https://www.instagram.com/pardonbygrace#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-pink-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-pink-600 group-hover:scale-110 transition-transform">photo_camera</span>
+                <span class="font-bold text-sm">Instagram</span>
+            </a>
+            <a href="https://wa.me/2347012266550" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-green-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-green-600 group-hover:scale-110 transition-transform">chat</span>
+                <span class="font-bold text-sm">WhatsApp</span>
+            </a>
+        </div>
+
+        <div class="space-y-4 text-gray-700 border-t border-gray-100 pt-6">
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">mail</span>
+                <a href="mailto:pardonbygrace@gmail.com" class="hover:text-accent transition">pardonbygrace@gmail.com</a>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">call</span>
+                <a href="tel:+2347012266550" class="hover:text-accent transition">+234 701 226 6550</a>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">location_on</span>
+                <p>2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria. <br><span class="font-bold">ZIP 100111</span></p>
+            </div>
         </div>
     </div>
 </div>
@@ -1040,5 +1117,5 @@
 </script>
 
 </body>
-</html>'''
+</html>
 
