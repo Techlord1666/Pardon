@@ -188,6 +188,18 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // Supabase Storage rejects object keys with accented letters or other
+  // special characters, so every uploaded file name is cleaned up first.
+  function sanitizeFileName(name) {
+    const lastDot = name.lastIndexOf('.');
+    const ext = lastDot !== -1 ? name.slice(lastDot).toLowerCase() : '';
+    let base = lastDot !== -1 ? name.slice(0, lastDot) : name;
+    base = base.normalize('NFKD').replace(/[\u0300-\u036f]/g, ''); // strip accents (é → e, Ọ → O, etc.)
+    base = base.replace(/[^a-zA-Z0-9-_]/g, '_');                   // swap anything else for _
+    base = base.replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 80);
+    return `${base || 'file'}${ext}`;
+  }
+
   async function tryLogin() {
     const email = document.getElementById('emailInput').value.trim();
     const password = document.getElementById('pwInput').value;
@@ -300,7 +312,7 @@
 
   async function uploadImage(file) {
     if (!file) return null;
-    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+    const fileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
     const { error } = await _supabase.storage.from('sermon-thumbnails').upload(fileName, file, { cacheControl: '3600', upsert: false });
     if (error) { alert('Error uploading image: ' + error.message); return null; }
     const { data } = _supabase.storage.from('sermon-thumbnails').getPublicUrl(fileName);
@@ -462,7 +474,7 @@
 
   async function uploadCover(file) {
     if (!file) return null;
-    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+    const fileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
     const { error } = await _supabase.storage.from('book-covers').upload(fileName, file, { cacheControl: '3600', upsert: false });
     if (error) { alert('Error uploading cover: ' + error.message); return null; }
     const { data } = _supabase.storage.from('book-covers').getPublicUrl(fileName);
@@ -471,7 +483,7 @@
 
   async function uploadPdf(file) {
     if (!file) return null;
-    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+    const fileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
     const { error } = await _supabase.storage.from('book-files').upload(fileName, file, { cacheControl: '3600', upsert: false });
     if (error) { alert('Error uploading PDF: ' + error.message); return null; }
     return fileName; // stored as the path — this bucket is private, so no public URL
