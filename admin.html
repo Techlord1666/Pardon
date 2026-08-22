@@ -69,29 +69,53 @@
       <div class="flex items-center gap-3">
         <img src="logo.png" alt="" class="h-9 w-auto" onerror="this.style.display='none'">
         <div>
-          <p class="font-serif text-lg text-forest leading-none">Sermon Admin</p>
+          <p class="font-serif text-lg text-forest leading-none">Admin</p>
           <p class="text-[10px] uppercase tracking-widest text-ink-soft mt-1">Pardon By Grace</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
         <a href="media-library.html" class="text-[11px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition">View Library</a>
-        <button onclick="openUpload()" class="flex items-center gap-1 bg-gold text-white px-4 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">
-          <span class="material-symbols-outlined !text-[16px]">add</span>Add Sermon
-        </button>
+        <a href="store.html" class="text-[11px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition">View Store</a>
         <button onclick="logout()" class="flex items-center gap-1 text-ink-soft hover:text-red-500 transition text-[11px] font-bold uppercase tracking-widest px-2">
           <span class="material-symbols-outlined !text-[16px]">logout</span>
         </button>
       </div>
     </div>
+    <div class="max-w-6xl mx-auto px-6 flex gap-1 -mb-px">
+      <button id="tabSermonsBtn" onclick="switchTab('sermons')" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 border-forest text-forest transition">Sermons</button>
+      <button id="tabBooksBtn" onclick="switchTab('books')" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 border-transparent text-ink-soft hover:text-forest transition">Books</button>
+    </div>
   </nav>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-    <div class="mb-8">
-      <h2 class="font-serif text-3xl text-forest mb-1">Manage Sermons</h2>
-      <p class="text-ink-soft text-sm">Upload a thumbnail and paste Google Drive links — sermons appear on the library instantly.</p>
+    <div id="sermonsPanel">
+      <div class="mb-8 flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="font-serif text-3xl text-forest mb-1">Manage Sermons</h2>
+          <p class="text-ink-soft text-sm">Upload a thumbnail and paste Google Drive links — sermons appear on the library instantly.</p>
+        </div>
+        <button onclick="openUpload()" class="flex items-center gap-1 bg-gold text-white px-4 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition shrink-0">
+          <span class="material-symbols-outlined !text-[16px]">add</span>Add Sermon
+        </button>
+      </div>
+      <div id="sermonTable" class="bg-white border border-line rounded-2xl overflow-hidden divide-y divide-line">
+        <p id="emptyMsg" class="hidden p-10 text-center text-ink-soft italic">No sermons yet. Add your first one.</p>
+      </div>
     </div>
-    <div id="sermonTable" class="bg-white border border-line rounded-2xl overflow-hidden divide-y divide-line">
-      <p id="emptyMsg" class="hidden p-10 text-center text-ink-soft italic">No sermons yet. Add your first one.</p>
+
+    <div id="booksPanel" class="hidden">
+      <div class="mb-8 flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="font-serif text-3xl text-forest mb-1">Manage Books</h2>
+          <p class="text-ink-soft text-sm">Upload a cover, the PDF, and a price — books appear in the store instantly. The PDF stays private until a purchase is confirmed.</p>
+        </div>
+        <button onclick="openBookUpload()" class="flex items-center gap-1 bg-gold text-white px-4 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition shrink-0">
+          <span class="material-symbols-outlined !text-[16px]">add</span>Add Book
+        </button>
+      </div>
+      <div id="bookTable" class="bg-white border border-line rounded-2xl overflow-hidden divide-y divide-line">
+        <p id="emptyBooksMsg" class="hidden p-10 text-center text-ink-soft italic">No books yet. Add your first one.</p>
+      </div>
     </div>
   </main>
 </div>
@@ -124,6 +148,37 @@
       </div>
 
       <button id="saveBtn" onclick="saveSermon()" class="w-full bg-forest text-white py-4 rounded-xl font-bold uppercase tracking-widest mt-2 hover:bg-forest/90 transition">Save Sermon</button>
+    </div>
+  </div>
+</div>
+
+<!-- Book upload/edit modal -->
+<div id="bookModal" class="modal">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeBookModal()"></div>
+  <div class="relative bg-white w-full max-w-lg rounded-3xl p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <h3 id="bookModalTitle" class="text-2xl font-serif mb-6 text-forest">Add New Book</h3>
+    <input type="hidden" id="editBookId">
+    <input type="hidden" id="fPdfPath">
+    <div class="space-y-4">
+      <input type="text" id="fBookTitle" placeholder="Book title" class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm">
+      <input type="text" id="fBookAuthor" placeholder="Author name" class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm">
+      <textarea id="fBookDescription" placeholder="Short description" rows="3" class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+      <input type="number" id="fBookPrice" placeholder="Price in NGN, e.g. 2500" min="0" step="0.01" class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm">
+
+      <div class="bg-sand p-4 rounded-xl border border-line">
+        <p class="text-[10px] font-bold text-gold uppercase tracking-widest mb-2">Cover Image</p>
+        <input type="file" id="fCoverUpload" accept="image/*" class="w-full bg-transparent border-none p-0 focus:ring-0 text-sm">
+        <p id="currentCoverName" class="text-ink-soft text-xs mt-2 italic"></p>
+      </div>
+
+      <div class="bg-sand p-4 rounded-xl border border-line">
+        <p class="text-[10px] font-bold text-gold uppercase tracking-widest mb-2">Book PDF</p>
+        <input type="file" id="fPdfUpload" accept="application/pdf" class="w-full bg-transparent border-none p-0 focus:ring-0 text-sm">
+        <p id="currentPdfName" class="text-ink-soft text-xs mt-2 italic"></p>
+        <p class="text-ink-soft text-[11px] mt-1">Stored privately — only released after a confirmed purchase.</p>
+      </div>
+
+      <button id="saveBookBtn" onclick="saveBook()" class="w-full bg-forest text-white py-4 rounded-xl font-bold uppercase tracking-widest mt-2 hover:bg-forest/90 transition">Save Book</button>
     </div>
   </div>
 </div>
@@ -338,6 +393,181 @@
   function clearForm() {
     ['fTitle','fSpeaker','fVideoLink','fAudioLink'].forEach(id => document.getElementById(id).value = "");
     document.getElementById('fImageUpload').value = "";
+  }
+
+  // ---------- Tabs ----------
+  function switchTab(tab) {
+    const sermonsBtn = document.getElementById('tabSermonsBtn');
+    const booksBtn = document.getElementById('tabBooksBtn');
+    const sermonsPanel = document.getElementById('sermonsPanel');
+    const booksPanel = document.getElementById('booksPanel');
+
+    if (tab === 'sermons') {
+      sermonsPanel.classList.remove('hidden');
+      booksPanel.classList.add('hidden');
+      sermonsBtn.classList.add('border-forest', 'text-forest');
+      sermonsBtn.classList.remove('border-transparent', 'text-ink-soft');
+      booksBtn.classList.remove('border-forest', 'text-forest');
+      booksBtn.classList.add('border-transparent', 'text-ink-soft');
+    } else {
+      booksPanel.classList.remove('hidden');
+      sermonsPanel.classList.add('hidden');
+      booksBtn.classList.add('border-forest', 'text-forest');
+      booksBtn.classList.remove('border-transparent', 'text-ink-soft');
+      sermonsBtn.classList.remove('border-forest', 'text-forest');
+      sermonsBtn.classList.add('border-transparent', 'text-ink-soft');
+      loadBooks();
+    }
+  }
+
+  // ---------- Books ----------
+  async function loadBooks() {
+    const { data, error } = await _supabase.from('books').select('*').order('created_at', { ascending: false });
+    const table = document.getElementById('bookTable');
+    const emptyMsg = document.getElementById('emptyBooksMsg');
+    table.innerHTML = '';
+
+    if (error) {
+      table.innerHTML = `<p class="p-10 text-center text-red-500 italic">Error loading books: ${error.message}</p>`;
+      return;
+    }
+    if (!data || !data.length) {
+      table.appendChild(emptyMsg);
+      emptyMsg.classList.remove('hidden');
+      return;
+    }
+    data.forEach((b, i) => renderBookRow(b, i));
+  }
+
+  function renderBookRow(b, i) {
+    const table = document.getElementById('bookTable');
+    const row = document.createElement('div');
+    row.className = "row-enter flex items-center gap-4 p-4";
+    row.style.animationDelay = `${Math.min(i * 40, 300)}ms`;
+
+    row.innerHTML = `
+      <img src="${b.cover_url || ''}" class="w-14 h-14 rounded-xl object-cover bg-sand shrink-0" onerror="this.src='https://via.placeholder.com/100x100/f6f3ec/a9812f?text=Book'">
+      <div class="min-w-0 flex-1">
+        <p class="font-serif text-ink truncate">${b.title || 'Untitled'}</p>
+        <p class="text-ink-soft text-xs truncate">${b.author || ''} · ₦${Number(b.price).toLocaleString()}</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick='openBookEdit(${JSON.stringify(b)})'
+          class="text-[10px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition px-3 py-2">Edit</button>
+        <button onclick="deleteBook('${b.id}')" class="text-[10px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 transition px-3 py-2">Delete</button>
+      </div>
+    `;
+    table.appendChild(row);
+  }
+
+  async function uploadCover(file) {
+    if (!file) return null;
+    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+    const { error } = await _supabase.storage.from('book-covers').upload(fileName, file, { cacheControl: '3600', upsert: false });
+    if (error) { alert('Error uploading cover: ' + error.message); return null; }
+    const { data } = _supabase.storage.from('book-covers').getPublicUrl(fileName);
+    return data.publicUrl;
+  }
+
+  async function uploadPdf(file) {
+    if (!file) return null;
+    const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+    const { error } = await _supabase.storage.from('book-files').upload(fileName, file, { cacheControl: '3600', upsert: false });
+    if (error) { alert('Error uploading PDF: ' + error.message); return null; }
+    return fileName; // stored as the path — this bucket is private, so no public URL
+  }
+
+  async function saveBook() {
+    const id = document.getElementById('editBookId').value;
+    const title = document.getElementById('fBookTitle').value.trim();
+    const author = document.getElementById('fBookAuthor').value.trim();
+    const description = document.getElementById('fBookDescription').value.trim();
+    const price = document.getElementById('fBookPrice').value;
+    const coverFile = document.getElementById('fCoverUpload').files[0];
+    const pdfFile = document.getElementById('fPdfUpload').files[0];
+    let coverUrl = document.getElementById('fCoverUpload').dataset.existingUrl || '';
+    let pdfPath = document.getElementById('fPdfPath').value;
+
+    const btn = document.getElementById('saveBookBtn');
+
+    if (!title || !author || !price || (!id && !pdfFile)) {
+      alert("Please fill in Title, Author, Price, and attach a PDF.");
+      return;
+    }
+
+    btn.innerText = "Uploading…";
+    btn.disabled = true;
+
+    if (coverFile) {
+      const uploaded = await uploadCover(coverFile);
+      if (!uploaded) { btn.innerText = "Save Book"; btn.disabled = false; return; }
+      coverUrl = uploaded;
+    }
+    if (pdfFile) {
+      const uploaded = await uploadPdf(pdfFile);
+      if (!uploaded) { btn.innerText = "Save Book"; btn.disabled = false; return; }
+      pdfPath = uploaded;
+    }
+    if (!coverUrl) coverUrl = 'https://via.placeholder.com/400x533/f6f3ec/a9812f?text=No+Cover';
+
+    const payload = { title, author, description, price: Number(price), cover_url: coverUrl, pdf_path: pdfPath };
+
+    const result = id
+      ? await _supabase.from('books').update(payload).eq('id', id)
+      : await _supabase.from('books').insert([payload]);
+
+    btn.innerText = "Save Book";
+    btn.disabled = false;
+
+    if (result.error) {
+      alert('Error saving book: ' + result.error.message);
+    } else {
+      closeBookModal();
+      loadBooks();
+    }
+  }
+
+  function openBookUpload() {
+    document.getElementById('bookModalTitle').innerText = "Add New Book";
+    document.getElementById('editBookId').value = "";
+    document.getElementById('fPdfPath').value = "";
+    document.getElementById('fBookTitle').value = "";
+    document.getElementById('fBookAuthor').value = "";
+    document.getElementById('fBookDescription').value = "";
+    document.getElementById('fBookPrice').value = "";
+    document.getElementById('fCoverUpload').value = null;
+    document.getElementById('fCoverUpload').dataset.existingUrl = "";
+    document.getElementById('fPdfUpload').value = null;
+    document.getElementById('currentCoverName').innerText = "";
+    document.getElementById('currentPdfName').innerText = "";
+    document.getElementById('bookModal').classList.add('active');
+  }
+
+  function openBookEdit(b) {
+    document.getElementById('bookModalTitle').innerText = "Edit Book";
+    document.getElementById('editBookId').value = b.id;
+    document.getElementById('fPdfPath').value = b.pdf_path || "";
+    document.getElementById('fBookTitle').value = b.title || "";
+    document.getElementById('fBookAuthor').value = b.author || "";
+    document.getElementById('fBookDescription').value = b.description || "";
+    document.getElementById('fBookPrice').value = b.price || "";
+    document.getElementById('fCoverUpload').value = null;
+    document.getElementById('fCoverUpload').dataset.existingUrl = b.cover_url || "";
+    document.getElementById('fPdfUpload').value = null;
+    document.getElementById('currentCoverName').innerText = b.cover_url ? `Current: ${b.cover_url.split('/').pop().split('?')[0]}` : "No cover uploaded yet.";
+    document.getElementById('currentPdfName').innerText = b.pdf_path ? `Current file on record — choose a new PDF only to replace it.` : "No PDF uploaded yet.";
+    document.getElementById('bookModal').classList.add('active');
+  }
+
+  async function deleteBook(id) {
+    if (!confirm("Delete this book? This does not refund past buyers, it only removes it from the store.")) return;
+    const { error } = await _supabase.from('books').delete().eq('id', id);
+    if (error) alert('Error deleting book: ' + error.message);
+    else loadBooks();
+  }
+
+  function closeBookModal() {
+    document.getElementById('bookModal').classList.remove('active');
   }
 </script>
 
