@@ -49,13 +49,16 @@
   <div class="w-full max-w-sm bg-white border border-line rounded-3xl p-10 text-center">
     <img src="logo.png" alt="" class="h-10 w-auto mx-auto mb-5" onerror="this.style.display='none'">
     <h1 class="font-serif text-2xl text-forest mb-1">Staff Access</h1>
-    <p class="text-ink-soft text-sm mb-6">Enter the admin password to manage the sermon library.</p>
-    <input id="pwInput" type="password" placeholder="Password"
+    <p class="text-ink-soft text-sm mb-6">Sign in to manage the sermon library.</p>
+    <input id="emailInput" type="email" placeholder="Email" autocomplete="username"
+      class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm mb-3 focus:border-gold-soft transition"
+      onkeydown="if(event.key==='Enter') document.getElementById('pwInput').focus()">
+    <input id="pwInput" type="password" placeholder="Password" autocomplete="current-password"
       class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm mb-3 focus:border-gold-soft transition"
       onkeydown="if(event.key==='Enter') tryLogin()">
-    <button onclick="tryLogin()" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">Enter</button>
-    <p id="gateError" class="hidden text-red-500 text-xs mt-3">Incorrect password. Try again.</p>
-    <a href="media.html" class="block mt-6 text-[11px] uppercase tracking-widest text-ink-soft hover:text-forest transition">← Back to Sermon Library</a>
+    <button id="loginBtn" onclick="tryLogin()" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">Sign In</button>
+    <p id="gateError" class="hidden text-red-500 text-xs mt-3">Incorrect email or password.</p>
+    <a href="media-library.html" class="block mt-6 text-[11px] uppercase tracking-widest text-ink-soft hover:text-forest transition">← Back to Sermon Library</a>
   </div>
 </div>
 
@@ -71,9 +74,12 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="media.html" class="text-[11px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition">View Library</a>
+        <a href="media-library.html" class="text-[11px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition">View Library</a>
         <button onclick="openUpload()" class="flex items-center gap-1 bg-gold text-white px-4 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">
           <span class="material-symbols-outlined !text-[16px]">add</span>Add Sermon
+        </button>
+        <button onclick="logout()" class="flex items-center gap-1 text-ink-soft hover:text-red-500 transition text-[11px] font-bold uppercase tracking-widest px-2">
+          <span class="material-symbols-outlined !text-[16px]">logout</span>
         </button>
       </div>
     </div>
@@ -127,16 +133,33 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const ADMIN_PASSWORD = "pardonbygrace11"; // change this for production
+  async function tryLogin() {
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('pwInput').value;
+    const btn = document.getElementById('loginBtn');
+    const errEl = document.getElementById('gateError');
+    errEl.classList.add('hidden');
 
-  function tryLogin() {
-    const val = document.getElementById('pwInput').value;
-    if (val === ADMIN_PASSWORD) {
-      sessionStorage.setItem('pbg_admin', '1');
-      unlock();
-    } else {
-      document.getElementById('gateError').classList.remove('hidden');
+    if (!email || !password) {
+      errEl.textContent = "Please enter your email and password.";
+      errEl.classList.remove('hidden');
+      return;
     }
+
+    btn.innerText = "Signing in…";
+    btn.disabled = true;
+
+    const { error } = await _supabase.auth.signInWithPassword({ email, password });
+
+    btn.innerText = "Sign In";
+    btn.disabled = false;
+
+    if (error) {
+      errEl.textContent = "Incorrect email or password.";
+      errEl.classList.remove('hidden');
+      return;
+    }
+    unlock();
   }
 
   function unlock() {
@@ -145,8 +168,18 @@
     loadSermons();
   }
 
-  window.onload = () => {
-    if (sessionStorage.getItem('pbg_admin') === '1') unlock();
+  async function logout() {
+    await _supabase.auth.signOut();
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('gate').classList.remove('hidden');
+    document.getElementById('pwInput').value = '';
+  }
+
+  window.onload = async () => {
+    // Supabase persists the session in localStorage automatically,
+    // so a signed-in admin stays signed in across page loads.
+    const { data } = await _supabase.auth.getSession();
+    if (data.session) unlock();
   };
 
   function extractGoogleId(url) {
