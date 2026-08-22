@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book Store | Pardon By Grace</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..500" rel="stylesheet"/>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#ffffff", sand: "#f6f3ec", ink: "#101a14", "ink-soft": "#5c6a61",
+          forest: "#0c2b1c", gold: "#a9812f", "gold-soft": "#cba660", line: "#e7e3d6"
+        },
+        fontFamily: { serif: ["Fraunces", "serif"], sans: ["Manrope", "sans-serif"] }
+      }
+    }
+  }
+</script>
+
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 20px; vertical-align: middle; }
+  .book-cover { aspect-ratio: 3/4; border-radius: 14px 4px 14px 4px; }
+  .card-enter { animation: riseIn .5s ease-out both; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .modal.active { display: flex; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
+  .divider-mark { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .divider-mark::before, .divider-mark::after { content: ""; height: 1px; width: 44px; background: #a9812f; opacity: .5; }
+  .divider-mark span { width: 6px; height: 6px; background: #a9812f; transform: rotate(45deg); display: inline-block; }
+  .skeleton { background: linear-gradient(90deg, #f0ede3 25%, #f8f6ef 37%, #f0ede3 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+  @media (prefers-reduced-motion: reduce) { .card-enter, .skeleton { animation: none; } }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="logo.png" alt="Pardon By Grace" class="h-9 w-auto" onerror="this.style.display='none'">
+      <span class="font-serif font-semibold text-lg tracking-tight text-forest">Pardon By Grace</span>
+    </a>
+    <div class="flex items-center gap-6">
+      <a href="media-library.html" class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-soft hover:text-forest transition">Sermons</a>
+      <a href="index.html" class="text-[11px] font-bold uppercase tracking-[0.2em] text-ink-soft hover:text-forest transition">Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="pt-40 pb-16 px-6 max-w-6xl mx-auto text-center">
+  <p class="text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-5">Books & Resources</p>
+  <h1 class="font-serif text-5xl md:text-6xl text-forest leading-[1.05] mb-5">
+    The <span class="italic font-medium">Book</span> Store
+  </h1>
+  <p class="text-ink-soft text-base max-w-md mx-auto">
+    Teaching, encouragement, and study resources — delivered instantly as a PDF the moment your payment is confirmed.
+  </p>
+</header>
+
+<div class="divider-mark mb-16"><span></span></div>
+
+<!-- Book grid -->
+<main class="px-6 max-w-6xl mx-auto pb-32">
+  <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="skeleton h-80 rounded-2xl"></div>
+    <div class="skeleton h-80 rounded-2xl"></div>
+    <div class="skeleton h-80 rounded-2xl"></div>
+  </div>
+  <p id="emptyMsg" class="hidden text-center text-ink-soft py-20 italic">No books available yet — check back soon.</p>
+</main>
+
+<!-- Footer -->
+<footer class="bg-forest text-white/85">
+  <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
+    <div class="md:col-span-2">
+      <div class="flex items-center gap-3 mb-4">
+        <img src="logo.png" alt="" class="h-8 w-auto" onerror="this.style.display='none'">
+        <span class="font-serif text-xl">Pardon By Grace</span>
+      </div>
+      <p class="text-white/60 text-sm max-w-sm leading-relaxed">
+        A church family devoted to reaching the lost, teaching the Word, and walking together in grace.
+      </p>
+    </div>
+    <div>
+      <p class="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Explore</p>
+      <ul class="space-y-2 text-sm text-white/70">
+        <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+        <li><a href="media-library.html" class="hover:text-white transition">Sermon Library</a></li>
+        <li><a href="store.html" class="hover:text-white transition">Book Store</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-4">Join Us</p>
+      <ul class="space-y-2 text-sm text-white/70">
+        <li>Sundays · 9:00 AM</li>
+        <li>Bible Study · Wednesdays</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-6 px-6 text-center text-white/40 text-xs">
+    © 2025 Pardon By Grace International Church. All rights reserved.
+  </div>
+</footer>
+
+<!-- Checkout email modal -->
+<div id="checkoutModal" class="modal">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeCheckout()"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl">
+    <h3 class="font-serif text-2xl text-forest mb-1">Almost there</h3>
+    <p id="checkoutBookTitle" class="text-ink-soft text-sm mb-6"></p>
+    <input id="buyerEmail" type="email" placeholder="Your email — we'll send your receipt here"
+      class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm mb-4 focus:border-gold-soft transition">
+    <button id="payBtn" onclick="startPayment()" class="w-full bg-forest text-white py-3.5 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">
+      Continue to Payment
+    </button>
+    <p id="checkoutError" class="hidden text-red-500 text-xs mt-3"></p>
+  </div>
+</div>
+
+<!-- Post-payment status modal -->
+<div id="statusModal" class="modal">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl text-center">
+    <div id="statusIcon" class="text-4xl mb-3"><span class="material-symbols-outlined !text-[40px] text-gold animate-spin">progress_activity</span></div>
+    <h3 id="statusTitle" class="font-serif text-xl text-forest mb-2">Confirming your payment…</h3>
+    <p id="statusMsg" class="text-ink-soft text-sm mb-5">Please don't close this window.</p>
+    <button id="statusCloseBtn" onclick="closeStatus()" class="hidden text-[11px] font-bold uppercase tracking-widest text-ink-soft hover:text-forest transition">Close</button>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ⚠️ Replace with your real Paystack PUBLIC key (starts with pk_live_ or pk_test_).
+  // Never put your SECRET key in front-end code — only the Edge Function uses that.
+  const PAYSTACK_PUBLIC_KEY = "pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY";
+
+  // Built automatically from your Supabase URL — no change needed.
+  const VERIFY_URL = `${SUPABASE_URL.replace('.supabase.co', '.functions.supabase.co')}/verify-payment`;
+
+  let currentBook = null;
+
+  window.onload = loadBooks;
+
+  async function loadBooks() {
+    const { data, error } = await _supabase.from('books').select('*').order('created_at', { ascending: false });
+    const grid = document.getElementById('bookGrid');
+    const emptyMsg = document.getElementById('emptyMsg');
+    grid.innerHTML = '';
+
+    if (error) {
+      grid.innerHTML = `<p class="col-span-full text-center text-red-500 py-20 italic">Error loading books: ${error.message}</p>`;
+      return;
+    }
+    if (!data || !data.length) {
+      emptyMsg.classList.remove('hidden');
+      return;
+    }
+    data.forEach((b, i) => renderBook(b, i));
+  }
+
+  function renderBook(b, i) {
+    const grid = document.getElementById('bookGrid');
+    const div = document.createElement('div');
+    div.className = "card-enter bg-white border border-line rounded-2xl p-5 flex flex-col";
+    div.style.animationDelay = `${Math.min(i * 70, 400)}ms`;
+
+    div.innerHTML = `
+      <div class="book-cover w-full bg-sand overflow-hidden mb-4">
+        <img src="${b.cover_url || ''}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/f6f3ec/a9812f?text=Book+Cover'">
+      </div>
+      <h3 class="font-serif text-lg text-ink leading-snug mb-1">${escapeHtml(b.title)}</h3>
+      <p class="text-ink-soft text-xs uppercase tracking-widest mb-3">${escapeHtml(b.author || '')}</p>
+      <p class="text-ink-soft text-sm leading-relaxed mb-5 flex-1">${escapeHtml(b.description || '')}</p>
+      <div class="flex items-center justify-between">
+        <span class="font-serif text-xl text-forest">₦${Number(b.price).toLocaleString()}</span>
+        <button onclick='openCheckout(${JSON.stringify(b)})' class="bg-gold text-white px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</button>
+      </div>
+    `;
+    grid.appendChild(div);
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.innerText = str || '';
+    return d.innerHTML;
+  }
+
+  function openCheckout(book) {
+    currentBook = book;
+    document.getElementById('checkoutBookTitle').innerText = `${book.title} — ₦${Number(book.price).toLocaleString()}`;
+    document.getElementById('buyerEmail').value = '';
+    document.getElementById('checkoutError').classList.add('hidden');
+    document.getElementById('checkoutModal').classList.add('active');
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkoutModal').classList.remove('active');
+  }
+
+  function startPayment() {
+    const email = document.getElementById('buyerEmail').value.trim();
+    const errEl = document.getElementById('checkoutError');
+
+    if (!email || !email.includes('@')) {
+      errEl.textContent = "Please enter a valid email address.";
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (PAYSTACK_PUBLIC_KEY.includes('REPLACE_WITH')) {
+      errEl.textContent = "Payments aren't set up yet — add your Paystack public key in store.html.";
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: Math.round(Number(currentBook.price) * 100), // Paystack expects kobo
+      currency: "NGN",
+      ref: `pbg_${currentBook.id.slice(0, 8)}_${Date.now()}`,
+      metadata: { book_id: currentBook.id, book_title: currentBook.title },
+      callback: function (response) {
+        closeCheckout();
+        confirmPurchase(response.reference, email);
+      },
+      onClose: function () {}
+    });
+    handler.openIframe();
+  }
+
+  async function confirmPurchase(reference, email) {
+    showStatus("loading", "Confirming your payment…", "Please don't close this window.");
+    try {
+      const res = await fetch(VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference, book_id: currentBook.id, email })
+      });
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        showStatus("error", "We couldn't confirm that payment", data.error || "Please contact us if you were charged.");
+        return;
+      }
+
+      showStatus("success", "Payment confirmed!", "Your download is starting now.");
+      window.location.href = data.url;
+    } catch (e) {
+      showStatus("error", "Something went wrong", "Please contact us if you were charged, and we'll sort it out.");
+    }
+  }
+
+  function showStatus(type, title, msg) {
+    const modal = document.getElementById('statusModal');
+    const icon = document.getElementById('statusIcon');
+    const closeBtn = document.getElementById('statusCloseBtn');
+    document.getElementById('statusTitle').innerText = title;
+    document.getElementById('statusMsg').innerText = msg;
+
+    if (type === "loading") {
+      icon.innerHTML = `<span class="material-symbols-outlined !text-[40px] text-gold animate-spin">progress_activity</span>`;
+      closeBtn.classList.add('hidden');
+    } else if (type === "success") {
+      icon.innerHTML = `<span class="material-symbols-outlined !text-[40px] text-forest">check_circle</span>`;
+      closeBtn.classList.remove('hidden');
+    } else {
+      icon.innerHTML = `<span class="material-symbols-outlined !text-[40px] text-red-500">error</span>`;
+      closeBtn.classList.remove('hidden');
+    }
+    modal.classList.add('active');
+  }
+
+  function closeStatus() {
+    document.getElementById('statusModal').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
