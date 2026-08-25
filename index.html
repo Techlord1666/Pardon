@@ -1,1 +1,1123 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    
+    <!-- SEO & Keywords -->
+    <title>Pardon By Grace International Church | Winning the Lost at All Cost</title>
+    <meta name="description" content="Pardon by Grace International Church, founded by Pastor Franklin Oji. A dynamic ministry in Lagos, Nigeria, dedicated to winning souls, salvation, and spiritual growth." />
+    <meta name="keywords" content="Pardon by Grace International Church, Pastor Franklin Oji, Church in Obawole, Church in Lagos, Salvation, Deliverance, Winning the Lost" />
+    
+    <!-- Link Preview (Open Graph) -->
+    <meta property="og:title" content="Pardon By Grace International Church" />
+    <meta property="og:description" content="Winning the lost at all cost. Join us for a life-changing encounter with Jesus Christ." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1000" />
+    <meta property="og:type" content="website" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32.png?text=PBG">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Animation Libraries -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+                "primary": "#061b0e",
+                "secondary": "#715a3e",
+                "accent": "#d4af37",
+            },
+            fontFamily: {
+                "body": ["Manrope", "sans-serif"],
+                "display": ["Noto Serif", "serif"]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .modal { transition: opacity 0.3s ease-in-out; visibility: hidden; opacity: 0; }
+        .modal.active { visibility: visible; opacity: 1; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .animate-fade-up { animation: fadeUp 1s ease-out forwards; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== NEW ANIMATIONS ========== */
+        
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        
+        /* Shimmer effect for accent elements */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #d4af37 0%, #fff 50%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        /* Pulse glow for buttons */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0.2); }
+        }
+        .btn-glow { animation: pulseGlow 2s ease-in-out infinite; }
+        
+        /* Scale on hover for images */
+        .img-zoom { overflow: hidden; }
+        .img-zoom img { transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .img-zoom:hover img { transform: scale(1.08); }
+        
+        /* Card lift effect */
+        .card-lift {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .card-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Stagger children animation */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .stagger-children.animate > * {
+            animation: staggerIn 0.6s ease-out forwards;
+        }
+        .stagger-children.animate > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-children.animate > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-children.animate > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-children.animate > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-children.animate > *:nth-child(5) { animation-delay: 0.5s; }
+        .stagger-children.animate > *:nth-child(6) { animation-delay: 0.6s; }
+        
+        @keyframes staggerIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Typing effect for hero subtitle */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        
+        /* Gradient border animation */
+        @keyframes rotateBorder {
+            0% { --angle: 0deg; }
+            100% { --angle: 360deg; }
+        }
+        
+        /* Parallax background */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        /* Magnetic button effect */
+        .magnetic-btn {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        /* Counter animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Reveal line animation */
+        .reveal-line {
+            position: relative;
+            overflow: hidden;
+        }
+        .reveal-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #d4af37;
+            transform: translateX(-100%);
+            transition: transform 0.6s ease-out;
+        }
+        .reveal-line:hover::after {
+            transform: translateX(0);
+        }
+        
+        /* Bounce in animation */
+        @keyframes bounceInCustom {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .bounce-in { animation: bounceInCustom 0.8s ease-out forwards; }
+        
+        /* Slide in from sides */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* Rotate in */
+        @keyframes rotateIn {
+            from { opacity: 0; transform: rotate(-180deg) scale(0); }
+            to { opacity: 1; transform: rotate(0) scale(1); }
+        }
+        
+        /* Wave text animation */
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .wave-text span {
+            display: inline-block;
+            animation: wave 1s ease-in-out infinite;
+        }
+        .wave-text span:nth-child(1) { animation-delay: 0s; }
+        .wave-text span:nth-child(2) { animation-delay: 0.1s; }
+        .wave-text span:nth-child(3) { animation-delay: 0.2s; }
+        .wave-text span:nth-child(4) { animation-delay: 0.3s; }
+        .wave-text span:nth-child(5) { animation-delay: 0.4s; }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #d4af37 0%, #f0e68c 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Smooth image reveal */
+        .img-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+        .img-reveal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.7s ease;
+            z-index: 1;
+        }
+        .img-reveal:hover::before {
+            left: 100%;
+        }
+        
+        /* Icon spin on hover */
+        .icon-spin { transition: transform 0.5s ease; }
+        .icon-spin:hover { transform: rotate(360deg) scale(1.2); }
+        
+        /* Underline expand */
+        .underline-expand {
+            position: relative;
+        }
+        .underline-expand::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .underline-expand:hover::after {
+            width: 100%;
+        }
+        
+        /* Modal zoom in */
+        @keyframes modalZoomIn {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-content-anim {
+            animation: modalZoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        /* Scroll indicator */
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(10px); opacity: 0.5; }
+        }
+        .scroll-indicator {
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+        
+        /* Background ken burns */
+        @keyframes kenBurns {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-1%, -1%); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+        .ken-burns { animation: kenBurns 20s ease-in-out infinite; }
+        
+        /* Glow text */
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.5); }
+        }
+        .text-glow { animation: textGlow 3s ease-in-out infinite; }
+        
+        /* Particle background effect */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            animation: particleFloat 15s infinite;
+        }
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Service card hover */
+        .service-card {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .service-card:hover::before {
+            left: 100%;
+        }
+        .service-card:hover {
+            transform: translateX(10px);
+            box-shadow: -5px 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Social icon bounce */
+        .social-bounce {
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .social-bounce:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        /* Footer link slide */
+        .footer-link {
+            position: relative;
+            padding-left: 0;
+            transition: all 0.3s ease;
+        }
+        .footer-link::before {
+            content: '→';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: #d4af37;
+        }
+        .footer-link:hover {
+            padding-left: 20px;
+            color: #d4af37;
+        }
+        .footer-link:hover::before {
+            left: 0;
+            opacity: 1;
+        }
+        
+        /* Mobile menu slide animation */
+        .mobile-menu-item {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.4s ease;
+        }
+        .mobile-menu-open .mobile-menu-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .mobile-menu-open .mobile-menu-item:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(6) { transition-delay: 0.35s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(7) { transition-delay: 0.4s; }
+        .mobile-menu-open .mobile-menu-item:nth-child(8) { transition-delay: 0.45s; }
+        
+        /* Navbar scroll effect */
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(20px) !important;
+        }
+        
+        /* Loading skeleton shimmer for images */
+        .img-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s infinite;
+        }
+        @keyframes skeletonShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Quote mark animation */
+        @keyframes quoteFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        .quote-float { animation: quoteFloat 4s ease-in-out infinite; }
+        
+        /* Number counter styling */
+        .counter-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Smooth section transitions */
+        section {
+            position: relative;
+        }
+        
+        /* Decorative shape animations */
+        @keyframes shapeRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .shape-rotate { animation: shapeRotate 30s linear infinite; }
+        
+        /* Text reveal mask */
+        .text-reveal {
+            overflow: hidden;
+        }
+        .text-reveal span {
+            display: inline-block;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .text-reveal.revealed span {
+            transform: translateY(0);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fafaf4; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b8960c; }
+    </style>
+</head>
+<body class="bg-[#fafaf4] text-gray-900 font-body overflow-x-hidden">
+
+<!-- Navigation -->
+<nav id="mainNav" class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+        
+        <!-- Logo Image -->
+        <a href="index.html" class="flex items-center group" data-aos="fade-right" data-aos-duration="800">
+            <img src="logo.png" alt="PARDON BY GRACE INTERNATIONAL CHURCH" class="h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/200x60?text=PBG+CHURCH'">
+        </a>
+        
+        <!-- Desktop Menu (Hidden on Mobile) -->
+        <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest">
+            <a href="index.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="100">Home</a>
+            <a href="about.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="200">About</a>
+             <a href="pomag.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="200">POMAG</a>
+            <a href="media.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="300">Library</a>
+            <a href="store.html" class="text-primary hover:text-accent transition underline-expand" data-aos="fade-down" data-aos-delay="300">Pardon Books</a>
+            <button onclick="toggleModal('givingModal')" class="text-primary hover:text-accent transition uppercase underline-expand" data-aos="fade-down" data-aos-delay="400">Giving</button>
+            <button onclick="toggleModal('connectModal')" class="text-primary hover:text-accent transition uppercase underline-expand" data-aos="fade-down" data-aos-delay="500">Connect</button>
+        </div>
+
+        <!-- Mobile Menu Toggle (Visible only on Mobile) -->
+        <button class="lg:hidden text-primary hover:text-accent transition-transform duration-300 hover:rotate-90" onclick="toggleMobileMenu(true)" data-aos="fade-left">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobileMenu" class="fixed inset-0 z-[60] bg-white translate-x-full transition-transform duration-500 lg:hidden">
+    <div class="p-6">
+        <button class="float-right hover:rotate-90 transition-transform duration-300" onclick="toggleMobileMenu()"><span class="material-symbols-outlined text-4xl">close</span></button>
+        <div class="mt-20 flex flex-col space-y-8 text-center text-2xl font-display" id="mobileMenuItems">
+            <a href="index.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Home</a>
+            <a href="about.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">About</a>
+            <a href="pomag.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">POMAG</a>
+            <a href="media.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Library</a>
+            <a href="store.html" onclick="toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Pardon Books</a>
+            <button onclick="toggleModal('givingModal'); toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Giving</button>
+            <button onclick="toggleModal('connectModal'); toggleMobileMenu()" class="mobile-menu-item hover:text-accent transition">Connect With Us</button>
+            <button onclick="toggleModal('joinModal'); toggleMobileMenu()" class="mobile-menu-item bg-primary text-white py-4 rounded-xl hover:bg-secondary transition transform hover:scale-105">Join Us Live</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<header class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover ken-burns" style="animation-duration: 20s" src="IMG_1116.jpeg" alt="Church Background"/>
+        <div class="absolute inset-0 bg-black/50"></div>
+        <!-- Particles overlay -->
+        <div class="particles" id="heroParticles"></div>
+    </div>
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+        <span class="text-accent tracking-[0.4em] font-bold text-sm block mb-4 shimmer-text animate-float" data-aos="fade-down" data-aos-duration="500">ESTABLISHED BY PASTOR FRANKLIN OJI</span>
+        <h1 class="font-display text-4xl md:text-7xl text-white mb-6 text-glow" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">WINNING THE LOST AT ALL COST</h1>
+        <p class="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto" data-aos="fade-up" data-aos-duration="500" data-aos-delay="200">Discover salvation, deliverance, and spiritual growth in an unshakable community of faith.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-duration="500" data-aos-delay="300">
+            <button onclick="toggleModal('joinModal')" class="w-full sm:w-auto bg-accent text-primary font-bold px-10 py-4 rounded-full shadow-lg hover:bg-white hover:scale-105 transition-all duration-300 btn-glow magnetic-btn">
+                JOIN US THIS SUNDAY
+            </button>
+            <button onclick="toggleModal('missionModal')" class="w-full sm:w-auto border-2 border-white text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary hover:scale-105 transition-all duration-300 magnetic-btn">
+                OUR MISSION
+            </button>
+        </div>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator" data-aos="fade-up" data-aos-delay="400">
+            <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
+                <div class="w-1.5 h-3 bg-accent rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Welcome Section -->
+<section class="py-20 bg-white px-6 relative overflow-hidden">
+    <!-- Decorative shapes -->
+    <div class="absolute top-10 right-10 w-32 h-32 border border-accent/20 rounded-full shape-rotate opacity-30"></div>
+    <div class="absolute bottom-10 left-10 w-20 h-20 border border-primary/10 rounded-full shape-rotate opacity-30" style="animation-direction: reverse;"></div>
+    
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+        <h2 class="font-display text-3xl md:text-5xl text-primary mb-6" data-aos="fade-up" data-aos-duration="800">Welcome to Pardon By Grace</h2>
+        <div class="w-20 h-1 bg-accent mx-auto mb-8" data-aos="scale-x" data-aos-duration="600" data-aos-delay="200"></div>
+        <p class="text-lg text-gray-600 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+            Welcome to a place where God's grace transforms lives. Whether you are seeking answers, looking for a spiritual home, or needing a miracle, we invite you to experience the dynamic power of the Holy Spirit with us.
+        </p>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="py-20 bg-[#eeeee8] px-6 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div data-aos="fade-right" data-aos-duration="1000">
+            <div class="img-zoom img-reveal rounded-2xl shadow-2xl">
+                <img class="w-full rounded-2xl" src="IMG_1116.jpeg" alt="Church Community"/>
+            </div>
+        </div>
+        <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+            <span class="text-secondary font-bold tracking-widest uppercase text-sm">About our Ministry</span>
+            <h2 class="font-display text-4xl text-primary mt-2 mb-6">Founded on Truth & Power</h2>
+            <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                Pardon by Grace International Church is a dynamic and spirit-filled ministry founded on the unshakable truth of God's word. We serve as a beacon of hope, drawing people into a life-changing relationship with Jesus Christ.
+            </p>
+            <a href="about.html" class="inline-block border-b-2 border-primary pb-1 font-bold text-primary hover:text-secondary hover:border-secondary transition group">
+                READ MORE <span class="inline-block transition-transform group-hover:translate-x-2">→</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Founder Section -->
+<section class="py-24 px-6 bg-white relative overflow-hidden">
+    <!-- Background decorative element -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+        <div class="w-full md:w-1/2" data-aos="fade-right" data-aos-duration="1000">
+            <div class="img-zoom img-reveal">
+                <img class="w-full rounded-[3rem] shadow-2xl" src="Daddy.png" alt="Pastor Franklin Oji"/>
+            </div>
+        </div>
+        <div class="w-full md:w-1/2" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+            <h2 class="font-display text-4xl text-primary mb-4">Meet Our Founder</h2>
+            <h3 class="text-accent font-bold text-xl mb-6 shimmer-text">Pastor Franklin Oji</h3>
+            <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                Established by Pastor Franklin Oji, the church is committed to its divine mandate: winning lost souls at all cost for God. Under his leadership, the ministry focuses on deep spiritual growth and the manifestation of God's power in modern lives.
+            </p>
+            <p class="italic text-gray-500 quote-float">"Our focus remains salvation, deliverance, and the radical love of Christ."</p>
+        </div>
+    </div>
+</section>
+
+<!-- Core Values Section -->
+<section class="py-24 bg-primary text-white px-6 relative overflow-hidden">
+    <!-- Animated background pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-10 left-10 w-40 h-40 border border-white rounded-full shape-rotate"></div>
+        <div class="absolute top-40 right-20 w-60 h-60 border border-white rounded-full shape-rotate" style="animation-direction: reverse; animation-duration: 25s;"></div>
+        <div class="absolute bottom-20 left-1/3 w-32 h-32 border border-white rounded-full shape-rotate" style="animation-duration: 35s;"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
+            <h2 class="font-display text-4xl mb-4">Our Core Values</h2>
+            <p class="text-accent tracking-widest uppercase">The Pillars of our Faith</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8" id="coreValuesGrid">
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition card-lift cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-4 icon-spin">
+                    <span class="material-symbols-outlined text-accent text-2xl">favorite</span>
+                </div>
+                <h4 class="text-accent font-bold text-xl mb-3">Grace & Forgiveness</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">We believe in the transformative power of God's grace to restore anyone.</p>
+                <p class="text-xs italic text-gray-400">"For by grace you have been saved through faith..." - Ephesians 2:8</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition card-lift cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-4 icon-spin">
+                    <span class="material-symbols-outlined text-accent text-2xl">campaign</span>
+                </div>
+                <h4 class="text-accent font-bold text-xl mb-3">Evangelism</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Spreading the gospel is our priority. We are soul hunters for the kingdom.</p>
+                <p class="text-xs italic text-gray-400">"Go into all the world and preach the gospel..." - Mark 16:15</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition card-lift cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-4 icon-spin">
+                    <span class="material-symbols-outlined text-accent text-2xl">prayer_times</span>
+                </div>
+                <h4 class="text-accent font-bold text-xl mb-3">Prayer</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">We stand in the gap for souls and nations through persistent intercession.</p>
+                <p class="text-xs italic text-gray-400">"Pray without ceasing." - 1 Thess 5:17</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition card-lift cursor-pointer" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-4 icon-spin">
+                    <span class="material-symbols-outlined text-accent text-2xl">school</span>
+                </div>
+                <h4 class="text-accent font-bold text-xl mb-3">Discipleship</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Equipping believers to become strong, mature ambassadors of Christ.</p>
+                <p class="text-xs italic text-gray-400">"Go and make disciples of all nations..." - Matthew 28:19</p>
+            </div>
+            <div class="bg-white/5 p-8 rounded-2xl hover:bg-white/10 transition card-lift cursor-pointer" data-aos="fade-up" data-aos-delay="500">
+                <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mb-4 icon-spin">
+                    <span class="material-symbols-outlined text-accent text-2xl">diversity_3</span>
+                </div>
+                <h4 class="text-accent font-bold text-xl mb-3">Love & Community</h4>
+                <p class="text-gray-300 mb-4 text-sm leading-relaxed">Serving humanity with compassion and godly love.</p>
+                <p class="text-xs italic text-gray-400">"Love your neighbor as yourself." - Matthew 22:39</p>
+            </div>
+            <div class="bg-accent/20 p-8 rounded-2xl border border-accent/30 flex items-center justify-center text-center card-lift" data-aos="zoom-in" data-aos-delay="600">
+                <p class="font-display text-xl italic shimmer-text">"At All Cost..."</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="py-24 bg-white px-6">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="font-display text-3xl mb-12 text-center" data-aos="fade-up">Life in the Church</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="img-zoom img-reveal rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <img class="w-full h-64 object-cover" src="Church2.png" alt="Church 1">
+            </div>
+            <div class="img-zoom img-reveal rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <img class="w-full h-64 object-cover" src="Church1.png" alt="Church 2">
+            </div>
+            <div class="img-zoom img-reveal rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                <img class="w-full h-64 object-cover" src="Church3.png" alt="Church 3">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Times Section -->
+<section id="service-times" class="py-24 bg-[#eeeee8] px-6 relative">
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-gray-100" data-aos="fade-up" data-aos-duration="1000">
+        <div class="text-center mb-12">
+            <span class="material-symbols-outlined text-accent text-5xl mb-4 icon-spin" data-aos="rotate-in">schedule</span>
+            <h2 class="font-display text-4xl text-primary" data-aos="fade-up" data-aos-delay="100">Service Times</h2>
+        </div>
+        <div class="space-y-8 divide-y divide-gray-100">
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 service-card p-4 rounded-xl" data-aos="fade-right" data-aos-delay="200">
+                <div>
+                    <h3 class="font-bold text-xl">Sunday Service</h3>
+                    <p class="text-gray-600">Join us for worship and word</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-primary">1st Service: 7:00am - 9:30am</p>
+                    <p class="font-bold text-primary">2nd Service: 9:30am - 12noon</p>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 service-card p-4 rounded-xl" data-aos="fade-right" data-aos-delay="300">
+                <div>
+                    <h3 class="font-bold text-xl">Every Friday</h3>
+                    <p class="text-gray-600">Destiny Recovery Encounter</p>
+                </div>
+                <p class="font-bold text-primary">6:00pm - 8:30pm</p>
+            </div>
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 service-card p-4 rounded-xl" data-aos="fade-right" data-aos-delay="400">
+                <div>
+                    <h3 class="font-bold text-xl">Every Last Sunday</h3>
+                    <p class="text-gray-600 font-bold text-accent">Deliverance Service</p>
+                </div>
+                <p class="font-bold text-primary">7:00am - 11:30am</p>
+            </div>
+        </div>
+        <div class="mt-16 text-center" data-aos="zoom-in" data-aos-delay="500">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" class="bg-primary text-white px-12 py-4 rounded-full font-bold hover:bg-secondary transition inline-block hover:scale-105 transform duration-300 btn-glow">
+                JOIN LIVE ON FACEBOOK
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Us Section -->
+<section class="py-24 bg-white px-6 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-72 h-72 bg-accent/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-4xl mx-auto text-center relative z-10" data-aos="fade-up" data-aos-duration="800">
+        <span class="material-symbols-outlined text-accent text-5xl mb-4 icon-spin">connect_without_contact</span>
+        <h2 class="font-display text-3xl md:text-5xl text-primary mb-6">Let's Connect</h2>
+        <p class="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl mx-auto">
+            Reach out on social media, send us a message, or find everything you need to get in touch — all in one place.
+        </p>
+        <button onclick="toggleModal('connectModal')" class="bg-accent text-primary font-bold px-12 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white hover:scale-105 transition-all duration-300 btn-glow magnetic-btn">
+            CONTACT US
+        </button>
+
+        <!-- Quick social row -->
+        <div class="flex items-center justify-center gap-4 mt-10" data-aos="fade-up" data-aos-delay="200">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="Facebook">
+                <span class="material-symbols-outlined">facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@PardonByGrace" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="YouTube">
+                <span class="material-symbols-outlined">play_circle</span>
+            </a>
+            <a href="https://www.instagram.com/pardonbygrace#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="Instagram">
+                <span class="material-symbols-outlined">photo_camera</span>
+            </a>
+            <a href="https://wa.me/2347012266550" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center hover:bg-accent hover:text-white transition social-bounce" aria-label="WhatsApp">
+                <span class="material-symbols-outlined">chat</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-primary text-white pt-24 pb-12 px-6 relative overflow-hidden">
+    <!-- Decorative background -->
+    <div class="absolute top-0 left-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full -translate-x-1/2 -translate-y-1/2 shape-rotate"></div>
+    
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 border-b border-white/10 pb-16 relative z-10">
+        <div class="col-span-1 md:col-span-2" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="font-display text-2xl mb-6 uppercase tracking-wider">Pardon By Grace International Church</h2>
+            <p class="text-gray-400 max-w-md leading-relaxed mb-8">
+                Winning lost souls at all cost for God. A beacon of hope, salvation, and spiritual growth in Lagos, Nigeria.
+            </p>
+            <div class="flex gap-4">
+                <a href="https://www.facebook.com/profile.php?id=61550063067274" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition social-bounce">
+                    <span class="material-symbols-outlined">facebook</span>
+                </a>
+                <a href="https://www.youtube.com/@PardonByGrace" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition social-bounce">
+                    <span class="material-symbols-outlined">play_circle</span>
+                </a>
+                <a href="https://www.instagram.com/pardonbygrace#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-accent transition social-bounce">
+                    <span class="material-symbols-outlined">photo_camera</span>
+                </a>
+            </div>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="200">
+            <h4 class="font-bold mb-6 text-accent">Contact</h4>
+            <p class="text-gray-400 text-sm mb-2 hover:text-white transition">pardonbygrace@gmail.com</p>
+            <p class="text-gray-400 text-sm hover:text-white transition">2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria.</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="300">
+            <h4 class="font-bold mb-6 text-accent">Quick Links</h4>
+            <ul class="text-gray-400 text-sm space-y-4">
+                <li><a href="#" class="footer-link hover:text-white transition">Home</a></li>
+                <li><a href="#about" class="footer-link hover:text-white transition">About Us</a></li>
+                <li><button onclick="toggleModal('givingModal')" class="footer-link hover:text-white transition">Giving</button></li>
+                <li><a href="#service-times" class="footer-link hover:text-white transition">Services</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto pt-12 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-widest gap-4 relative z-10">
+        <p data-aos="fade-up">© 2025 Pardon By Grace International Church. All Rights Reserved.</p>
+        <div class="flex gap-6" data-aos="fade-up" data-aos-delay="100">
+            <a href="#" class="hover:text-accent transition underline-expand">Privacy Policy</a>
+            <a href="#" class="hover:text-accent transition underline-expand">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+<!-- MODALS -->
+
+<!-- Modal: Join Us This Sunday -->
+<div id="joinModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('joinModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden modal-content-anim">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black hover:rotate-90 transition duration-300" onclick="toggleModal('joinModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-display text-2xl text-primary mb-6">Join Us This Sunday</h3>
+        <div class="space-y-4 text-gray-700">
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">location_on</span>
+                <p>2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria. <br><span class="font-bold">ZIP 100111</span></p>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">mail</span>
+                <p>pardonbygrace@gmail.com</p>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">live_tv</span>
+                <div>
+                    <p class="font-bold">Join us Live:</p>
+                    <div class="flex flex-col gap-2 mt-2">
+                        <a href="https://www.facebook.com/profile.php?id=61550063067274" class="text-blue-600 hover:underline hover:translate-x-2 transition-transform inline-block">Facebook Live</a>
+                        <a href="https://www.youtube.com/@PardonByGrace?" class="text-red-600 hover:underline hover:translate-x-2 transition-transform inline-block">YouTube Channel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Mission -->
+<div id="missionModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('missionModal')"></div>
+    <div class="relative bg-white max-w-2xl w-full rounded-3xl p-10 modal-content-anim">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black hover:rotate-90 transition duration-300" onclick="toggleModal('missionModal')"><span class="material-symbols-outlined">close</span></button>
+        <span class="text-accent font-bold tracking-widest text-sm uppercase">Our Mandate</span>
+        <h3 class="font-display text-3xl text-primary mt-2 mb-6 uppercase">Winning the Lost at All Cost</h3>
+        <p class="text-gray-700 leading-relaxed">
+            Pardon by Grace International Church is a dynamic and spirit-filled ministry founded on the unshakable truth of God's word. Established by Pastor Franklin Oji, the church is committed to its divine mandate: winning lost souls at all cost for God. With an unwavering focus on salvation, deliverance, and spiritual growth, Pardon by Grace International Church serves as a beacon of hope, drawing people into a life-changing relationship with Jesus Christ.
+        </p>
+    </div>
+</div>
+
+<!-- Modal: Giving -->
+<div id="givingModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('givingModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden modal-content-anim">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black hover:rotate-90 transition duration-300" onclick="toggleModal('givingModal')"><span class="material-symbols-outlined">close</span></button>
+        <h3 class="font-display text-2xl text-primary mb-6">Offering & Tithes</h3>
+        
+        <div class="bg-gray-50 p-6 rounded-2xl mb-6 card-lift hover:shadow-lg transition">
+            <p class="text-xs text-gray-500 uppercase font-bold mb-2">Local Bank Transfer (Nigeria)</p>
+            <p class="font-bold text-lg text-primary">Fidelity Bank</p>
+            <p class="text-2xl font-display text-secondary tracking-widest my-2 shimmer-text">4110072789</p>
+            <p class="text-sm font-bold">PARDON BY GRACE INTERNATIONAL CHURCH</p>
+        </div>
+
+        <div class="bg-primary text-white p-6 rounded-2xl card-lift hover:shadow-lg transition">
+            <p class="text-sm mb-4">Are you joining us from outside Nigeria?</p>
+            <a href="https://wa.me/2347012266550" target="_blank" class="flex items-center justify-center gap-3 bg-green-600 py-3 rounded-xl font-bold hover:bg-green-700 transition hover:scale-105 transform">
+                <span class="material-symbols-outlined">chat</span>
+                CONTACT ON WHATSAPP
+            </a>
+            <p class="text-[10px] mt-2 text-center text-white/60">Call/Chat +234 701 226 6550 for international details</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Connect / Contact Us -->
+<div id="connectModal" class="modal fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('connectModal')"></div>
+    <div class="relative bg-white max-w-lg w-full rounded-3xl p-8 overflow-hidden modal-content-anim max-h-[85vh] overflow-y-auto">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-black hover:rotate-90 transition duration-300" onclick="toggleModal('connectModal')"><span class="material-symbols-outlined">close</span></button>
+        <span class="text-accent font-bold tracking-widest text-sm uppercase">Get In Touch</span>
+        <h3 class="font-display text-2xl text-primary mt-2 mb-6">Connect With Us</h3>
+
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <a href="https://www.facebook.com/profile.php?id=61550063067274" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-blue-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-blue-600 group-hover:scale-110 transition-transform">facebook</span>
+                <span class="font-bold text-sm">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@PardonByGrace" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-red-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-red-600 group-hover:scale-110 transition-transform">play_circle</span>
+                <span class="font-bold text-sm">YouTube</span>
+            </a>
+            <a href="https://www.instagram.com/pardonbygrace#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-pink-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-pink-600 group-hover:scale-110 transition-transform">photo_camera</span>
+                <span class="font-bold text-sm">Instagram</span>
+            </a>
+            <a href="https://wa.me/2347012266550" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 bg-gray-50 hover:bg-green-50 p-4 rounded-2xl card-lift transition group">
+                <span class="material-symbols-outlined text-green-600 group-hover:scale-110 transition-transform">chat</span>
+                <span class="font-bold text-sm">WhatsApp</span>
+            </a>
+        </div>
+
+        <div class="space-y-4 text-gray-700 border-t border-gray-100 pt-6">
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">mail</span>
+                <a href="mailto:pardonbygrace@gmail.com" class="hover:text-accent transition">pardonbygrace@gmail.com</a>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">call</span>
+                <a href="tel:+2347012266550" class="hover:text-accent transition">+234 701 226 6550</a>
+            </div>
+            <div class="flex gap-3 items-start hover:translate-x-2 transition-transform duration-300">
+                <span class="material-symbols-outlined text-accent icon-spin">location_on</span>
+                <p>2, Lijoka Street, Behind NRC, Fardock Estate, Obawole, Lagos, Nigeria. <br><span class="font-bold">ZIP 100111</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+        duration: 600,
+        once: true,
+        offset: 100,
+        easing: 'ease-out-cubic'
+    });
+    
+    // Create floating particles for hero section
+    function createParticles() {
+        const container = document.getElementById('heroParticles');
+        if (!container) return;
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.width = (Math.random() * 4 + 2) + 'px';
+            particle.style.height = particle.style.width;
+            container.appendChild(particle);
+        }
+    }
+    createParticles();
+    
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+            nav.classList.add('nav-scrolled');
+        } else {
+            nav.classList.remove('nav-scrolled');
+        }
+    });
+    
+    // Magnetic button effect
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.05)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+    
+    // Modal functions
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.toggle('active');
+        if (modal.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+            // Add animation class to modal content
+            const content = modal.querySelector('.modal-content-anim');
+            if (content) {
+                content.style.animation = 'none';
+                content.offsetHeight; // Trigger reflow
+                content.style.animation = 'modalZoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+            }
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+    
+    // Mobile menu with stagger animation
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const items = document.getElementById('mobileMenuItems');
+        if (menu.classList.contains('translate-x-full')) {
+            menu.classList.remove('translate-x-full');
+            setTimeout(() => {
+                items.classList.add('mobile-menu-open');
+            }, 300);
+        } else {
+            items.classList.remove('mobile-menu-open');
+            setTimeout(() => {
+                menu.classList.add('translate-x-full');
+            }, 100);
+        }
+    }
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+    
+    // Intersection Observer for additional animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add stagger animation to core values grid
+                if (entry.target.id === 'coreValuesGrid') {
+                    entry.target.classList.add('animate');
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    const coreValuesGrid = document.getElementById('coreValuesGrid');
+    if (coreValuesGrid) observer.observe(coreValuesGrid);
+    
+    // Parallax effect for images
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        document.querySelectorAll('.parallax-bg').forEach(el => {
+            const speed = 0.5;
+            el.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    });
+    
+    // Text scramble effect for hero title on load
+    function scrambleText(element, finalText, duration = 2000) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let iteration = 0;
+        const interval = setInterval(() => {
+            element.innerText = finalText.split('').map((char, index) => {
+                if (index < iteration) return finalText[index];
+                if (char === ' ') return ' ';
+                return chars[Math.floor(Math.random() * 26)];
+            }).join('');
+            if (iteration >= finalText.length) clearInterval(interval);
+            iteration += 1 / 2;
+        }, duration / finalText.length);
+    }
+    
+    // Apply scramble effect to hero title after a short delay
+    setTimeout(() => {
+        const heroTitle = document.querySelector('header h1');
+        if (heroTitle) {
+            const originalText = heroTitle.innerText;
+            scrambleText(heroTitle, originalText, 700);
+        }
+    }, 150);
+    
+    // Add ripple effect to buttons
+    document.querySelectorAll('button, a').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(212, 175, 55, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: rippleEffect 0.6s ease-out;
+                pointer-events: none;
+            `;
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+    
+    // Add ripple keyframes dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes rippleEffect {
+            to { transform: scale(2); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Easter egg: Konami code triggers confetti-like effect
+    let konamiCode = [];
+    const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    document.addEventListener('keydown', (e) => {
+        konamiCode.push(e.key);
+        konamiCode = konamiCode.slice(-10);
+        if (konamiCode.join(',') === konamiSequence.join(',')) {
+            // Trigger celebration
+            document.body.style.animation = 'none';
+            document.body.offsetHeight;
+            document.body.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
+        }
+    });
+    
+    // Add shake animation
+    const shakeStyle = document.createElement('style');
+    shakeStyle.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    `;
+    document.head.appendChild(shakeStyle);
+</script>
+
+</body>
+</html>
 
