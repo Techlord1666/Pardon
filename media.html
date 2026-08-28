@@ -280,7 +280,22 @@
       // 1. Get file size/name first, so we can show it before downloading.
       btn.innerHTML = `<span class="material-symbols-outlined !text-[16px] animate-pulse">hourglass_top</span>Checking size…`;
       const metaRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=name,size,mimeType&key=${DRIVE_API_KEY}`);
-      if (!metaRes.ok) throw new Error('Could not read file details from Google Drive.');
+      if (!metaRes.ok) {
+        const errBody = await metaRes.json().catch(() => null);
+        const reason = errBody?.error?.errors?.[0]?.reason || errBody?.error?.status || metaRes.status;
+        const msg = errBody?.error?.message || 'Unknown error';
+        console.error('Drive metadata error:', reason, msg, errBody);
+        if (reason === 'notFound' || metaRes.status === 404) {
+          throw new Error("File not found — check the sharing link is correct.");
+        }
+        if (metaRes.status === 403 && /referer|referrer/i.test(msg)) {
+          throw new Error("This site's domain isn't allowed on the API key yet.");
+        }
+        if (metaRes.status === 403) {
+          throw new Error("Not shared publicly — set it to 'Anyone with the link' in Drive.");
+        }
+        throw new Error(msg);
+      }
       const meta = await metaRes.json();
       const totalBytes = Number(meta.size || 0);
       const displayName = meta.name || fileName;
@@ -292,7 +307,11 @@
       const barFill = progressRow.querySelector('div > div');
 
       const mediaRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${DRIVE_API_KEY}`);
-      if (!mediaRes.ok || !mediaRes.body) throw new Error('Could not download this file from Google Drive.');
+      if (!mediaRes.ok || !mediaRes.body) {
+        const errBody = await mediaRes.json().catch(() => null);
+        console.error('Drive media error:', mediaRes.status, errBody);
+        throw new Error(errBody?.error?.message || 'Could not download this file from Google Drive.');
+      }
 
       const reader = mediaRes.body.getReader();
       const chunks = [];
@@ -327,9 +346,9 @@
       setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; progressRow.classList.add('hidden'); }, 2000);
     } catch (err) {
       console.error(err);
-      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">error</span>Failed — tap to retry`;
+      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">error</span>${err.message || 'Failed — tap to retry'}`;
       btn.disabled = false;
-      setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+      setTimeout(() => { btn.innerHTML = originalHTML; }, 5000);
     }
   }
 </script>
