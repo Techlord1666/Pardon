@@ -143,6 +143,13 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // ⚠️ Replace with your Google Drive API key (see setup steps: enable the
+  // Drive API in Google Cloud Console, create an API key, and restrict it
+  // to this site's domain under "HTTP referrers"). This key only allows
+  // reading files already shared as "Anyone with the link" — it cannot
+  // access anything private.
+  const DRIVE_API_KEY = "REPLACE_WITH_YOUR_GOOGLE_DRIVE_API_KEY";
+
   let allSermons = [];
 
   window.onload = loadSermons;
@@ -215,8 +222,6 @@
     const finalThumbnail = convertToDirectLink(s.image_url);
     const videoId = extractGoogleId(s.video_link);
     const audioId = extractGoogleId(s.audio_link);
-    const videoDownloadUrl = videoId ? `https://drive.google.com/uc?export=download&id=${videoId}` : '';
-    const audioDownloadUrl = audioId ? `https://drive.google.com/uc?export=download&id=${audioId}` : '';
 
     div.innerHTML = `
       <a href="${s.video_link || '#'}" target="_blank" rel="noopener noreferrer"
@@ -231,25 +236,101 @@
         <h3 class="font-serif text-base text-ink truncate">${s.title || 'Untitled Sermon'}</h3>
         <p class="text-ink-soft text-sm truncate mb-3">${s.speaker || ''}</p>
         <div class="flex items-center gap-2 flex-wrap">
-          ${videoDownloadUrl ? `<button data-url="${videoDownloadUrl}" onclick="downloadDirect(this)" class="flex items-center gap-1 bg-forest text-white px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-forest/90 transition"><span class="material-symbols-outlined !text-[16px]">download</span>Video</button>` : ''}
-          ${audioDownloadUrl ? `<button data-url="${audioDownloadUrl}" onclick="downloadDirect(this)" class="flex items-center gap-1 bg-sand text-forest border border-line px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gold-soft transition"><span class="material-symbols-outlined !text-[16px]">download</span>Audio</button>` : ''}
-          ${!videoDownloadUrl && !audioDownloadUrl ? '<span class="text-ink-soft text-xs">No downloads available</span>' : ''}
+          ${videoId ? `<button data-id="${videoId}" data-name="${escapeAttr(s.title || 'sermon')}-video.mp4" onclick="downloadFromDrive(this)" class="flex items-center gap-1 bg-forest text-white px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-forest/90 transition"><span class="material-symbols-outlined !text-[16px]">download</span>Video</button>` : ''}
+          ${audioId ? `<button data-id="${audioId}" data-name="${escapeAttr(s.title || 'sermon')}-audio.mp3" onclick="downloadFromDrive(this)" class="flex items-center gap-1 bg-sand text-forest border border-line px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gold-soft transition"><span class="material-symbols-outlined !text-[16px]">download</span>Audio</button>` : ''}
+          ${!videoId && !audioId ? '<span class="text-ink-soft text-xs">No downloads available</span>' : ''}
         </div>
+        <div class="progress-row hidden mt-2"></div>
       </div>
     `;
     grid.appendChild(div);
   }
 
-  // Triggers the file download in place — the page never navigates away.
-  // Note: for very large files, Google Drive may show its own "can't scan
-  // for viruses" confirmation step, which is a limitation of Drive itself.
-  function downloadDirect(btn) {
-    const url = btn.getAttribute('data-url');
-    if (!url) return;
-    const original = btn.innerHTML;
-    btn.innerHTML = `<span class="material-symbols-outlined !text-[16px] animate-pulse">hourglass_top</span>Starting…`;
-    window.location.href = url;
-    setTimeout(() => { btn.innerHTML = original; }, 2500);
+  function escapeAttr(str) {
+    return (str || '').replace(/"/g, '&quot;');
+  }
+
+  function formatBytes(bytes) {
+    if (!bytes) return '';
+    const mb = bytes / (1024 * 1024);
+    if (mb < 1000) return `${mb.toFixed(mb < 10 ? 1 : 0)} MB`;
+    return `${(mb / 1024).toFixed(2)} GB`;
+  }
+
+  // Downloads a Drive file through the official Drive API instead of the
+  // drive.google.com/uc export link, so the "can't scan for viruses" page
+  // (which only exists on that web UI endpoint) never appears. Shows the
+  // file size up front, then a real progress bar while it downloads, then
+  // triggers a normal browser "Save As" download once it's fully fetched.
+  async function downloadFromDrive(btn) {
+    const fileId = btn.getAttribute('data-id');
+    const fileName = btn.getAttribute('data-name') || 'download';
+    if (!fileId) return;
+
+    if (DRIVE_API_KEY.includes('REPLACE_WITH')) {
+      alert("Downloads aren't fully set up yet — add your Google Drive API key in this page's code.");
+      return;
+    }
+
+    const originalHTML = btn.innerHTML;
+    const progressRow = btn.closest('.min-w-0').querySelector('.progress-row');
+    btn.disabled = true;
+
+    try {
+      // 1. Get file size/name first, so we can show it before downloading.
+      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px] animate-pulse">hourglass_top</span>Checking size…`;
+      const metaRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=name,size,mimeType&key=${DRIVE_API_KEY}`);
+      if (!metaRes.ok) throw new Error('Could not read file details from Google Drive.');
+      const meta = await metaRes.json();
+      const totalBytes = Number(meta.size || 0);
+      const displayName = meta.name || fileName;
+
+      // 2. Download with progress, reading the response in chunks.
+      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px] animate-pulse">downloading</span>${formatBytes(totalBytes) || 'Downloading'}`;
+      progressRow.classList.remove('hidden');
+      progressRow.innerHTML = `<div class="w-full h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-gold transition-all" style="width:0%"></div></div>`;
+      const barFill = progressRow.querySelector('div > div');
+
+      const mediaRes = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${DRIVE_API_KEY}`);
+      if (!mediaRes.ok || !mediaRes.body) throw new Error('Could not download this file from Google Drive.');
+
+      const reader = mediaRes.body.getReader();
+      const chunks = [];
+      let received = 0;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        if (totalBytes) {
+          const pct = Math.min(100, Math.round((received / totalBytes) * 100));
+          barFill.style.width = `${pct}%`;
+          btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">downloading</span>${pct}%`;
+        } else {
+          btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">downloading</span>${formatBytes(received)}`;
+        }
+      }
+
+      // 3. Assemble the file and trigger a real "Save As" download.
+      const blob = new Blob(chunks, { type: meta.mimeType || 'application/octet-stream' });
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = displayName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 4000);
+
+      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">check</span>Done`;
+      setTimeout(() => { btn.innerHTML = originalHTML; btn.disabled = false; progressRow.classList.add('hidden'); }, 2000);
+    } catch (err) {
+      console.error(err);
+      btn.innerHTML = `<span class="material-symbols-outlined !text-[16px]">error</span>Failed — tap to retry`;
+      btn.disabled = false;
+      setTimeout(() => { btn.innerHTML = originalHTML; }, 3000);
+    }
   }
 </script>
 
