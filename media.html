@@ -216,7 +216,7 @@
   function renderCard(s, index) {
     const grid = document.getElementById('sermonGrid');
     const div = document.createElement('div');
-    div.className = "card-enter bg-white border border-line rounded-2xl p-4 flex items-center gap-4 hover:border-gold-soft hover:shadow-[0_8px_28px_-14px_rgba(16,26,20,0.25)] transition";
+    div.className = "card-enter bg-white border border-line rounded-2xl p-4 flex items-start sm:items-center gap-4 hover:border-gold-soft hover:shadow-[0_8px_28px_-14px_rgba(16,26,20,0.25)] transition";
     div.style.animationDelay = `${Math.min(index * 60, 400)}ms`;
 
     const finalThumbnail = convertToDirectLink(s.image_url);
@@ -233,8 +233,8 @@
       </a>
 
       <div class="min-w-0 flex-1">
-        <h3 class="font-serif text-base text-ink truncate">${s.title || 'Untitled Sermon'}</h3>
-        <p class="text-ink-soft text-sm truncate mb-3">${s.speaker || ''}</p>
+        <h3 class="font-serif text-base text-ink leading-snug break-words sm:truncate">${s.title || 'Untitled Sermon'}</h3>
+        <p class="text-ink-soft text-sm break-words sm:truncate mb-3">${s.speaker || ''}</p>
         <div class="flex items-center gap-2 flex-wrap">
           ${videoId ? `<button data-id="${videoId}" data-name="${escapeAttr(s.title || 'sermon')}-video.mp4" onclick="downloadFromDrive(this)" class="flex items-center gap-1 bg-forest text-white px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-forest/90 transition"><span class="material-symbols-outlined !text-[16px]">download</span>Video</button>` : ''}
           ${audioId ? `<button data-id="${audioId}" data-name="${escapeAttr(s.title || 'sermon')}-audio.mp3" onclick="downloadFromDrive(this)" class="flex items-center gap-1 bg-sand text-forest border border-line px-3.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:border-gold-soft transition"><span class="material-symbols-outlined !text-[16px]">download</span>Audio</button>` : ''}
