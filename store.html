@@ -27,7 +27,7 @@
 
 <style>
   .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 20px; vertical-align: middle; }
-  .book-cover { aspect-ratio: 3/4; border-radius: 14px 4px 14px 4px; }
+  .book-cover { aspect-ratio: 3/4; border-radius: 12px 4px 12px 4px; }
   .card-enter { animation: riseIn .5s ease-out both; }
   @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
@@ -50,7 +50,7 @@
 
 <!-- Navigation -->
 <nav class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-line">
-  <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex justify-between items-center">
     <a href="index.html" class="flex items-center gap-3">
       <img src="logo1.png" alt="Pardon By Grace" class="h-9 w-auto" onerror="this.style.display='none'">
       <span class="font-serif font-semibold text-lg tracking-tight text-forest">Pardon By Grace</span>
@@ -63,9 +63,9 @@
 </nav>
 
 <!-- Hero -->
-<header class="pt-40 pb-16 px-6 max-w-6xl mx-auto text-center">
+<header class="pt-36 sm:pt-40 pb-12 sm:pb-16 px-6 max-w-6xl mx-auto text-center">
   <p class="text-gold text-[11px] font-bold tracking-[0.35em] uppercase mb-5">Books & Resources</p>
-  <h1 class="font-serif text-5xl md:text-6xl text-forest leading-[1.05] mb-5">
+  <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl text-forest leading-[1.05] mb-5">
     The <span class="italic font-medium">Book</span> Store
   </h1>
   <p class="text-ink-soft text-base max-w-md mx-auto">
@@ -73,14 +73,16 @@
   </p>
 </header>
 
-<div class="divider-mark mb-16"><span></span></div>
+<div class="divider-mark mb-10 sm:mb-14"><span></span></div>
 
-<!-- Book grid -->
-<main class="px-6 max-w-6xl mx-auto pb-32">
-  <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div class="skeleton h-80 rounded-2xl"></div>
-    <div class="skeleton h-80 rounded-2xl"></div>
-    <div class="skeleton h-80 rounded-2xl"></div>
+<!-- Book grid: 2 per row on phone, 3 on tablet, 5 on laptop -->
+<main class="px-3 sm:px-6 max-w-7xl mx-auto pb-24 sm:pb-32">
+  <div id="bookGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-5">
+    <div class="skeleton h-64 rounded-2xl"></div>
+    <div class="skeleton h-64 rounded-2xl"></div>
+    <div class="skeleton h-64 rounded-2xl hidden md:block"></div>
+    <div class="skeleton h-64 rounded-2xl hidden lg:block"></div>
+    <div class="skeleton h-64 rounded-2xl hidden lg:block"></div>
   </div>
   <p id="emptyMsg" class="hidden text-center text-ink-soft py-20 italic">No books available yet — check back soon.</p>
 </main>
@@ -241,35 +243,35 @@
   function ratingLine(bookId) {
     const s = stats(bookId);
     if (!s.count) {
-      return `<button onclick="openReviews('${bookId}')" class="text-ink-soft text-xs hover:text-forest transition text-left">Be the first to review</button>`;
+      return `<button onclick="openReviews('${bookId}')" class="text-ink-soft text-[10px] sm:text-xs hover:text-forest transition text-left">Be the first to review</button>`;
     }
-    return `<button onclick="openReviews('${bookId}')" class="flex items-center gap-2 text-left group">
-      <span class="text-gold text-sm tracking-tight">${starsText(s.avg)}</span>
-      <span class="text-ink-soft text-xs group-hover:text-forest transition">${s.avg.toFixed(1)} · ${s.count} review${s.count === 1 ? '' : 's'}</span>
+    return `<button onclick="openReviews('${bookId}')" class="flex items-center gap-1.5 text-left group flex-wrap">
+      <span class="text-gold text-xs tracking-tight">${starsText(s.avg)}</span>
+      <span class="text-ink-soft text-[10px] sm:text-xs group-hover:text-forest transition">${s.avg.toFixed(1)} (${s.count})</span>
     </button>`;
   }
 
   function renderBook(b, i) {
     const grid = document.getElementById('bookGrid');
     const div = document.createElement('div');
-    div.className = "card-enter bg-white border border-line rounded-2xl p-5 flex flex-col";
-    div.style.animationDelay = `${Math.min(i * 70, 400)}ms`;
+    div.className = "card-enter bg-white border border-line rounded-2xl p-3 sm:p-4 flex flex-col";
+    div.style.animationDelay = `${Math.min(i * 60, 400)}ms`;
 
     const link = safeUrl(b.store_link);
     const buyBtn = link
-      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="bg-gold text-white px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
-      : `<span class="text-ink-soft text-[11px] font-bold uppercase tracking-widest">Coming soon</span>`;
+      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="block text-center bg-gold text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
+      : `<span class="block text-center text-ink-soft text-[10px] font-bold uppercase tracking-widest py-2">Coming soon</span>`;
 
     div.innerHTML = `
-      <div class="book-cover w-full bg-sand overflow-hidden mb-4">
-        <img src="${escapeHtml(b.cover_url || '')}" alt="${escapeHtml(b.title)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/f6f3ec/a9812f?text=Book+Cover'">
+      <div class="book-cover w-full bg-sand overflow-hidden mb-3">
+        <img src="${escapeHtml(b.cover_url || '')}" alt="${escapeHtml(b.title)}" loading="lazy" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/f6f3ec/a9812f?text=Book+Cover'">
       </div>
-      <h3 class="font-serif text-lg text-ink leading-snug mb-1">${escapeHtml(b.title)}</h3>
-      <p class="text-ink-soft text-xs uppercase tracking-widest mb-2">${escapeHtml(b.author || '')}</p>
-      <div class="mb-3" id="rating-${escapeHtml(b.id)}">${ratingLine(b.id)}</div>
-      <p class="text-ink-soft text-sm leading-relaxed mb-5 flex-1">${escapeHtml(b.description || '')}</p>
-      <div class="flex items-center justify-between">
-        <span class="font-serif text-xl text-forest">₦${Number(b.price).toLocaleString()}</span>
+      <h3 class="font-serif text-sm sm:text-base text-ink leading-snug mb-1 line-clamp-2">${escapeHtml(b.title)}</h3>
+      <p class="text-ink-soft text-[10px] uppercase tracking-widest mb-2 line-clamp-1">${escapeHtml(b.author || '')}</p>
+      <div class="mb-2" id="rating-${escapeHtml(b.id)}">${ratingLine(b.id)}</div>
+      <p class="text-ink-soft text-xs leading-relaxed mb-3 flex-1 line-clamp-3">${escapeHtml(b.description || '')}</p>
+      <div class="space-y-2">
+        <span class="block font-serif text-base sm:text-lg text-forest">₦${Number(b.price).toLocaleString()}</span>
         ${buyBtn}
       </div>
     `;
