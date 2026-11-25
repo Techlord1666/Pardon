@@ -36,9 +36,10 @@
   .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 20px; vertical-align: middle; }
   .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .modal.active { display: flex; }
-  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
   .row-enter { animation: riseIn .4s ease-out both; }
   @keyframes riseIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .row-enter { animation: none; } }
 </style>
 </head>
 
@@ -49,7 +50,7 @@
   <div class="w-full max-w-sm bg-white border border-line rounded-3xl p-10 text-center">
     <img src="logo.png" alt="" class="h-10 w-auto mx-auto mb-5" onerror="this.style.display='none'">
     <h1 class="font-serif text-2xl text-forest mb-1">Staff Access</h1>
-    <p class="text-ink-soft text-sm mb-6">Sign in to manage the sermon library and book store.</p>
+    <p class="text-ink-soft text-sm mb-6">Sign in to manage sermons, books and reviews.</p>
     <input id="emailInput" type="email" placeholder="Email" autocomplete="username"
       class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-sm mb-3 focus:border-gold-soft transition"
       onkeydown="if(event.key==='Enter') document.getElementById('pwInput').focus()">
@@ -81,13 +82,15 @@
         </button>
       </div>
     </div>
-    <div class="max-w-6xl mx-auto px-6 flex gap-1 -mb-px">
+    <div class="max-w-6xl mx-auto px-6 flex gap-1 -mb-px overflow-x-auto">
       <button id="tabSermonsBtn" onclick="switchTab('sermons')" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 border-forest text-forest transition">Sermons</button>
       <button id="tabBooksBtn" onclick="switchTab('books')" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 border-transparent text-ink-soft hover:text-forest transition">Books</button>
+      <button id="tabReviewsBtn" onclick="switchTab('reviews')" class="px-5 py-3 text-[11px] font-bold uppercase tracking-widest border-b-2 border-transparent text-ink-soft hover:text-forest transition">Reviews</button>
     </div>
   </nav>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Sermons -->
     <div id="sermonsPanel">
       <div class="mb-8 flex items-start justify-between gap-4 flex-wrap">
         <div>
@@ -103,6 +106,7 @@
       </div>
     </div>
 
+    <!-- Books -->
     <div id="booksPanel" class="hidden">
       <div class="mb-8 flex items-start justify-between gap-4 flex-wrap">
         <div>
@@ -117,10 +121,35 @@
         <p id="emptyBooksMsg" class="hidden p-10 text-center text-ink-soft italic">No books yet. Add your first one.</p>
       </div>
     </div>
+
+    <!-- Reviews -->
+    <div id="reviewsPanel" class="hidden">
+      <div class="mb-8 flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="font-serif text-3xl text-forest mb-1">Manage Reviews</h2>
+          <p class="text-ink-soft text-sm">Every review posted on the store appears here. Delete anything inappropriate and it disappears from the store immediately.</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <select id="reviewFilter" onchange="renderReviews()" class="bg-white border border-line rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-ink-soft focus:border-gold-soft">
+            <option value="all">All books</option>
+          </select>
+          <select id="ratingFilter" onchange="renderReviews()" class="bg-white border border-line rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-ink-soft focus:border-gold-soft">
+            <option value="all">All ratings</option>
+            <option value="low">1–2 stars</option>
+            <option value="5">5 stars</option>
+            <option value="4">4 stars</option>
+            <option value="3">3 stars</option>
+          </select>
+        </div>
+      </div>
+      <div id="reviewTable" class="bg-white border border-line rounded-2xl overflow-hidden divide-y divide-line">
+        <p id="emptyReviewsMsg" class="hidden p-10 text-center text-ink-soft italic">No reviews yet.</p>
+      </div>
+    </div>
   </main>
 </div>
 
-<!-- Upload/Edit modal -->
+<!-- Sermon upload/edit modal -->
 <div id="uploadModal" class="modal">
   <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeModal()"></div>
   <div class="relative bg-white w-full max-w-lg rounded-3xl p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -414,27 +443,25 @@
 
   // ---------- Tabs ----------
   function switchTab(tab) {
-    const sermonsBtn = document.getElementById('tabSermonsBtn');
-    const booksBtn = document.getElementById('tabBooksBtn');
-    const sermonsPanel = document.getElementById('sermonsPanel');
-    const booksPanel = document.getElementById('booksPanel');
+    const tabs = {
+      sermons: { btn: 'tabSermonsBtn', panel: 'sermonsPanel' },
+      books:   { btn: 'tabBooksBtn',   panel: 'booksPanel' },
+      reviews: { btn: 'tabReviewsBtn', panel: 'reviewsPanel' }
+    };
 
-    if (tab === 'sermons') {
-      sermonsPanel.classList.remove('hidden');
-      booksPanel.classList.add('hidden');
-      sermonsBtn.classList.add('border-forest', 'text-forest');
-      sermonsBtn.classList.remove('border-transparent', 'text-ink-soft');
-      booksBtn.classList.remove('border-forest', 'text-forest');
-      booksBtn.classList.add('border-transparent', 'text-ink-soft');
-    } else {
-      booksPanel.classList.remove('hidden');
-      sermonsPanel.classList.add('hidden');
-      booksBtn.classList.add('border-forest', 'text-forest');
-      booksBtn.classList.remove('border-transparent', 'text-ink-soft');
-      sermonsBtn.classList.remove('border-forest', 'text-forest');
-      sermonsBtn.classList.add('border-transparent', 'text-ink-soft');
-      loadBooks();
-    }
+    Object.entries(tabs).forEach(([name, t]) => {
+      const btn = document.getElementById(t.btn);
+      const panel = document.getElementById(t.panel);
+      const active = name === tab;
+      panel.classList.toggle('hidden', !active);
+      btn.classList.toggle('border-forest', active);
+      btn.classList.toggle('text-forest', active);
+      btn.classList.toggle('border-transparent', !active);
+      btn.classList.toggle('text-ink-soft', !active);
+    });
+
+    if (tab === 'books') loadBooks();
+    if (tab === 'reviews') loadReviews();
   }
 
   // ---------- Books ----------
@@ -563,7 +590,7 @@
   }
 
   async function deleteBook(id) {
-    if (!confirm("Delete this book? This only removes it from the store page.")) return;
+    if (!confirm("Delete this book? Its reviews will be deleted too. This only removes it from the store page.")) return;
     const { error } = await _supabase.from('books').delete().eq('id', id);
     if (error) alert('Error deleting book: ' + error.message);
     else loadBooks();
@@ -571,6 +598,93 @@
 
   function closeBookModal() {
     document.getElementById('bookModal').classList.remove('active');
+  }
+
+  // ---------- Reviews ----------
+  let allReviews = [];
+  let bookTitleById = {};
+
+  async function loadReviews() {
+    const table = document.getElementById('reviewTable');
+    table.innerHTML = `<p class="p-10 text-center text-ink-soft italic">Loading reviews…</p>`;
+
+    const [revRes, bookRes] = await Promise.all([
+      _supabase.from('reviews').select('*').order('created_at', { ascending: false }),
+      _supabase.from('books').select('id,title')
+    ]);
+
+    if (revRes.error) {
+      table.innerHTML = `<p class="p-10 text-center text-red-500 italic">Error loading reviews: ${escapeHtml(revRes.error.message)}</p>`;
+      return;
+    }
+
+    allReviews = revRes.data || [];
+    bookTitleById = {};
+    (bookRes.data || []).forEach(b => { bookTitleById[b.id] = b.title; });
+
+    // Rebuild the book filter, keeping the current selection if still valid
+    const filter = document.getElementById('reviewFilter');
+    const previous = filter.value;
+    filter.innerHTML = `<option value="all">All books</option>` +
+      (bookRes.data || []).map(b => `<option value="${escapeHtml(b.id)}">${escapeHtml(b.title)}</option>`).join('');
+    filter.value = [...filter.options].some(o => o.value === previous) ? previous : 'all';
+
+    renderReviews();
+  }
+
+  function renderReviews() {
+    const table = document.getElementById('reviewTable');
+    const bookFilter = document.getElementById('reviewFilter').value;
+    const ratingFilter = document.getElementById('ratingFilter').value;
+
+    let list = allReviews.filter(r => bookFilter === 'all' || String(r.book_id) === String(bookFilter));
+    if (ratingFilter === 'low') list = list.filter(r => Number(r.rating) <= 2);
+    else if (ratingFilter !== 'all') list = list.filter(r => Number(r.rating) === Number(ratingFilter));
+
+    table.innerHTML = '';
+
+    if (!list.length) {
+      table.innerHTML = `<p class="p-10 text-center text-ink-soft italic">${allReviews.length ? 'No reviews match this filter.' : 'No reviews yet.'}</p>`;
+      return;
+    }
+
+    list.forEach((r, i) => {
+      const row = document.createElement('div');
+      row.className = "row-enter flex items-start gap-4 p-5";
+      row.style.animationDelay = `${Math.min(i * 30, 300)}ms`;
+      const stars = '★'.repeat(Number(r.rating)) + '☆'.repeat(5 - Number(r.rating));
+      const date = new Date(r.created_at).toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      row.innerHTML = `
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-3 flex-wrap mb-1">
+            <p class="font-semibold text-sm text-ink">${escapeHtml(r.reviewer_name)}</p>
+            <span class="text-gold text-sm">${stars}</span>
+            <span class="text-ink-soft text-[11px]">${escapeHtml(date)}</span>
+          </div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-gold mb-2">${escapeHtml(bookTitleById[r.book_id] || 'Deleted book')}</p>
+          <p class="text-ink-soft text-sm leading-relaxed whitespace-pre-line break-words">${escapeHtml(r.comment)}</p>
+        </div>
+        <button onclick="deleteReview('${escapeHtml(r.id)}')" class="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 transition px-3 py-2 shrink-0">
+          <span class="material-symbols-outlined !text-[16px]">delete</span>Delete
+        </button>
+      `;
+      table.appendChild(row);
+    });
+  }
+
+  async function deleteReview(id) {
+    if (!confirm("Delete this review? It will be removed from the store immediately.")) return;
+    // .select() returns the deleted rows, so we can tell if the database
+    // actually removed it (a blocked delete returns no error but zero rows).
+    const { data, error } = await _supabase.from('reviews').delete().eq('id', id).select();
+    if (error) { alert('Error deleting review: ' + error.message); return; }
+    if (!data || !data.length) {
+      alert("The review was not deleted. Make sure you're signed in and the delete policy from the SQL setup has been added.");
+      return;
+    }
+    allReviews = allReviews.filter(r => String(r.id) !== String(id));
+    renderReviews();
   }
 </script>
 
