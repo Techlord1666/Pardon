@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book | Pardon By Grace</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..500" rel="stylesheet"/>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: "#ffffff", sand: "#f6f3ec", ink: "#101a14", "ink-soft": "#5c6a61",
+          forest: "#0c2b1c", gold: "#a9812f", "gold-soft": "#cba660", line: "#e7e3d6"
+        },
+        fontFamily: { serif: ["Fraunces", "serif"], sans: ["Manrope", "sans-serif"] }
+      }
+    }
+  }
+</script>
+
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20; font-size: 20px; vertical-align: middle; }
+  .book-cover { aspect-ratio: 3/4; border-radius: 18px 6px 18px 6px; }
+  .fade-in { animation: riseIn .5s ease-out both; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
+  .skeleton { background: linear-gradient(90deg, #f0ede3 25%, #f8f6ef 37%, #f0ede3 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+  .star-btn { font-size: 30px; line-height: 1; color: #d9d3c0; transition: color .15s, transform .15s; cursor: pointer; background: none; border: 0; padding: 0 2px; }
+  .star-btn.on { color: #a9812f; }
+  .star-btn:hover { transform: scale(1.12); }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .section-mark { display: flex; align-items: center; gap: 12px; }
+  .section-mark::after { content: ""; height: 1px; flex: 1; background: #e7e3d6; }
+  @media (prefers-reduced-motion: reduce) { .fade-in, .skeleton { animation: none; } .star-btn { transition: none; } }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-paper/90 backdrop-blur-md border-b border-line">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="logo1.png" alt="Pardon By Grace" class="h-8 sm:h-9 w-auto" onerror="this.style.display='none'">
+      <span class="font-serif font-semibold text-base sm:text-lg tracking-tight text-forest">Pardon By Grace</span>
+    </a>
+    <a href="store.html" class="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-ink-soft hover:text-forest transition">
+      <span class="material-symbols-outlined !text-[18px]">arrow_back</span>Store
+    </a>
+  </div>
+</nav>
+
+<main class="pt-24 sm:pt-32 pb-32 md:pb-24 px-4 sm:px-6 max-w-6xl mx-auto">
+
+  <!-- Loading skeleton -->
+  <div id="loading" class="grid md:grid-cols-[minmax(0,380px)_1fr] gap-8 md:gap-14">
+    <div class="skeleton book-cover w-full max-w-xs mx-auto md:max-w-none"></div>
+    <div class="space-y-4">
+      <div class="skeleton h-5 w-24 rounded"></div>
+      <div class="skeleton h-10 w-4/5 rounded"></div>
+      <div class="skeleton h-4 w-40 rounded"></div>
+      <div class="skeleton h-32 w-full rounded"></div>
+    </div>
+  </div>
+
+  <!-- Not found -->
+  <div id="notFound" class="hidden text-center py-24">
+    <p class="font-serif text-3xl text-forest mb-3">Book not found</p>
+    <p class="text-ink-soft text-sm mb-6">This book may have been removed or the link is incorrect.</p>
+    <a href="store.html" class="inline-block bg-forest text-white px-6 py-3 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-forest/90 transition">Back to Store</a>
+  </div>
+
+  <!-- Product -->
+  <div id="product" class="hidden fade-in">
+    <div class="grid md:grid-cols-[minmax(0,380px)_1fr] gap-8 md:gap-14 items-start">
+
+      <!-- Cover -->
+      <div class="md:sticky md:top-28">
+        <div class="book-cover w-full max-w-[260px] sm:max-w-xs md:max-w-none mx-auto bg-sand overflow-hidden shadow-xl shadow-forest/10">
+          <img id="pCover" src="" alt="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x533/f6f3ec/a9812f?text=Book+Cover'">
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div>
+        <p class="text-gold text-[11px] font-bold tracking-[0.3em] uppercase mb-3">Book</p>
+        <h1 id="pTitle" class="font-serif text-3xl sm:text-4xl lg:text-5xl text-forest leading-tight mb-3"></h1>
+        <p class="text-ink-soft text-sm mb-4">by <span id="pAuthor" class="font-semibold text-ink"></span></p>
+
+        <a href="#reviews" id="pRating" class="inline-flex items-center gap-2 mb-5"></a>
+
+        <p id="pPrice" class="font-serif text-3xl text-forest mb-6"></p>
+
+        <div id="pBuyDesktop" class="hidden md:block mb-8"></div>
+
+        <div class="section-mark mb-4">
+          <p class="text-[11px] font-bold uppercase tracking-[0.25em] text-gold">About this book</p>
+        </div>
+        <p id="pDescription" class="text-ink-soft text-[15px] leading-[1.85] whitespace-pre-line break-words"></p>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <section id="reviews" class="mt-16 sm:mt-20 scroll-mt-24">
+      <div class="section-mark mb-6">
+        <h2 class="font-serif text-2xl text-forest">Reader Reviews</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+        <div>
+          <p id="reviewsSummary" class="text-ink-soft text-sm mb-4"></p>
+          <div id="reviewsList" class="divide-y divide-line border border-line rounded-2xl bg-white overflow-hidden"></div>
+        </div>
+
+        <form id="reviewForm" onsubmit="submitReview(event)" class="bg-sand border border-line rounded-2xl p-5 sm:p-6" novalidate>
+          <p class="font-serif text-lg text-forest mb-3">Write a review</p>
+
+          <div class="flex items-center gap-1 mb-3" id="starPicker" role="radiogroup" aria-label="Your rating">
+            <button type="button" class="star-btn" data-v="1" aria-label="1 star">★</button>
+            <button type="button" class="star-btn" data-v="2" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn" data-v="3" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn" data-v="4" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn" data-v="5" aria-label="5 stars">★</button>
+          </div>
+
+          <input id="rvName" type="text" maxlength="60" placeholder="Your name"
+            class="w-full bg-white border border-line rounded-xl px-4 py-3 text-sm mb-3 focus:border-gold-soft transition">
+          <textarea id="rvComment" rows="4" maxlength="1000" placeholder="Share your thoughts about this book…"
+            class="w-full bg-white border border-line rounded-xl px-4 py-3 text-sm mb-3 resize-none focus:border-gold-soft transition"></textarea>
+
+          <!-- Honeypot: real people never see or fill this -->
+          <input id="rvWebsite" type="text" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button id="rvSubmit" type="submit" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">
+            Post Review
+          </button>
+          <p id="rvMsg" class="hidden text-xs mt-3"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Sticky buy bar (phones) -->
+<div id="stickyBar" class="hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-line px-4 py-3 md:hidden">
+  <div class="flex items-center justify-between gap-4 max-w-6xl mx-auto">
+    <div class="min-w-0">
+      <p id="sbTitle" class="text-xs text-ink-soft truncate"></p>
+      <p id="sbPrice" class="font-serif text-xl text-forest leading-tight"></p>
+    </div>
+    <div id="sbBuy" class="shrink-0"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-forest text-white/85">
+  <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="" class="h-7 w-auto" onerror="this.style.display='none'">
+      <span class="font-serif text-lg">Pardon By Grace</span>
+    </div>
+    <div class="flex items-center gap-6 text-white/70">
+      <a href="index.html" class="hover:text-white transition">Home</a>
+      <a href="media-library.html" class="hover:text-white transition">Sermon Library</a>
+      <a href="store.html" class="hover:text-white transition">Book Store</a>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-5 px-6 text-center text-white/40 text-xs">
+    © 2025 Pardon By Grace International Church. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let book = null;
+  let reviews = [];
+  let selectedRating = 0;
+
+  window.onload = () => { initStarPicker(); loadProduct(); };
+
+  // ---------- Helpers ----------
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.innerText = str == null ? '' : String(str);
+    return d.innerHTML.replace(/"/g, '&quot;');
+  }
+
+  function safeUrl(u) {
+    try {
+      const x = new URL(u);
+      return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : '';
+    } catch (e) { return ''; }
+  }
+
+  function starsText(n) {
+    const r = Math.max(0, Math.min(5, Math.round(n)));
+    return '★'.repeat(r) + '☆'.repeat(5 - r);
+  }
+
+  function showNotFound() {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('product').classList.add('hidden');
+    document.getElementById('notFound').classList.remove('hidden');
+  }
+
+  // ---------- Load ----------
+  async function loadProduct() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) return showNotFound();
+
+    const [bookRes, reviewsRes] = await Promise.all([
+      _supabase.from('books').select('*').eq('id', id).maybeSingle(),
+      _supabase.from('reviews').select('*').eq('book_id', id).order('created_at', { ascending: false })
+    ]);
+
+    if (bookRes.error || !bookRes.data) return showNotFound();
+
+    book = bookRes.data;
+    reviews = (!reviewsRes.error && reviewsRes.data) ? reviewsRes.data : [];
+
+    document.title = `${book.title} | Pardon By Grace`;
+
+    document.getElementById('pCover').src = book.cover_url || '';
+    document.getElementById('pCover').alt = book.title || '';
+    document.getElementById('pTitle').innerText = book.title || '';
+    document.getElementById('pAuthor').innerText = book.author || 'Unknown';
+    document.getElementById('pPrice').innerText = `₦${Number(book.price).toLocaleString()}`;
+    document.getElementById('pDescription').innerText = book.description || 'No description available yet.';
+
+    // Buy buttons (desktop block, phone sticky bar)
+    const link = safeUrl(book.store_link);
+    const bigBtn = link
+      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gold text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now <span class="material-symbols-outlined !text-[18px]">arrow_outward</span></a>`
+      : `<span class="inline-block text-ink-soft text-xs font-bold uppercase tracking-widest py-4">Coming soon</span>`;
+    const smallBtn = link
+      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 bg-gold text-white px-7 py-3 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
+      : `<span class="text-ink-soft text-[11px] font-bold uppercase tracking-widest">Coming soon</span>`;
+
+    document.getElementById('pBuyDesktop').innerHTML = bigBtn;
+    document.getElementById('sbBuy').innerHTML = smallBtn;
+    document.getElementById('sbTitle').innerText = book.title || '';
+    document.getElementById('sbPrice').innerText = `₦${Number(book.price).toLocaleString()}`;
+
+    renderReviews();
+
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('product').classList.remove('hidden');
+    document.getElementById('stickyBar').classList.remove('hidden');
+  }
+
+  // ---------- Reviews ----------
+  function renderReviews() {
+    const count = reviews.length;
+    const avg = count ? reviews.reduce((a, r) => a + Number(r.rating || 0), 0) / count : 0;
+
+    // Rating line near the title
+    document.getElementById('pRating').innerHTML = count
+      ? `<span class="text-gold text-lg tracking-tight">${starsText(avg)}</span>
+         <span class="text-ink-soft text-sm">${avg.toFixed(1)} · ${count} review${count === 1 ? '' : 's'}</span>`
+      : `<span class="text-ink-soft text-sm underline underline-offset-4 decoration-line hover:text-forest transition">Be the first to review</span>`;
+
+    document.getElementById('reviewsSummary').innerText = count
+      ? `${avg.toFixed(1)} out of 5 · ${count} review${count === 1 ? '' : 's'}`
+      : 'No reviews yet';
+
+    const box = document.getElementById('reviewsList');
+    if (!count) {
+      box.innerHTML = `<p class="p-8 text-center text-ink-soft text-sm italic">No reviews yet — be the first to share your thoughts.</p>`;
+      return;
+    }
+
+    box.innerHTML = reviews.map(r => `
+      <div class="p-5 sm:p-6">
+        <div class="flex items-center justify-between gap-3 mb-1">
+          <p class="font-semibold text-sm text-ink truncate">${escapeHtml(r.reviewer_name)}</p>
+          <p class="text-ink-soft text-[11px] shrink-0">${new Date(r.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+        </div>
+        <p class="text-gold text-sm mb-2">${starsText(r.rating)}</p>
+        <p class="text-ink-soft text-sm leading-relaxed whitespace-pre-line break-words">${escapeHtml(r.comment)}</p>
+      </div>
+    `).join('');
+  }
+
+  // ---------- Star picker ----------
+  function initStarPicker() {
+    document.querySelectorAll('#starPicker .star-btn').forEach(btn => {
+      btn.addEventListener('click', () => setRating(Number(btn.dataset.v)));
+    });
+  }
+
+  function setRating(n) {
+    selectedRating = n;
+    document.querySelectorAll('#starPicker .star-btn').forEach(btn => {
+      btn.classList.toggle('on', Number(btn.dataset.v) <= n);
+    });
+  }
+
+  // ---------- Submit review ----------
+  function showMsg(text, ok) {
+    const el = document.getElementById('rvMsg');
+    el.textContent = text;
+    el.className = `text-xs mt-3 ${ok ? 'text-forest' : 'text-red-500'}`;
+  }
+  function hideMsg() { document.getElementById('rvMsg').className = 'hidden text-xs mt-3'; }
+
+  async function submitReview(e) {
+    e.preventDefault();
+    hideMsg();
+
+    // Honeypot — bots fill this, people never see it
+    if (document.getElementById('rvWebsite').value) return;
+    if (!book) return;
+
+    const name = document.getElementById('rvName').value.trim();
+    const comment = document.getElementById('rvComment').value.trim();
+
+    if (!selectedRating) return showMsg('Please choose a star rating.', false);
+    if (!name) return showMsg('Please enter your name.', false);
+    if (comment.length < 5) return showMsg('Please write a short review (at least 5 characters).', false);
+
+    // Gentle client-side cooldown (30s) to discourage rapid-fire posting
+    try {
+      const last = Number(localStorage.getItem('pbg_last_review') || 0);
+      if (Date.now() - last < 30000) return showMsg('Please wait a moment before posting another review.', false);
+    } catch (_) {}
+
+    const btn = document.getElementById('rvSubmit');
+    btn.disabled = true;
+    btn.innerText = 'Posting…';
+
+    const { error } = await _supabase.from('reviews').insert([{
+      book_id: book.id,
+      reviewer_name: name,
+      rating: selectedRating,
+      comment: comment
+    }]);
+
+    btn.disabled = false;
+    btn.innerText = 'Post Review';
+
+    if (error) {
+      showMsg('Could not post your review: ' + error.message, false);
+      return;
+    }
+
+    try { localStorage.setItem('pbg_last_review', String(Date.now())); } catch (_) {}
+
+    const { data } = await _supabase.from('reviews').select('*').eq('book_id', book.id).order('created_at', { ascending: false });
+    reviews = data || [];
+    renderReviews();
+
+    setRating(0);
+    document.getElementById('rvName').value = '';
+    document.getElementById('rvComment').value = '';
+    showMsg('Thank you! Your review has been posted.', true);
+  }
+</script>
+
+</body>
+</html>
