@@ -30,19 +30,15 @@
   .book-cover { aspect-ratio: 3/4; border-radius: 12px 4px 12px 4px; }
   .card-enter { animation: riseIn .5s ease-out both; }
   @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-  .modal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; padding: 20px; }
-  .modal.active { display: flex; }
-  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
   .divider-mark { display: flex; align-items: center; justify-content: center; gap: 12px; }
   .divider-mark::before, .divider-mark::after { content: ""; height: 1px; width: 44px; background: #a9812f; opacity: .5; }
   .divider-mark span { width: 6px; height: 6px; background: #a9812f; transform: rotate(45deg); display: inline-block; }
   .skeleton { background: linear-gradient(90deg, #f0ede3 25%, #f8f6ef 37%, #f0ede3 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
   @keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
-  .star-btn { font-size: 28px; line-height: 1; color: #d9d3c0; transition: color .15s, transform .15s; cursor: pointer; background: none; border: 0; padding: 0 2px; }
-  .star-btn.on { color: #a9812f; }
-  .star-btn:hover { transform: scale(1.12); }
-  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-  @media (prefers-reduced-motion: reduce) { .card-enter, .skeleton { animation: none; } .star-btn { transition: none; } }
+  .book-card:hover .book-cover img { transform: scale(1.04); }
+  .book-cover img { transition: transform .4s ease; }
+  @media (prefers-reduced-motion: reduce) { .card-enter, .skeleton { animation: none; } .book-cover img { transition: none; } }
 </style>
 </head>
 
@@ -69,7 +65,7 @@
     The <span class="italic font-medium">Book</span> Store
   </h1>
   <p class="text-ink-soft text-base max-w-md mx-auto">
-    Teaching, encouragement, and study resources — browse our books, read what others say, and tap Buy Now to order from our store.
+    Teaching, encouragement, and study resources — tap any book to read more, see reviews, and order from our store.
   </p>
 </header>
 
@@ -120,63 +116,12 @@
   </div>
 </footer>
 
-<!-- Reviews modal -->
-<div id="reviewsModal" class="modal">
-  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeReviews()"></div>
-  <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
-    <div class="p-6 pb-4 border-b border-line flex items-start justify-between gap-4">
-      <div class="min-w-0">
-        <p class="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-1">Reader Reviews</p>
-        <h3 id="reviewsBookTitle" class="font-serif text-xl text-forest leading-snug truncate"></h3>
-        <p id="reviewsSummary" class="text-ink-soft text-xs mt-1"></p>
-      </div>
-      <button onclick="closeReviews()" aria-label="Close" class="text-ink-soft hover:text-forest transition shrink-0">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-
-    <div class="overflow-y-auto flex-1">
-      <div id="reviewsList" class="divide-y divide-line"></div>
-
-      <form id="reviewForm" onsubmit="submitReview(event)" class="p-6 bg-sand border-t border-line" novalidate>
-        <p class="font-serif text-lg text-forest mb-3">Write a review</p>
-
-        <div class="flex items-center gap-1 mb-3" id="starPicker" role="radiogroup" aria-label="Your rating">
-          <button type="button" class="star-btn" data-v="1" aria-label="1 star">★</button>
-          <button type="button" class="star-btn" data-v="2" aria-label="2 stars">★</button>
-          <button type="button" class="star-btn" data-v="3" aria-label="3 stars">★</button>
-          <button type="button" class="star-btn" data-v="4" aria-label="4 stars">★</button>
-          <button type="button" class="star-btn" data-v="5" aria-label="5 stars">★</button>
-        </div>
-
-        <input id="rvName" type="text" maxlength="60" placeholder="Your name"
-          class="w-full bg-white border border-line rounded-xl px-4 py-3 text-sm mb-3 focus:border-gold-soft transition">
-        <textarea id="rvComment" rows="3" maxlength="1000" placeholder="Share your thoughts about this book…"
-          class="w-full bg-white border border-line rounded-xl px-4 py-3 text-sm mb-3 resize-none focus:border-gold-soft transition"></textarea>
-
-        <!-- Honeypot: real people never see or fill this -->
-        <input id="rvWebsite" type="text" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-        <button id="rvSubmit" type="submit" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">
-          Post Review
-        </button>
-        <p id="rvMsg" class="hidden text-xs mt-3"></p>
-      </form>
-    </div>
-  </div>
-</div>
-
 <script>
   const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let booksCache = [];
-  let reviewsByBook = {};   // { book_id: [review, ...] }
-  let currentBookId = null;
-  let selectedRating = 0;
-
-  window.onload = () => { initStarPicker(); loadStore(); };
+  window.onload = loadStore;
 
   // ---------- Helpers ----------
   function escapeHtml(str) {
@@ -198,13 +143,6 @@
     return '★'.repeat(r) + '☆'.repeat(5 - r);
   }
 
-  function stats(bookId) {
-    const list = reviewsByBook[bookId] || [];
-    if (!list.length) return { count: 0, avg: 0 };
-    const sum = list.reduce((a, r) => a + Number(r.rating || 0), 0);
-    return { count: list.length, avg: sum / list.length };
-  }
-
   // ---------- Load ----------
   async function loadStore() {
     const grid = document.getElementById('bookGrid');
@@ -212,7 +150,7 @@
 
     const [booksRes, reviewsRes] = await Promise.all([
       _supabase.from('books').select('*').order('created_at', { ascending: false }),
-      _supabase.from('reviews').select('*').order('created_at', { ascending: false })
+      _supabase.from('reviews').select('book_id,rating')
     ]);
 
     grid.innerHTML = '';
@@ -222,188 +160,60 @@
       return;
     }
 
-    // If reviews fail to load, the store still works — just without reviews.
-    reviewsByBook = {};
+    // If reviews fail to load, the store still works — just without ratings.
+    const ratings = {}; // { book_id: { sum, count } }
     if (!reviewsRes.error && reviewsRes.data) {
       reviewsRes.data.forEach(r => {
-        (reviewsByBook[r.book_id] = reviewsByBook[r.book_id] || []).push(r);
+        const o = ratings[r.book_id] = ratings[r.book_id] || { sum: 0, count: 0 };
+        o.sum += Number(r.rating || 0);
+        o.count += 1;
       });
     }
 
-    booksCache = booksRes.data || [];
-    if (!booksCache.length) {
+    const books = booksRes.data || [];
+    if (!books.length) {
       emptyMsg.classList.remove('hidden');
       return;
     }
     emptyMsg.classList.add('hidden');
-    booksCache.forEach((b, i) => renderBook(b, i));
+    books.forEach((b, i) => renderBook(b, i, ratings[b.id]));
   }
 
   // ---------- Book cards ----------
-  function ratingLine(bookId) {
-    const s = stats(bookId);
-    if (!s.count) {
-      return `<button onclick="openReviews('${bookId}')" class="text-ink-soft text-[10px] sm:text-xs hover:text-forest transition text-left">Be the first to review</button>`;
-    }
-    return `<button onclick="openReviews('${bookId}')" class="flex items-center gap-1.5 text-left group flex-wrap">
-      <span class="text-gold text-xs tracking-tight">${starsText(s.avg)}</span>
-      <span class="text-ink-soft text-[10px] sm:text-xs group-hover:text-forest transition">${s.avg.toFixed(1)} (${s.count})</span>
-    </button>`;
-  }
-
-  function renderBook(b, i) {
+  function renderBook(b, i, rating) {
     const grid = document.getElementById('bookGrid');
-    const div = document.createElement('div');
-    div.className = "card-enter bg-white border border-line rounded-2xl p-3 sm:p-4 flex flex-col";
-    div.style.animationDelay = `${Math.min(i * 60, 400)}ms`;
+    const article = document.createElement('article');
+    article.className = "book-card card-enter bg-white border border-line rounded-2xl p-3 sm:p-4 flex flex-col";
+    article.style.animationDelay = `${Math.min(i * 60, 400)}ms`;
 
+    const detailUrl = `product.html?id=${encodeURIComponent(b.id)}`;
     const link = safeUrl(b.store_link);
+
+    const ratingHtml = rating && rating.count
+      ? `<span class="text-gold text-xs tracking-tight">${starsText(rating.sum / rating.count)}</span>
+         <span class="text-ink-soft text-[10px] sm:text-xs">${(rating.sum / rating.count).toFixed(1)} (${rating.count})</span>`
+      : `<span class="text-ink-soft text-[10px] sm:text-xs">No reviews yet</span>`;
+
     const buyBtn = link
       ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="block text-center bg-gold text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
       : `<span class="block text-center text-ink-soft text-[10px] font-bold uppercase tracking-widest py-2">Coming soon</span>`;
 
-    div.innerHTML = `
-      <div class="book-cover w-full bg-sand overflow-hidden mb-3">
-        <img src="${escapeHtml(b.cover_url || '')}" alt="${escapeHtml(b.title)}" loading="lazy" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/f6f3ec/a9812f?text=Book+Cover'">
-      </div>
-      <h3 class="font-serif text-sm sm:text-base text-ink leading-snug mb-1 line-clamp-2">${escapeHtml(b.title)}</h3>
-      <p class="text-ink-soft text-[10px] uppercase tracking-widest mb-2 line-clamp-1">${escapeHtml(b.author || '')}</p>
-      <div class="mb-2" id="rating-${escapeHtml(b.id)}">${ratingLine(b.id)}</div>
-      <p class="text-ink-soft text-xs leading-relaxed mb-3 flex-1 line-clamp-3">${escapeHtml(b.description || '')}</p>
-      <div class="space-y-2">
-        <span class="block font-serif text-base sm:text-lg text-forest">₦${Number(b.price).toLocaleString()}</span>
-        ${buyBtn}
-      </div>
-    `;
-    grid.appendChild(div);
-  }
-
-  function refreshRatingLine(bookId) {
-    const el = document.getElementById(`rating-${bookId}`);
-    if (el) el.innerHTML = ratingLine(bookId);
-  }
-
-  // ---------- Reviews modal ----------
-  function openReviews(bookId) {
-    const book = booksCache.find(b => String(b.id) === String(bookId));
-    if (!book) return;
-    currentBookId = book.id;
-    document.getElementById('reviewsBookTitle').innerText = book.title || '';
-    setRating(0);
-    document.getElementById('rvName').value = '';
-    document.getElementById('rvComment').value = '';
-    hideMsg();
-    renderReviewList();
-    document.getElementById('reviewsModal').classList.add('active');
-  }
-
-  function closeReviews() {
-    document.getElementById('reviewsModal').classList.remove('active');
-  }
-
-  function renderReviewList() {
-    const list = reviewsByBook[currentBookId] || [];
-    const s = stats(currentBookId);
-    const summary = document.getElementById('reviewsSummary');
-    const box = document.getElementById('reviewsList');
-
-    summary.innerText = s.count
-      ? `${s.avg.toFixed(1)} out of 5 · ${s.count} review${s.count === 1 ? '' : 's'}`
-      : 'No reviews yet';
-
-    if (!list.length) {
-      box.innerHTML = `<p class="p-8 text-center text-ink-soft text-sm italic">No reviews yet — be the first to share your thoughts.</p>`;
-      return;
-    }
-
-    box.innerHTML = list.map(r => `
-      <div class="p-6">
-        <div class="flex items-center justify-between gap-3 mb-1">
-          <p class="font-semibold text-sm text-ink truncate">${escapeHtml(r.reviewer_name)}</p>
-          <p class="text-ink-soft text-[11px] shrink-0">${new Date(r.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+    article.innerHTML = `
+      <a href="${detailUrl}" class="flex flex-col flex-1" aria-label="View details for ${escapeHtml(b.title)}">
+        <div class="book-cover w-full bg-sand overflow-hidden mb-3">
+          <img src="${escapeHtml(b.cover_url || '')}" alt="${escapeHtml(b.title)}" loading="lazy" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/f6f3ec/a9812f?text=Book+Cover'">
         </div>
-        <p class="text-gold text-sm mb-2">${starsText(r.rating)}</p>
-        <p class="text-ink-soft text-sm leading-relaxed whitespace-pre-line break-words">${escapeHtml(r.comment)}</p>
-      </div>
-    `).join('');
+        <h3 class="font-serif text-sm sm:text-base text-ink leading-snug mb-1 line-clamp-2">${escapeHtml(b.title)}</h3>
+        <p class="text-ink-soft text-[10px] uppercase tracking-widest mb-2 line-clamp-1">${escapeHtml(b.author || '')}</p>
+        <div class="flex items-center gap-1.5 flex-wrap mb-2">${ratingHtml}</div>
+        <p class="text-ink-soft text-xs leading-relaxed line-clamp-2">${escapeHtml(b.description || '')}</p>
+        <span class="text-forest text-[11px] font-bold mt-1 mb-3 inline-flex items-center gap-0.5">Read more <span class="material-symbols-outlined !text-[14px]">arrow_forward</span></span>
+        <span class="block font-serif text-base sm:text-lg text-forest mt-auto mb-2">₦${Number(b.price).toLocaleString()}</span>
+      </a>
+      ${buyBtn}
+    `;
+    grid.appendChild(article);
   }
-
-  // ---------- Star picker ----------
-  function initStarPicker() {
-    document.querySelectorAll('#starPicker .star-btn').forEach(btn => {
-      btn.addEventListener('click', () => setRating(Number(btn.dataset.v)));
-    });
-  }
-
-  function setRating(n) {
-    selectedRating = n;
-    document.querySelectorAll('#starPicker .star-btn').forEach(btn => {
-      btn.classList.toggle('on', Number(btn.dataset.v) <= n);
-    });
-  }
-
-  // ---------- Submit review ----------
-  function showMsg(text, ok) {
-    const el = document.getElementById('rvMsg');
-    el.textContent = text;
-    el.className = `text-xs mt-3 ${ok ? 'text-forest' : 'text-red-500'}`;
-  }
-  function hideMsg() { document.getElementById('rvMsg').className = 'hidden text-xs mt-3'; }
-
-  async function submitReview(e) {
-    e.preventDefault();
-    hideMsg();
-
-    // Honeypot — bots fill this, people never see it
-    if (document.getElementById('rvWebsite').value) return;
-
-    const name = document.getElementById('rvName').value.trim();
-    const comment = document.getElementById('rvComment').value.trim();
-
-    if (!selectedRating) return showMsg('Please choose a star rating.', false);
-    if (!name) return showMsg('Please enter your name.', false);
-    if (comment.length < 5) return showMsg('Please write a short review (at least 5 characters).', false);
-
-    // Gentle client-side cooldown (30s) to discourage rapid-fire posting
-    try {
-      const last = Number(localStorage.getItem('pbg_last_review') || 0);
-      if (Date.now() - last < 30000) return showMsg('Please wait a moment before posting another review.', false);
-    } catch (_) {}
-
-    const btn = document.getElementById('rvSubmit');
-    btn.disabled = true;
-    btn.innerText = 'Posting…';
-
-    const { error } = await _supabase.from('reviews').insert([{
-      book_id: currentBookId,
-      reviewer_name: name,
-      rating: selectedRating,
-      comment: comment
-    }]);
-
-    btn.disabled = false;
-    btn.innerText = 'Post Review';
-
-    if (error) {
-      showMsg('Could not post your review: ' + error.message, false);
-      return;
-    }
-
-    try { localStorage.setItem('pbg_last_review', String(Date.now())); } catch (_) {}
-
-    // Refresh this book's reviews
-    const { data } = await _supabase.from('reviews').select('*').eq('book_id', currentBookId).order('created_at', { ascending: false });
-    reviewsByBook[currentBookId] = data || [];
-    renderReviewList();
-    refreshRatingLine(currentBookId);
-
-    setRating(0);
-    document.getElementById('rvName').value = '';
-    document.getElementById('rvComment').value = '';
-    showMsg('Thank you! Your review has been posted.', true);
-  }
-
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReviews(); });
 </script>
 
 </body>
