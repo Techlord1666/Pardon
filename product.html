@@ -178,6 +178,20 @@
   </div>
 </footer>
 
+<!-- Access code modal (locked books) -->
+<div id="codeModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-5">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeCodeModal()"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl text-center">
+    <h3 class="font-serif text-2xl text-forest mb-2">Enter Access Code</h3>
+    <p class="text-ink-soft text-sm mb-5">This book is released by code. Enter the code you were given to continue to the purchase page.</p>
+    <input id="accessCodeInput" type="text" placeholder="XXXX-XXXX" autocomplete="off"
+      class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-center font-mono tracking-widest uppercase mb-3"
+      onkeydown="if(event.key==='Enter') submitCode()">
+    <p id="codeError" class="hidden text-red-500 text-xs mb-3"></p>
+    <button id="codeBtn" onclick="submitCode()" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">Continue</button>
+  </div>
+</div>
+
 <script>
   const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
@@ -219,8 +233,10 @@
     const id = new URLSearchParams(window.location.search).get('id');
     if (!id) return showNotFound();
 
+    // store_link is NOT selected: the public key can't read it.
+    // The link is released by the redeem_book_link() database function.
     const [bookRes, reviewsRes] = await Promise.all([
-      _supabase.from('books').select('*').eq('id', id).maybeSingle(),
+      _supabase.from('books').select('id,title,author,description,price,cover_url,created_at,is_locked').eq('id', id).maybeSingle(),
       _supabase.from('reviews').select('*').eq('book_id', id).order('created_at', { ascending: false })
     ]);
 
@@ -239,13 +255,9 @@
     document.getElementById('pDescription').innerText = book.description || 'No description available yet.';
 
     // Buy buttons (desktop block, phone sticky bar)
-    const link = safeUrl(book.store_link);
-    const bigBtn = link
-      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gold text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now <span class="material-symbols-outlined !text-[18px]">arrow_outward</span></a>`
-      : `<span class="inline-block text-ink-soft text-xs font-bold uppercase tracking-widest py-4">Coming soon</span>`;
-    const smallBtn = link
-      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 bg-gold text-white px-7 py-3 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
-      : `<span class="text-ink-soft text-[11px] font-bold uppercase tracking-widest">Coming soon</span>`;
+    const lockIcon = book.is_locked ? '🔒 ' : '';
+    const bigBtn = `<button type="button" onclick="buyBook()" class="inline-flex items-center justify-center gap-2 bg-gold text-white px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold-soft transition">${lockIcon}Buy Now <span class="material-symbols-outlined !text-[18px]">arrow_outward</span></button>`;
+    const smallBtn = `<button type="button" onclick="buyBook()" class="inline-flex items-center justify-center gap-1 bg-gold text-white px-7 py-3 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">${lockIcon}Buy Now</button>`;
 
     document.getElementById('pBuyDesktop').innerHTML = bigBtn;
     document.getElementById('sbBuy').innerHTML = smallBtn;
@@ -257,6 +269,44 @@
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('product').classList.remove('hidden');
     document.getElementById('stickyBar').classList.remove('hidden');
+  }
+
+  // ---------- Buying / access codes ----------
+  async function getLink(code) {
+    const { data, error } = await _supabase.rpc('redeem_book_link', { p_book_id: book.id, p_code: code || '' });
+    return error ? null : safeUrl(data);
+  }
+
+  async function buyBook() {
+    if (!book) return;
+    if (book.is_locked) {
+      document.getElementById('accessCodeInput').value = '';
+      document.getElementById('codeError').classList.add('hidden');
+      const m = document.getElementById('codeModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+      setTimeout(() => document.getElementById('accessCodeInput').focus(), 50);
+      return;
+    }
+    const link = await getLink('');
+    if (link) window.location.href = link;
+    else alert('This book is not available right now.');
+  }
+
+  function closeCodeModal() {
+    const m = document.getElementById('codeModal');
+    m.classList.add('hidden'); m.classList.remove('flex');
+  }
+
+  async function submitCode() {
+    const code = document.getElementById('accessCodeInput').value.trim();
+    const err = document.getElementById('codeError');
+    const btn = document.getElementById('codeBtn');
+    if (!code) return;
+    btn.disabled = true; btn.innerText = 'Checking…'; err.classList.add('hidden');
+    const link = await getLink(code);
+    btn.disabled = false; btn.innerText = 'Continue';
+    if (!link) { err.textContent = 'Invalid or already used code.'; err.classList.remove('hidden'); return; }
+    window.location.href = link;
   }
 
   // ---------- Reviews ----------
