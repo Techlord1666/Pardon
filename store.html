@@ -30,7 +30,7 @@
   .book-cover { aspect-ratio: 3/4; border-radius: 12px 4px 12px 4px; }
   .card-enter { animation: riseIn .5s ease-out both; }
   @keyframes riseIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-  a:focus-visible, button:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #a9812f; outline-offset: 3px; border-radius: 4px; }
   .divider-mark { display: flex; align-items: center; justify-content: center; gap: 12px; }
   .divider-mark::before, .divider-mark::after { content: ""; height: 1px; width: 44px; background: #a9812f; opacity: .5; }
   .divider-mark span { width: 6px; height: 6px; background: #a9812f; transform: rotate(45deg); display: inline-block; }
@@ -116,6 +116,20 @@
   </div>
 </footer>
 
+<!-- Access code modal (locked books) -->
+<div id="codeModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-5">
+  <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeCodeModal()"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl text-center">
+    <h3 class="font-serif text-2xl text-forest mb-2">Enter Access Code</h3>
+    <p class="text-ink-soft text-sm mb-5">This book is released by code. Enter the code you were given to continue to the purchase page.</p>
+    <input id="accessCodeInput" type="text" placeholder="XXXX-XXXX" autocomplete="off"
+      class="w-full bg-sand border border-line rounded-xl px-4 py-3 text-center font-mono tracking-widest uppercase mb-3"
+      onkeydown="if(event.key==='Enter') submitCode()">
+    <p id="codeError" class="hidden text-red-500 text-xs mb-3"></p>
+    <button id="codeBtn" onclick="submitCode()" class="w-full bg-forest text-white py-3 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-forest/90 transition">Continue</button>
+  </div>
+</div>
+
 <script>
   const SUPABASE_URL = 'https://jzhpqxsneqjnggrfzksa.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6aHBxeHNuZXFqbmdncmZ6a3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTg5NDksImV4cCI6MjA5MjU5NDk0OX0.zi3hhcg61ptBkzZiePlyuHkwDRKlWlplexIQxT6CW6I';
@@ -148,8 +162,10 @@
     const grid = document.getElementById('bookGrid');
     const emptyMsg = document.getElementById('emptyMsg');
 
+    // store_link is NOT selected here: the public key can't read it.
+    // The link is released by the redeem_book_link() database function.
     const [booksRes, reviewsRes] = await Promise.all([
-      _supabase.from('books').select('*').order('created_at', { ascending: false }),
+      _supabase.from('books').select('id,title,author,description,price,cover_url,created_at,is_locked').order('created_at', { ascending: false }),
       _supabase.from('reviews').select('book_id,rating')
     ]);
 
@@ -187,16 +203,13 @@
     article.style.animationDelay = `${Math.min(i * 60, 400)}ms`;
 
     const detailUrl = `product.html?id=${encodeURIComponent(b.id)}`;
-    const link = safeUrl(b.store_link);
 
     const ratingHtml = rating && rating.count
       ? `<span class="text-gold text-xs tracking-tight">${starsText(rating.sum / rating.count)}</span>
          <span class="text-ink-soft text-[10px] sm:text-xs">${(rating.sum / rating.count).toFixed(1)} (${rating.count})</span>`
       : `<span class="text-ink-soft text-[10px] sm:text-xs">No reviews yet</span>`;
 
-    const buyBtn = link
-      ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="block text-center bg-gold text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">Buy Now</a>`
-      : `<span class="block text-center text-ink-soft text-[10px] font-bold uppercase tracking-widest py-2">Coming soon</span>`;
+    const buyBtn = `<button type="button" onclick="buyBook('${escapeHtml(b.id)}', ${b.is_locked ? 'true' : 'false'})" class="block w-full text-center bg-gold text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gold-soft transition">${b.is_locked ? '🔒 ' : ''}Buy Now</button>`;
 
     article.innerHTML = `
       <a href="${detailUrl}" class="flex flex-col flex-1" aria-label="View details for ${escapeHtml(b.title)}">
@@ -213,6 +226,46 @@
       ${buyBtn}
     `;
     grid.appendChild(article);
+  }
+
+  // ---------- Buying / access codes ----------
+  let pendingBookId = null;
+
+  async function getLink(bookId, code) {
+    const { data, error } = await _supabase.rpc('redeem_book_link', { p_book_id: bookId, p_code: code || '' });
+    return error ? null : safeUrl(data);
+  }
+
+  async function buyBook(id, locked) {
+    if (locked) {
+      pendingBookId = id;
+      document.getElementById('accessCodeInput').value = '';
+      document.getElementById('codeError').classList.add('hidden');
+      const m = document.getElementById('codeModal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+      setTimeout(() => document.getElementById('accessCodeInput').focus(), 50);
+      return;
+    }
+    const link = await getLink(id, '');
+    if (link) window.location.href = link;
+    else alert('This book is not available right now.');
+  }
+
+  function closeCodeModal() {
+    const m = document.getElementById('codeModal');
+    m.classList.add('hidden'); m.classList.remove('flex');
+  }
+
+  async function submitCode() {
+    const code = document.getElementById('accessCodeInput').value.trim();
+    const err = document.getElementById('codeError');
+    const btn = document.getElementById('codeBtn');
+    if (!code) return;
+    btn.disabled = true; btn.innerText = 'Checking…'; err.classList.add('hidden');
+    const link = await getLink(pendingBookId, code);
+    btn.disabled = false; btn.innerText = 'Continue';
+    if (!link) { err.textContent = 'Invalid or already used code.'; err.classList.remove('hidden'); return; }
+    window.location.href = link;
   }
 </script>
 
